@@ -17,13 +17,13 @@
 
         <ImageView
             android:id="@+id/iv_login_logo"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="112dp"
+            android:layout_height="103dp"
             android:layout_gravity="center_horizontal"
-            app:srcCompat="@mipmap/launcher"
             android:contentDescription="@null"
             android:paddingTop="20dp"
-            android:scaleType="centerInside" />
+            android:scaleType="centerInside"
+            app:srcCompat="@mipmap/launcher" />
 
         <LinearLayout
             android:id="@+id/ll_login_username"
@@ -145,13 +145,13 @@
         </LinearLayout>
 
         <Button
-            android:id="@+id/bt_login_submit"
+            android:id="@+id/bt_register_submit"
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:layout_marginLeft="24dp"
             android:layout_marginTop="20dp"
             android:layout_marginRight="24dp"
-            android:background="@drawable/bg_login_submit"
+            android:background="@mipmap/bg_submit"
             android:elevation="0dp"
             android:outlineProvider="none"
             android:text="@string/login"
@@ -166,7 +166,7 @@
             android:layout_marginLeft="24dp"
             android:layout_marginTop="16dp"
             android:layout_marginRight="24dp"
-            android:background="@drawable/bg_login_submit"
+            android:background="@mipmap/bg_submit"
             android:elevation="0dp"
             android:outlineProvider="none"
             android:text="@string/login_register_hint"
