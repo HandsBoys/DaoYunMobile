@@ -189,10 +189,10 @@
                 android:layout_width="40dp"
                 android:layout_height="match_parent"
                 android:background="@drawable/ic_selector_checkbox"
-                android:button="@null"
+                android:button="@drawable/bg_login_navigation_bar"
                 android:checked="true"
                 android:contentDescription="@null"
-                android:textColor="@color/text_secondary_color"
+                android:textColor="@color/colorAccent"
                 android:textSize="@dimen/font_12"
                 tools:visibility="visible" />
 
