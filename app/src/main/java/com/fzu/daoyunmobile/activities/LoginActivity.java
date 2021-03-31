@@ -8,6 +8,7 @@ import androidx.viewpager.widget.ViewPager;
 import android.os.Bundle;
 import android.widget.Button;
 
+import com.fzu.daoyunmobile.Fragments.Code_loginFragment;
 import com.fzu.daoyunmobile.Fragments.PsdLoginFragment;
 import com.fzu.daoyunmobile.R;
 import com.google.android.material.tabs.TabLayout;
@@ -28,8 +29,8 @@ public class LoginActivity extends AppCompatActivity {
     private void initView() {
 
         vp = (ViewPager) findViewById(R.id.vp_login);
-        tabLayout = (TabLayout) findViewById(R.id.tabs2);
-        Fragment[] fragments = {new Fragment(), new PsdLoginFragment()};
+        tabLayout = (TabLayout) findViewById(R.id.lg_tabs);
+        Fragment[] fragments = {new Code_loginFragment(), new PsdLoginFragment()};
         String[] titles = {"验证码登录", "密码登录"};
 
         //每项只进入一次
