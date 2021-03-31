@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@mipmap/bg_login"
-    tools:context=".activities.TabTestActivity">
+    tools:context=".activities.LoginActivity">
 
     <FrameLayout
         android:id="@+id/lg_tabs_layout"
@@ -13,40 +13,22 @@
         android:layout_height="match_parent">
 
 
-        <com.google.android.material.tabs.TabLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:translationY="10dp"
-            tools:ignore="MissingConstraints">
-
-            <com.google.android.material.tabs.TabItem
-                android:id="@+id/code_login"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/code_login">
-
-            </com.google.android.material.tabs.TabItem>
-
-            <com.google.android.material.tabs.TabItem
-                android:id="@+id/psd_login"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/psd_login" />
-        </com.google.android.material.tabs.TabLayout>
-
         <androidx.viewpager.widget.ViewPager
             android:id="@+id/vp_login"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
             <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tabs2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="top" />
+                android:layout_gravity="center_horizontal"
+
+                app:tabMode="fixed"
+                app:tabTextColor="@android:color/black" />
 
         </androidx.viewpager.widget.ViewPager>
 
 
     </FrameLayout>
-
 </androidx.constraintlayout.widget.ConstraintLayout>
