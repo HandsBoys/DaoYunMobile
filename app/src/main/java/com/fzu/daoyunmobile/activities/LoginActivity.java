@@ -9,6 +9,7 @@ import android.widget.Button;
 
 import com.fzu.daoyunmobile.R;
 
+
 public class LoginActivity extends AppCompatActivity {
     private Button registerBtn;
 
@@ -20,7 +21,7 @@ public class LoginActivity extends AppCompatActivity {
         registerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                JumpToRegister();
+               // JumpToRegister();
             }
         });
     }
