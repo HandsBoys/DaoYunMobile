@@ -39,7 +39,7 @@ public class RegisterActivity extends AppCompatActivity {
         veriCodeBtn = findViewById(R.id.bt_veri_submit);
         userName = findViewById(R.id.et_login_username);
         password = findViewById(R.id.et_login_pwd);
-        confPassword = findViewById(R.id.et_reg_conf_pwd);
+        // confPassword = findViewById(R.id.tv_login_forget_pwd);
         veriCode = findViewById(R.id.et_reg_vericode);
         registerBtn = findViewById(R.id.bt_register_submit);
 
