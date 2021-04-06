@@ -36,6 +36,17 @@ public class InputFrameItem {
         // editText.setText("1066666655");
     }
 
+    /**
+     * @return 获取输入框内容
+     */
+    public String GetEditText() {
+        return editText.getText().toString();
+    }
+
+
+    /**
+     * @param name 设值输入框的名称
+     */
     public void SetEditTextHint(String name) {
         editText.setHint(name);
     }
