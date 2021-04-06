@@ -27,7 +27,6 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void initView() {
-
         vp = (ViewPager) findViewById(R.id.vp_login);
         tabLayout = (TabLayout) findViewById(R.id.lg_tabs);
         Fragment[] fragments = {new Code_loginFragment(), new PsdLoginFragment()};

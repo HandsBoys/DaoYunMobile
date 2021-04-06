@@ -1,13 +1,19 @@
+
 package com.fzu.daoyunmobile.activities;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.text.Layout;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 
+import com.fzu.daoyunmobile.FrameItems.InputFrameItem;
 import com.fzu.daoyunmobile.R;
 
 import java.util.Random;
@@ -31,6 +37,14 @@ public class RegisterActivity extends AppCompatActivity {
     private int verificationCode;
 
 
+    private View lineLayout;
+
+
+    private EditText testName;
+    private ImageView testImg;
+
+    private InputFrameItem item;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,6 +55,9 @@ public class RegisterActivity extends AppCompatActivity {
         confPassword = findViewById(R.id.et_reg_conf_pwd);
         veriCode = findViewById(R.id.et_reg_vericode);
         registerBtn = (Button) findViewById(R.id.bt_register_submit);
+
+        item = new InputFrameItem(getWindow().getDecorView(), R.id.testID, R.drawable.ic_login_username);
+
 
         veriCodeBtn.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -2,9 +2,9 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@mipmap/bg_login"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@mipmap/bg_login"
     android:fitsSystemWindows="true">
 
     <LinearLayout
@@ -270,6 +270,11 @@
                 app:srcCompat="@mipmap/ic_clear" />
 
         </LinearLayout>
+
+        <include
+            android:id="@+id/testID"
+            layout="@layout/input_frameitem_layout"
+            android:layout_width="match_parent" />
 
         <Button
             android:id="@+id/bt_register_submit"
