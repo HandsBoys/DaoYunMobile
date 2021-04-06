@@ -43,6 +43,7 @@
         android:textCursorDrawable="@null"
         android:textSize="@dimen/font_16" />
 
+
     <ImageView
         android:id="@+id/input_vericode_del"
         android:layout_width="20dp"
