@@ -27,6 +27,8 @@ public class RegisterActivity extends AppCompatActivity {
     //验证码
     private EditText veriCode;
 
+
+    
     //生成的验证码
     private int verificationCode;
 
