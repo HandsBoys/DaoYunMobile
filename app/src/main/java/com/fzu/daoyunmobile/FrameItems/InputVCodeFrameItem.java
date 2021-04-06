@@ -3,28 +3,37 @@ package com.fzu.daoyunmobile.FrameItems;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.fzu.daoyunmobile.R;
 
-public class InputFrameItem {
+public class InputVCodeFrameItem {
     private View priView;
     //当前act的view
     private View actView;
     private EditText editText;
     private ImageView icoImg;
+    private Button submitBtn;
 
-    public InputFrameItem(View view, int priViewId, int editTextId, int icoId, int imgID, String name) {
+
+    public InputVCodeFrameItem(View view, int priViewId, int editTextId, int btnId, int icoId, int imgID) {
         actView = view;
         SetPriView(priViewId);
         SetEditText(editTextId);
-        SetEditTextHint(name);
         SetIcoImg(icoId, imgID);
+        SetSubBtn(btnId);
     }
 
-    public InputFrameItem(View view, int priViewId, int imgID, String name) {
-        new InputFrameItem(view, priViewId, R.id.input_frameitem_editText, R.id.input_frameitem_img, imgID, name);
+
+    /**
+     * @param view      当前main act view
+     * @param priViewId 当前layout下的view id
+     * @param imgID     需要替换的图片ID
+     */
+    public InputVCodeFrameItem(View view, int priViewId, int imgID) {
+        new InputVCodeFrameItem(view, priViewId, R.id.input_vericode_icon, R.id.bt_veri_submit, R.id.input_vericode_icon, imgID);
     }
 
 
@@ -34,6 +43,11 @@ public class InputFrameItem {
 
     public void SetEditText(int id) {
         editText = priView.findViewById(id);
+        // editText.setText("1066666655");
+    }
+
+    public void SetSubBtn(int id) {
+        submitBtn = priView.findViewById(id);
     }
 
     /**
