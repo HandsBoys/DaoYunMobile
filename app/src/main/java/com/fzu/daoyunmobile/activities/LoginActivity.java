@@ -18,6 +18,9 @@ public class LoginActivity extends AppCompatActivity {
     private ViewPager vp;
     //注册按钮
     private Button registerBtn;
+    private Code_loginFragment code_loginFragment;
+    private PsdLoginFragment psdLoginFragment;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +32,9 @@ public class LoginActivity extends AppCompatActivity {
     private void initView() {
         vp = (ViewPager) findViewById(R.id.vp_login);
         tabLayout = (TabLayout) findViewById(R.id.lg_tabs);
-        Fragment[] fragments = {new Code_loginFragment(), new PsdLoginFragment()};
+        code_loginFragment = new Code_loginFragment();
+        psdLoginFragment = new PsdLoginFragment();
+        Fragment[] fragments = {code_loginFragment, psdLoginFragment};
         String[] titles = {"验证码登录", "密码登录"};
 
         //每项只进入一次
