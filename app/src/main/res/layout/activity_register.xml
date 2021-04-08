@@ -7,22 +7,26 @@
     android:background="@mipmap/bg_login"
     android:fitsSystemWindows="true">
 
+    <Button
+        android:id="@+id/res_back_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/list_item_background_pressed"
+        android:text="返回" />
+
     <LinearLayout
         android:id="@+id/lay_login_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
         android:orientation="vertical"
         android:paddingBottom="16dp">
-        <ImageView
-            android:id="@+id/iv_login_logo"
-            android:layout_width="121dp"
-            android:layout_height="112dp"
-            android:layout_gravity="center_horizontal"
-            android:contentDescription="@null"
-            android:paddingTop="20dp"
-            android:scaleType="centerInside"
-            app:srcCompat="@mipmap/launcher" />
+
+
+        <include
+            android:id="@+id/logo"
+            layout="@layout/logo_frameitem_layout"
+            android:layout_width="match_parent" />
         <include
             android:id="@+id/input_mobilenum"
             layout="@layout/input_frameitem_layout"
@@ -37,6 +41,7 @@
             android:id="@+id/input_psd"
             layout="@layout/input_frameitem_layout"
             android:layout_width="match_parent" />
+
         <include
             android:id="@+id/input_confpsd"
             layout="@layout/input_frameitem_layout"

@@ -14,15 +14,10 @@
         android:orientation="vertical"
         android:paddingBottom="16dp">
 
-        <ImageView
-            android:id="@+id/iv_login_logo"
-            android:layout_width="121dp"
-            android:layout_height="112dp"
-            android:layout_gravity="center_horizontal"
-            android:contentDescription="@null"
-            android:paddingTop="20dp"
-            android:scaleType="centerInside"
-            app:srcCompat="@mipmap/launcher" />
+        <include
+            android:id="@+id/logo"
+            layout="@layout/logo_frameitem_layout"
+            android:layout_width="match_parent" />
 
         <LinearLayout
             android:id="@+id/ll_login_username"

@@ -5,6 +5,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -19,16 +20,8 @@ public class RegisterActivity extends AppCompatActivity {
     private Button veriCodeBtn;
     //注册按钮
     private Button registerBtn;
-    //账号
-    private EditText userName;
-    //密码
-    private EditText password;
-    //确认密码
-    private EditText confPassword;
-    //验证码
-    private EditText veriCode;
-
-
+    //返回按钮
+    private Button backBtn;
     //生成的验证码
     private int verificationCode;
 
@@ -41,23 +34,35 @@ public class RegisterActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-        // confPassword = findViewById(R.id.tv_login_forget_pwd);
         registerBtn = findViewById(R.id.bt_register_submit);
+        //TODO 注册按钮 后续接入API使用
+        registerBtn.setOnClickListener(v -> {
+            System.out.println(input_mobilenum.GetEditText());
+            System.out.println(intput_psd.GetEditText());
+            System.out.println(input_vericode.GetEditText());
+            finish();
+        });
+        backBtn=findViewById(R.id.res_back_button);
+        backBtn.setOnClickListener(v-> finish());
 
-        input_mobilenum = new InputFrameItem(getWindow().getDecorView(), R.id.input_mobilenum, R.drawable.ic_login_username, "手机号/邮箱");
-        //input_mobilenum.SetEditTextHint("手机号/邮箱");
+
+        input_mobilenum = new InputFrameItem(getWindow().getDecorView(), R.id.input_mobilenum, R.id.input_frameitem_editText, R.id.input_frameitem_img, R.drawable.ic_login_username, "手机号/邮箱");
         intput_psd = new InputFrameItem(getWindow().getDecorView(), R.id.input_psd, R.drawable.ic_login_password, "密码");
-//        veriCodeBtn.setOnClickListener(v -> {
-//            Random r = new Random();
-//            verificationCode = r.nextInt(899999) + 100000;
-//            AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this)
-//                    .setTitle("验证码")
-//                    .setMessage("验证码为：" + verificationCode)
-//                    .setPositiveButton("确定", null);
-//            builder.show();
+        intput_confpsd = new InputFrameItem(getWindow().getDecorView(), R.id.input_confpsd, R.drawable.ic_login_password, "再次输入密码");
+        input_vericode = new InputVCodeFrameItem(getWindow().getDecorView(), R.id.input_vericode, R.drawable.ic_login_password);
+        veriCodeBtn = input_vericode.GetSubBtn();
+
+        veriCodeBtn.setOnClickListener(v -> {
+            Random r = new Random();
+            verificationCode = r.nextInt(899999) + 100000;
+            AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this)
+                    .setTitle("验证码")
+                    .setMessage("验证码为：" + verificationCode)
+                    .setPositiveButton("确定", null);
+            builder.show();
 //            veriCodeBtn.setText("已发送");
 //            veriCodeBtn.setEnabled(false);
-//        });
-        registerBtn.setOnClickListener(v -> finish());
+        });
+
     }
 }

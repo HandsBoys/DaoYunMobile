@@ -23,8 +23,13 @@ public class InputFrameItem {
         SetIcoImg(icoId, imgID);
     }
 
+
     public InputFrameItem(View view, int priViewId, int imgID, String name) {
-        new InputFrameItem(view, priViewId, R.id.input_frameitem_editText, R.id.input_frameitem_img, imgID, name);
+        actView = view;
+        SetPriView(priViewId);
+        SetEditText(R.id.input_frameitem_editText);
+        SetEditTextHint(name);
+        SetIcoImg(R.id.input_frameitem_img, imgID);
     }
 
 

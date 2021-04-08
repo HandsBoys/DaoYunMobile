@@ -26,7 +26,7 @@
         android:background="@color/login_line_color" />
 
     <EditText
-        android:id="@+id/input_vericode"
+        android:id="@+id/input_vericode_text"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_marginLeft="16dp"
@@ -56,7 +56,7 @@
         app:srcCompat="@mipmap/ic_clear" />
 
     <Button
-        android:id="@+id/inputbt_veri_submit"
+        android:id="@+id/inputbt_vericode_submit"
         android:layout_width="100dp"
         android:layout_height="48dp"
         android:layout_marginLeft="4dp"
