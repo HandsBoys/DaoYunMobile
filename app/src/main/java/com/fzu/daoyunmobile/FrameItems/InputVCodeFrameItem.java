@@ -1,6 +1,5 @@
 package com.fzu.daoyunmobile.FrameItems;
 
-import android.app.AlertDialog;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.view.View;
@@ -9,7 +8,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.fzu.daoyunmobile.R;
-import com.fzu.daoyunmobile.activities.RegisterActivity;
 
 public class InputVCodeFrameItem {
     private View priView;

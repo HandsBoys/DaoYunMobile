@@ -1,5 +1,6 @@
 package com.fzu.daoyunmobile.Fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AlertDialog;
@@ -10,29 +11,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.fzu.daoyunmobile.Activities.MainActivity;
+import com.fzu.daoyunmobile.Activities.RegisterActivity;
 import com.fzu.daoyunmobile.FrameItems.InputFrameItem;
 import com.fzu.daoyunmobile.FrameItems.InputVCodeFrameItem;
 import com.fzu.daoyunmobile.R;
-import com.fzu.daoyunmobile.activities.LoginActivity;
-import com.fzu.daoyunmobile.activities.RegisterActivity;
 
 import java.util.Random;
 
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link Code_loginFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * 验证码登录视图
  */
-public class Code_loginFragment extends Fragment {
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+public class CodeLoginFragment extends Fragment {
 
     //输入账号框
     private InputFrameItem input_mobilenum;
@@ -43,38 +33,11 @@ public class Code_loginFragment extends Fragment {
     //生成的验证码
     private int verificationCode;
 
-    public Code_loginFragment() {
+    public CodeLoginFragment() {
 
         // Required empty public constructor
     }
 
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment Code_loginFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static Code_loginFragment newInstance(String param1, String param2) {
-        Code_loginFragment fragment = new Code_loginFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -108,5 +71,8 @@ public class Code_loginFragment extends Fragment {
     //TODO 登录接口待做登录
     private void Login() {
         System.out.println("Login ");
+        startActivity(new Intent(getActivity(), MainActivity.class));
+
+
     }
 }

@@ -11,7 +11,7 @@
         android:id="@+id/res_back_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@color/list_item_background_pressed"
+        android:background="@color/account_input_bg_color"
         android:text="返回" />
 
     <LinearLayout

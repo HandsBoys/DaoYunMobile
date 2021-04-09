@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Fragments.Code_loginFragment">
+    tools:context=".Fragments.CodeLoginFragment">
 
     <LinearLayout
         android:id="@+id/lay_login_container"

@@ -1,4 +1,4 @@
-package com.fzu.daoyunmobile.activities;
+package com.fzu.daoyunmobile.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -8,7 +8,7 @@ import androidx.viewpager.widget.ViewPager;
 import android.os.Bundle;
 import android.widget.Button;
 
-import com.fzu.daoyunmobile.Fragments.Code_loginFragment;
+import com.fzu.daoyunmobile.Fragments.CodeLoginFragment;
 import com.fzu.daoyunmobile.Fragments.PsdLoginFragment;
 import com.fzu.daoyunmobile.R;
 import com.google.android.material.tabs.TabLayout;
@@ -18,9 +18,8 @@ public class LoginActivity extends AppCompatActivity {
     private ViewPager vp;
     //注册按钮
     private Button registerBtn;
-    private Code_loginFragment code_loginFragment;
+    private CodeLoginFragment code_loginFragment;
     private PsdLoginFragment psdLoginFragment;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +31,7 @@ public class LoginActivity extends AppCompatActivity {
     private void initView() {
         vp = (ViewPager) findViewById(R.id.vp_login);
         tabLayout = (TabLayout) findViewById(R.id.lg_tabs);
-        code_loginFragment = new Code_loginFragment();
+        code_loginFragment = new CodeLoginFragment();
         psdLoginFragment = new PsdLoginFragment();
         Fragment[] fragments = {code_loginFragment, psdLoginFragment};
         String[] titles = {"验证码登录", "密码登录"};
