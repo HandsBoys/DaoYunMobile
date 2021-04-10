@@ -6,10 +6,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.fzu.daoyunmobile.FrameItems.InputFrameItem;
 import com.fzu.daoyunmobile.FrameItems.InputVCodeFrameItem;
 import com.fzu.daoyunmobile.R;
+import com.lxj.xpopup.XPopup;
+import com.lxj.xpopup.interfaces.OnSelectListener;
 
 import java.util.Random;
 
@@ -40,8 +43,8 @@ public class RegisterActivity extends AppCompatActivity {
             System.out.println(input_vericode.GetEditText());
             finish();
         });
-        backBtn=findViewById(R.id.res_back_button);
-        backBtn.setOnClickListener(v-> finish());
+        backBtn = findViewById(R.id.res_back_button);
+        backBtn.setOnClickListener(v -> finish());
 
 
         input_mobilenum = new InputFrameItem(getWindow().getDecorView(), R.id.input_mobilenum, R.id.input_frameitem_editText, R.id.input_frameitem_img, R.drawable.ic_login_username, "手机号/邮箱");
@@ -58,8 +61,28 @@ public class RegisterActivity extends AppCompatActivity {
                     .setMessage("验证码为：" + verificationCode)
                     .setPositiveButton("确定", null);
             builder.show();
-//            veriCodeBtn.setText("已发送");
-//            veriCodeBtn.setEnabled(false);
+            veriCodeBtn.setText("已发送");
+            veriCodeBtn.setEnabled(false);
+
+//            new XPopup.Builder(this)
+//                    .isDarkTheme(true)
+//                    .hasShadowBg(true)
+////                            .hasBlurBg(true)
+////                            .isDestroyOnDismiss(true) //对于只使用一次的弹窗，推荐设置这个
+//                    .asBottomList("请选择一项", new String[]{"条目1", "条目2", "条目3", "条目4", "条目5"},
+//                            new OnSelectListener() {
+//                                @Override
+//                                public void onSelect(int position, String text) {
+//                                    //TODO 这里接入转换接口
+//                                    Toast.makeText(RegisterActivity.this, text, Toast.LENGTH_SHORT).show();
+//
+//                                    if (position == 1) {
+//                                        System.out.println("FUCK");
+//                                    }
+//                                }
+//                            }).show();
+
+
         });
 
     }

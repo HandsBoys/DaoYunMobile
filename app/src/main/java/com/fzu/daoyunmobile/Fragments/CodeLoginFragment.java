@@ -10,12 +10,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.fzu.daoyunmobile.Activities.MainActivity;
-import com.fzu.daoyunmobile.Activities.RegisterActivity;
 import com.fzu.daoyunmobile.FrameItems.InputFrameItem;
 import com.fzu.daoyunmobile.FrameItems.InputVCodeFrameItem;
 import com.fzu.daoyunmobile.R;
+import com.lxj.xpopup.XPopup;
+import com.lxj.xpopup.interfaces.OnSelectListener;
 
 import java.util.Random;
 
@@ -71,7 +73,24 @@ public class CodeLoginFragment extends Fragment {
     //TODO 登录接口待做登录
     private void Login() {
         System.out.println("Login ");
-        startActivity(new Intent(getActivity(), MainActivity.class));
+        new XPopup.Builder(getContext())
+                .isDarkTheme(true)
+                .hasShadowBg(true)
+//                            .hasBlurBg(true)
+//                            .isDestroyOnDismiss(true) //对于只使用一次的弹窗，推荐设置这个
+                .asBottomList("请选择一项", new String[]{"条目1", "条目2", "条目3", "条目4", "条目5"},
+                        new OnSelectListener() {
+                            @Override
+                            public void onSelect(int position, String text) {
+                                //TODO 这里接入转换接口
+                                Toast.makeText(getContext(), text, Toast.LENGTH_SHORT).show();
+
+                                if (position == 1) {
+                                    System.out.println("FUCK");
+                                }
+                            }
+                        }).show();
+        // startActivity(new Intent(getActivity(), MainActivity.class));
 
 
     }
