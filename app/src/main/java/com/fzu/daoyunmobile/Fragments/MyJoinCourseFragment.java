@@ -81,8 +81,8 @@ public class MyJoinCourseFragment extends Fragment {
 //                    public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
 //                        String responseBodyStr = response.body().string();
 //                        Log.i("LoginInfo", responseBodyStr);
-//                        courseList = parseJsonWithJsonObject(responseBodyStr);
-//                        afterAction();
+        courseList = parseJsonWithJsonObject("responseBodyStr");
+        afterAction();
 //                    }
 //                });
 //            }
@@ -112,6 +112,7 @@ public class MyJoinCourseFragment extends Fragment {
                 progressDialog.dismiss();
             }
         });
+        progressDialog.dismiss();
     }
 
     private List<Course> parseJsonWithJsonObject(String jsonData) {
@@ -129,7 +130,7 @@ public class MyJoinCourseFragment extends Fragment {
 //            out.close();
 //
 //            JSONArray jsonArray = new JSONArray(jsonData);
-//            List<Course> cList = new ArrayList<Course>();
+        List<Course> cList = new ArrayList<Course>();
 //            for (int i = 0; i < jsonArray.length(); i++) {
 //                JSONObject jsonObject = jsonArray.getJSONObject(i);
 //                final String classId = jsonObject.getString("classId");
@@ -138,15 +139,18 @@ public class MyJoinCourseFragment extends Fragment {
 //                final String gradeClass = jsonObject.getString("gradeClass");
 //                final String classIcon = jsonObject.getString("classIcon");
 //                final String teacherPhone = jsonObject.getString("teacherPhone");
-//                final Course[] course = {null};
+        final Course[] course = {null};
 //                File classIconFile = null;
 //                if (classIcon.equals("")) {
 //                    if (teacherName == null) {
 //                        course[0] = new Course(R.drawable.course_img_1, className, "", gradeClass, classId);
 //                    } else {
-//                        course[0] = new Course(R.drawable.course_img_1, className, teacherName, gradeClass, classId);
+        course[0] = new Course(R.drawable.course_img_1, "工程训练", "陈哥", "1班", "566");
+
 //                    }
-//                    course[0].teacherPhone = teacherPhone;
+        course[0].teacherPhone = "1066666655";
+
+
 //                } else {
 //                    classIconFile = new File(Environment.getExternalStorageDirectory() + "/daoyun/"
 //                            + classIcon);
@@ -192,13 +196,16 @@ public class MyJoinCourseFragment extends Fragment {
 //                        course[0].teacherPhone = teacherPhone;
 //                    }
 //                }
-//                cList.add(course[0]);
+        cList.add(course[0]);
+        course[0] = new Course(R.drawable.course_img_2, "工程训练2", "陈大哥", "2班", "567");
+        course[0].teacherPhone = "1234567";
+        cList.add(course[0]);
 //            }
 //            Log.i("LoginInfo", cList.size() + "");
-//            return cList;
+        return cList;
 //        } catch (Exception e) {
 //            e.printStackTrace();
 //        }
-        return null;
+//        return null;
     }
 }

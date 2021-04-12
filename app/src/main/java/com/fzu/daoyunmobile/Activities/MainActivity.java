@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.fzu.daoyunmobile.Fragments.HpMainFragment;
 import com.fzu.daoyunmobile.Fragments.MyInfoFragment;
 import com.fzu.daoyunmobile.R;
+import com.fzu.daoyunmobile.Utils.StatusBarUtil;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -36,6 +37,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initView();
+        //将状态栏设置透明
+        StatusBarUtil.transparencyBar(MainActivity.this);
+        
         //获取管理类
         this.getSupportFragmentManager()
                 .beginTransaction()

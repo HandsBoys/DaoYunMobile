@@ -5,12 +5,15 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import android.graphics.Color;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 
 import com.fzu.daoyunmobile.Fragments.CodeLoginFragment;
 import com.fzu.daoyunmobile.Fragments.PsdLoginFragment;
 import com.fzu.daoyunmobile.R;
+import com.fzu.daoyunmobile.Utils.StatusBarUtil;
 import com.google.android.material.tabs.TabLayout;
 
 public class LoginActivity extends AppCompatActivity {
@@ -26,6 +29,10 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         initView();
+        //设置顶部状态栏为透明
+        StatusBarUtil.transparencyBar(LoginActivity.this);
+//        getWindow().setStatusBarColor(Color.TRANSPARENT);
+//        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
     }
 
     private void initView() {

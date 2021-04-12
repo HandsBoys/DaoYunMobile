@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.fzu.daoyunmobile.Activities.MainActivity;
 import com.fzu.daoyunmobile.FrameItems.InputFrameItem;
 import com.fzu.daoyunmobile.R;
 import com.fzu.daoyunmobile.Activities.RegisterActivity;
@@ -66,6 +67,7 @@ public class PsdLoginFragment extends Fragment {
     }
 
     private void Login() {
+        startActivity(new Intent(getActivity(), MainActivity.class));
         System.out.println(input_mobilenum.GetEditText());
     }
 }

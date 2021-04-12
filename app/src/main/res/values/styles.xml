@@ -3,6 +3,7 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
+
     </style>
 
     <style name="BottomDialog" parent="@android:style/Theme.Dialog">
@@ -21,6 +22,4 @@
         <!-- 半透明 -->
         <item name="android:windowIsTranslucent">true</item>
     </style>
-
-
 </resources>

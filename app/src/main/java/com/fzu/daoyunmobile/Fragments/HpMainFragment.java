@@ -18,11 +18,15 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.fzu.daoyunmobile.Activities.CreateClassActivity;
 import com.fzu.daoyunmobile.Activities.MainActivity;
 import com.fzu.daoyunmobile.Adapter.CourseAdapter;
 import com.fzu.daoyunmobile.Entity.Course;
 import com.fzu.daoyunmobile.R;
+import com.lxj.xpopup.XPopup;
+import com.lxj.xpopup.interfaces.OnSelectListener;
 
 
 /**
@@ -49,7 +53,10 @@ public class HpMainFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_hp_main, null);
+
+        //添加按钮
         addTV = view.findViewById(R.id.toolbar_right_tv);
+        
         return view;
     }
 
@@ -58,15 +65,14 @@ public class HpMainFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         final AppCompatActivity activity = (AppCompatActivity) getActivity();
 
+        //俩块添加的视图
         myCreateView = activity.findViewById(R.id.view_mycreate);
         myJoinView = activity.findViewById(R.id.view_myjoin);
         myCreateTV = activity.findViewById(R.id.myCreateTv);
         myJoinTV = activity.findViewById(R.id.joinedClassTv);
-//        addTV = activity.findViewById(R.id.toolbar_right_tv);
+
         myJoinTV.setTextColor(Color.parseColor("#ff00bfff"));
         myCreateView.setVisibility(View.INVISIBLE);
-        Log.i("MainFragmentInfo", "test");
-//        myJoinTV.setTextColor(Color.parseColor("#80000000"));
 
         activity.getSupportFragmentManager()
                 .beginTransaction()
@@ -79,6 +85,7 @@ public class HpMainFragment extends Fragment {
         addTV.setOnClickListener(v -> {
             Log.i("MainFragmentInfo", "add textview");
 //                Toast.makeText(getContext(), "添加被按下", Toast.LENGTH_SHORT).show();
+
             showPopupMenu(addTV);
         });
 
@@ -152,48 +159,43 @@ public class HpMainFragment extends Fragment {
         }
     }
 
+    //添加选择按钮框
     private void showPopupMenu(View view) {
-        // 这里的view代表popupMenu需要依附的view
-        PopupMenu popupMenu = new PopupMenu(getActivity(), view);
-        // 获取布局文件
-        popupMenu.getMenuInflater().inflate(R.menu.class_menu_layout, popupMenu.getMenu());
-        popupMenu.show();
-        // 通过上面这几行代码，就可以把控件显示出来了
-        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                // 控件每一个item的点击事件
-                switch (item.getItemId()) {
-                    case R.id.myCreateCourse:
-                        //TODO 创建class
-                        //startActivityForResult(new Intent(getContext(), CreateClassActivity.class), 1);
-                        break;
-                    case R.id.joinClass:
-                        final EditText editText = new EditText(getContext());
-                        AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
-                                .setTitle("请输入七位班课号")
-                                .setView(editText);
-                        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+        //
+        new XPopup.Builder(getContext())
+                .isDarkTheme(true)
+                .hasShadowBg(true)
+//                            .hasBlurBg(true)
+//                            .isDestroyOnDismiss(true) //对于只使用一次的弹窗，推荐设置这个
+                .asBottomList("", new String[]{"创建班课", "使用班课号加入班课"},
+                        new OnSelectListener() {
                             @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                String classStr = editText.getText().toString();
-                                joinClass(classStr);
+                            public void onSelect(int position, String text) {
+                                //TODO 这里接入转换接口
+                                Toast.makeText(getContext(), text, Toast.LENGTH_SHORT).show();
+                                switch (position) {
+                                    case 0:
+                                        startActivityForResult(new Intent(getContext(), CreateClassActivity.class), 1);
+                                        break;
+                                    case 1:
+                                    default:
+                                        final EditText editText = new EditText(getContext());
+                                        AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
+                                                .setTitle("请输入七位班课号")
+                                                .setView(editText);
+                                        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                String classStr = editText.getText().toString();
+                                                joinClass(classStr);
+                                            }
+                                        });
+                                        builder.setNegativeButton("取消", null);
+                                        builder.show();
+                                        break;
+                                }
                             }
-                        });
-                        builder.setNegativeButton("取消", null);
-                        builder.show();
-                        break;
-                }
-                return true;
-            }
-        });
-        popupMenu.setOnDismissListener(new PopupMenu.OnDismissListener() {
-            @Override
-            public void onDismiss(PopupMenu menu) {
-                // 控件消失时的事件
-            }
-        });
-
+                        }).show();
     }
 
     private void joinClass(final String classStr) {

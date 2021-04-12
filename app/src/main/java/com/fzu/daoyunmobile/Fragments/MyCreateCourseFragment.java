@@ -108,10 +108,10 @@ public class MyCreateCourseFragment extends Fragment {
             }
         }).start();
 //        if(MainActivity.userName.equals("teacher")){
-//            Course course_1 = new Course(R.drawable.course_img_1, "工程实践", "池芝标", "19级工硕");
-//            courseList.add(course_1);
-//            Course course_2 = new Course(R.drawable.course_img_2, "工程训练", "池芝标", "19级工硕");
-//            courseList.add(course_2);
+        Course course_1 = new Course(R.drawable.course_img_1, "工程实践", "池芝标", "20级电子信息", "567");
+        courseList.add(course_1);
+        Course course_2 = new Course(R.drawable.course_img_2, "工程训练", "池芝标", "20级电子信息", "567");
+        courseList.add(course_2);
 //
 //        }
     }
