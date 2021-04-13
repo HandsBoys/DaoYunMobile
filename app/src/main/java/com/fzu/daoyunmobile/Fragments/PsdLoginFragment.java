@@ -1,10 +1,13 @@
 package com.fzu.daoyunmobile.Fragments;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +17,21 @@ import com.fzu.daoyunmobile.Activities.MainActivity;
 import com.fzu.daoyunmobile.FrameItems.InputFrameItem;
 import com.fzu.daoyunmobile.R;
 import com.fzu.daoyunmobile.Activities.RegisterActivity;
+
+import org.jetbrains.annotations.NotNull;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.FormBody;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 /**
  * 密码登录视图
@@ -67,7 +85,125 @@ public class PsdLoginFragment extends Fragment {
     }
 
     private void Login() {
-        startActivity(new Intent(getActivity(), MainActivity.class));
-        System.out.println(input_mobilenum.GetEditText());
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                OkHttpClient okHttpClient = new OkHttpClient();
+                MediaType JSON = MediaType.parse("application/json;charset=utf-8");
+                JSONObject json = new JSONObject();
+                try {
+                    json.put("userName", input_mobilenum.GetEditText());
+                    json.put("password", intput_psd.GetEditText());
+                    json.put("code", "1234");
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                RequestBody requestBody = RequestBody.create(JSON, String.valueOf(json));
+
+//                RequestBody requestBody = new FormBody.Builder()
+//                        .add("userName", "123456")
+//                        .add("password", "512739421")
+//                        .add("code", "1234")
+//                        .build();
+                Request request = new Request.Builder()
+                        .header("Content-Type", "application/json")
+                        .url("http://1.15.31.156:8081/login")
+                        .post(requestBody)
+                        .build();
+                okHttpClient.newCall(request).enqueue(new Callback() {
+                    @Override
+                    public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                        Log.i("LoginInfo", e.getMessage());
+                        System.out.println(e.getMessage());
+//                            Toast.makeText(LoginActivity.this, "Connection failed!", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                        String responseBodyStr = response.body().string();
+                        Log.i("LoginInfo", responseBodyStr);
+                        System.out.println(responseBodyStr);
+
+                        if (responseBodyStr.contains("登录成功")) {
+                            startActivity(new Intent(getActivity(), MainActivity.class));
+                        } else {
+                            //showAlertDialog("用户不存在或者密码错误");
+                            System.out.println("用户不存在或者密码错误");
+                        }
+//                            SharedPreferences.Editor editor = getSharedPreferences("remember_user", MODE_PRIVATE).edit();
+//                            if(rememberUserCB.isChecked()){
+//                                editor.putString("userName", username);
+//                                editor.putString("password", password);
+//                                editor.apply();
+//                            }else{
+//                                editor.putString("userName", "");
+//                                editor.putString("password", "");
+//                                editor.apply();
+//                            }
+//                            if(responseBodyStr.length() == 5){
+//                                MainActivity.icon = null;
+//                            }else{
+//                                String typeStr = responseBodyStr.substring(0, 5);
+//                                String iconStr = responseBodyStr.substring(5);
+//                                MainActivity.icon = iconStr;
+//                                if(typeStr.equals("phone")){
+//                                    MainActivity.loginType = "phoneNumber";
+//                                }else if(typeStr.equals("userN")){
+//                                    MainActivity.loginType = "userName";
+//                                }else if(typeStr.equals("email")){
+//                                    MainActivity.loginType = "email";
+//                                }
+//                            }
+//                            try {
+//                                JSONObject jsonObject = new JSONObject(responseBodyStr);
+//                                Log.i("LoginInfoInfo", jsonObject.toString());
+//                                MainActivity.loginType = jsonObject.getString("loginType");
+//                                MainActivity.icon = jsonObject.getString("icon");
+//                                MainActivity.name = jsonObject.getString("name");
+//                                MainActivity.phoneNumber = jsonObject.getString("phone");
+//                                Log.i("LoginInfoInfo", MainActivity.phoneNumber);
+//                            } catch (JSONException e) {
+//                                e.printStackTrace();
+//                            }
+//                            Intent intent = new Intent(getActivity(), MainActivity.class);
+//                            intent.putExtra("username", "512739421");
+//                            startActivity(intent);
+                        // }
+                    }
+                });
+
+//                if(username.equals("admin") || username.equals("teacher") || username.equals("student1")
+//                        || username.equals("student2")){
+
+//                }else {
+//                    SharedPreferences preferences;
+//                    if(!new File("/data/data/" + getPackageName().toString() + "/shared_prefs/",
+//                            username + ".xml").exists()){
+//                        showAlertDialog("用户名不存在！");
+//                    }else{
+//                        preferences = getSharedPreferences(username, MODE_PRIVATE);
+//                        if(!preferences.getString("password", "").equals(password)){
+//                            showAlertDialog("密码错误！");
+//                        }else {
+//                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+//                            intent.putExtra("username", username);
+//                            startActivity(intent);
+//                        }
+//                    }
+//
+            }
+
+        }).start();
+    }
+
+
+    protected void showAlertDialog(final String msg) {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
+                .setMessage(msg)
+                .setPositiveButton("确定", null);
+        builder.show();
     }
 }
