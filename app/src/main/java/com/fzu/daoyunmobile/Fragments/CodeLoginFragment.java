@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.fzu.daoyunmobile.Activities.MainActivity;
+import com.fzu.daoyunmobile.Activities.QRCodeTestActivity;
 import com.fzu.daoyunmobile.FrameItems.InputFrameItem;
 import com.fzu.daoyunmobile.FrameItems.InputVCodeFrameItem;
 import com.fzu.daoyunmobile.R;
@@ -73,6 +74,6 @@ public class CodeLoginFragment extends Fragment {
     //TODO 登录接口待做登录
     private void Login() {
         System.out.println("Login ");
-        startActivity(new Intent(getActivity(), MainActivity.class));
+        startActivity(new Intent(getActivity(), QRCodeTestActivity.class));
     }
 }

@@ -53,4 +53,7 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
     implementation("com.squareup.okhttp3:okhttp:4.9.1")
 
+    compile 'com.github.open-android:Zxing:v1.0.3'
+
+
 }
