@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.alibaba.fastjson.JSONObject;
 import com.fzu.daoyunmobile.Activities.MainActivity;
 import com.fzu.daoyunmobile.Activities.QRCodeTestActivity;
 import com.fzu.daoyunmobile.FrameItems.InputFrameItem;
@@ -19,6 +20,7 @@ import com.fzu.daoyunmobile.FrameItems.InputVCodeFrameItem;
 import com.fzu.daoyunmobile.R;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.interfaces.OnSelectListener;
+
 
 import java.util.Random;
 
@@ -73,7 +75,17 @@ public class CodeLoginFragment extends Fragment {
 
     //TODO 登录接口待做登录
     private void Login() {
+//        String studentString ="{\"message\": \"Ok\",\"code\":200,\"data\":{\"captcha\":\"328551\"}}";
+//
+//        //JSON字符串转换成JSON对象
+//        JSONObject messjsonObject = JSONObject.parseObject(studentString);
+//
+//        System.out.println(messjsonObject.get("data"));
+//
+//        System.out.println( messjsonObject.getJSONObject("data").getString("captcha"));
+
         System.out.println("Login ");
-        startActivity(new Intent(getActivity(), QRCodeTestActivity.class));
+        //startActivity(new Intent(getActivity(), QRCodeTestActivity.class));
+        startActivity(new Intent(getActivity(), MainActivity.class));
     }
 }
