@@ -17,16 +17,16 @@ import com.fzu.daoyunmobile.R;
 
 import java.util.List;
 
-public class CourseAdapter extends ArrayAdapter<Course> {
+public class MyJoinCourseAdapter extends ArrayAdapter<Course> {
     private int resourceId;
     private int flag = 1;
 
-    public CourseAdapter(@NonNull Context context, int textViewResourceId, @NonNull List<Course> objects) {
+    public MyJoinCourseAdapter(@NonNull Context context, int textViewResourceId, @NonNull List<Course> objects) {
         super(context, textViewResourceId, objects);
         resourceId = textViewResourceId;
     }
 
-    public CourseAdapter(@NonNull Context context,  int textViewResourceId, @NonNull List<Course> objects, int flag) {
+    public MyJoinCourseAdapter(@NonNull Context context, int textViewResourceId, @NonNull List<Course> objects, int flag) {
         super(context, textViewResourceId, objects);
         resourceId = textViewResourceId;
         this.flag = flag;
@@ -38,37 +38,42 @@ public class CourseAdapter extends ArrayAdapter<Course> {
         Course course = getItem(position);
         final View view;
         final ViewHolder viewHolder;
-        if(convertView == null){
+        if (convertView == null) {
             view = LayoutInflater.from(getContext()).inflate(resourceId, parent, false);
             viewHolder = new ViewHolder();
             viewHolder.courseImage = view.findViewById(R.id.course_image);
             viewHolder.courseName = view.findViewById(R.id.course_name);
             viewHolder.teacherName = view.findViewById(R.id.teacher_name);
-            viewHolder.className = view.findViewById(R.id.class_name);
+            viewHolder.courseDate = view.findViewById(R.id.course_date);
+            // viewHolder.className = view.findViewById(R.id.class_name);
             viewHolder.signInImg = view.findViewById(R.id.signIn_Iv);
             viewHolder.signInTv = view.findViewById(R.id.signIn_Tv);
 //            if(flag != 1){
-            viewHolder.signInImg.setVisibility(View.INVISIBLE);
-            viewHolder.signInTv.setVisibility(View.INVISIBLE);
+            //viewHolder.courseImage.setImageBitmap(BitmapFactory.decodeFile(course.getImgFilePath()));
+            viewHolder.signInImg.setVisibility(View.VISIBLE);
+            viewHolder.signInTv.setVisibility(View.VISIBLE);
 //            }
             view.setTag(viewHolder);
-        }else {
+        } else {
             view = convertView;
             viewHolder = (ViewHolder) view.getTag();
         }
-        if(course.getImgFilePath().equals("")){
+
+
+        if (course.getImgFilePath().equals("")) {
             viewHolder.courseImage.setImageResource(course.getImageId());
-            viewHolder.courseName.setText(course.getCourseName());
+           viewHolder.courseName.setText(course.getCourseName());
             viewHolder.teacherName.setText(course.getTeacherName());
-            viewHolder.className.setText(course.getClassName());
-        }else if(course.getImageId() == -1){
+            // viewHolder.className.setText(course.getClassName());
+            viewHolder.courseDate.setText(course.getCourseDate());
+        } else if (course.getImageId() == -1) {
             viewHolder.courseImage.setImageBitmap(BitmapFactory.decodeFile(course.getImgFilePath()));
-            viewHolder.courseName.setText(course.getCourseName());
-            viewHolder.teacherName.setText(course.getTeacherName());
-            viewHolder.className.setText(course.getClassName());
+//            viewHolder.courseName.setText(course.getCourseName());
+//            viewHolder.teacherName.setText(course.getTeacherName());
+//            viewHolder.className.setText(course.getClassName());
         }
 
-        if(flag == 1){
+        if (flag == 1) {
             viewHolder.signInImg.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -115,12 +120,12 @@ public class CourseAdapter extends ArrayAdapter<Course> {
         return view;
     }
 
-    class ViewHolder{
+    class ViewHolder {
         ImageView courseImage;
         TextView courseName;
         TextView teacherName;
         TextView className;
-
+        TextView courseDate;
         ImageView signInImg;
         TextView signInTv;
     }

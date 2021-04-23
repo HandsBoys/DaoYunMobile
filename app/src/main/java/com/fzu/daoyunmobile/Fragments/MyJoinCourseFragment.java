@@ -7,8 +7,6 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import android.os.Environment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,17 +14,10 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.fzu.daoyunmobile.Activities.ClassTabActivity;
-import com.fzu.daoyunmobile.Adapter.CourseAdapter;
+import com.fzu.daoyunmobile.Adapter.MyJoinCourseAdapter;
 import com.fzu.daoyunmobile.Entity.Course;
 import com.fzu.daoyunmobile.R;
 
-import org.jetbrains.annotations.NotNull;
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,7 +27,7 @@ import java.util.List;
 public class MyJoinCourseFragment extends Fragment {
 
     public List<Course> courseList = new ArrayList<>();
-    public CourseAdapter adapter;
+    public MyJoinCourseAdapter adapter;
     public ListView listView;
     private int myJoinNum = 0;
     public ProgressDialog progressDialog;
@@ -93,11 +84,12 @@ public class MyJoinCourseFragment extends Fragment {
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                adapter = new CourseAdapter(getContext(), R.layout.course_frameitem_layout, courseList);
+                adapter = new MyJoinCourseAdapter(getContext(), R.layout.myjoincourse_frameitem_layout, courseList);
                 listView = getActivity().findViewById(R.id.myjoincourselist_view);
                 listView.setAdapter(adapter);
                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
+                    //Item Click 传入需要的参数
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         Course course = courseList.get(position);
 //                Toast.makeText(getContext(), course.getCourseName(), Toast.LENGTH_SHORT).show();
@@ -145,7 +137,7 @@ public class MyJoinCourseFragment extends Fragment {
 //                    if (teacherName == null) {
 //                        course[0] = new Course(R.drawable.course_img_1, className, "", gradeClass, classId);
 //                    } else {
-        course[0] = new Course(R.drawable.course_img_1, "工程训练", "陈哥", "1班", "566");
+        course[0] = new Course(R.drawable.course_img_1, "工程训练", "陈哥", "1班", "566", "2020-2-2");
 
 //                    }
         course[0].teacherPhone = "1066666655";
@@ -197,7 +189,7 @@ public class MyJoinCourseFragment extends Fragment {
 //                    }
 //                }
         cList.add(course[0]);
-        course[0] = new Course(R.drawable.course_img_2, "工程训练2", "陈大哥", "2班", "567");
+        course[0] = new Course(R.drawable.course_img_2, "工程训练2", "陈大哥", "2班", "567", "2021-1-2");
         course[0].teacherPhone = "1234567";
         cList.add(course[0]);
 //            }

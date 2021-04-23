@@ -12,17 +12,15 @@ import androidx.fragment.app.Fragment;
 
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.fzu.daoyunmobile.Activities.CreateClassActivity;
 import com.fzu.daoyunmobile.Activities.MainActivity;
-import com.fzu.daoyunmobile.Adapter.CourseAdapter;
+import com.fzu.daoyunmobile.Adapter.MyJoinCourseAdapter;
 import com.fzu.daoyunmobile.Entity.Course;
 import com.fzu.daoyunmobile.R;
 import com.lxj.xpopup.XPopup;
@@ -153,7 +151,7 @@ public class HpMainFragment extends Fragment {
 //                myCreateFragment.adapter.notifyDataSetChanged();
             }
             myCreateFragment.adapter.notifyDataSetChanged();
-            myCreateFragment.adapter = new CourseAdapter(getContext(), R.layout.course_frameitem_layout
+            myCreateFragment.adapter = new MyJoinCourseAdapter(getContext(), R.layout.myjoincourse_frameitem_layout
                     , myCreateFragment.courseList, 2);
             myCreateFragment.listView.setAdapter(myCreateFragment.adapter);
         }

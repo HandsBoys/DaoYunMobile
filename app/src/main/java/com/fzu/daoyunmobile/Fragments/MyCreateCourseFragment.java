@@ -7,8 +7,6 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import android.os.Environment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,17 +14,10 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.fzu.daoyunmobile.Activities.ClassTabActivity;
-import com.fzu.daoyunmobile.Activities.MainActivity;
-import com.fzu.daoyunmobile.Adapter.CourseAdapter;
+import com.fzu.daoyunmobile.Adapter.MyJoinCourseAdapter;
 import com.fzu.daoyunmobile.Entity.Course;
 import com.fzu.daoyunmobile.R;
 
-import org.jetbrains.annotations.NotNull;
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +29,7 @@ public class MyCreateCourseFragment extends Fragment {
 
     public static List<Course> courseList = new ArrayList<>();
     private int myJoinNum = 0;
-    public CourseAdapter adapter;
+    public MyJoinCourseAdapter adapter;
     public ListView listView;
     public ProgressDialog progressDialog;
 
@@ -62,7 +53,7 @@ public class MyCreateCourseFragment extends Fragment {
         progressDialog.setCancelable(true);
         progressDialog.show();
         initCourses();
-        adapter = new CourseAdapter(getContext(), R.layout.course_frameitem_layout, courseList, 2);
+        adapter = new MyJoinCourseAdapter(getContext(), R.layout.myjoincourse_frameitem_layout, courseList, 2);
         listView = getActivity().findViewById(R.id.mycreatecourselist_view);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -122,7 +113,7 @@ public class MyCreateCourseFragment extends Fragment {
             public void run() {
                 courseList = temp_courseList;
                 adapter.notifyDataSetChanged();
-                adapter = new CourseAdapter(getContext(), R.layout.course_frameitem_layout, courseList, 2);
+                adapter = new MyJoinCourseAdapter(getContext(), R.layout.myjoincourse_frameitem_layout, courseList, 2);
                 listView.setAdapter(adapter);
                 progressDialog.dismiss();
             }
