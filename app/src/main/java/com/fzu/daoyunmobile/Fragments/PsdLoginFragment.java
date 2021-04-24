@@ -1,85 +1,76 @@
 package com.fzu.daoyunmobile.Fragments;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.fzu.daoyunmobile.Activities.MainActivity;
+import com.fzu.daoyunmobile.FrameItems.InputFrameItem;
 import com.fzu.daoyunmobile.R;
-import com.fzu.daoyunmobile.activities.RegisterActivity;
+import com.fzu.daoyunmobile.Activities.RegisterActivity;
+
+import org.jetbrains.annotations.NotNull;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.FormBody;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link PsdLoginFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * 密码登录视图
  */
 public class PsdLoginFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-    private Button registerBtn;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    //注册按钮
+    private Button registerBtn;
+    //登录按钮
+    private Button loginBtn;
+    //输入账号框
+    private InputFrameItem input_mobilenum;
+    //输入密码框
+    private InputFrameItem intput_psd;
+
 
     public PsdLoginFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment PsdLoginFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static PsdLoginFragment newInstance(String param1, String param2) {
-        PsdLoginFragment fragment = new PsdLoginFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-//        registerBtn = (Button) getView().findViewById(R.id.bt_login_register);
-//        registerBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                JumpToRegister();
-//            }
-//        });
-
-
-    }
-
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        Button button = (Button) getActivity().findViewById(R.id.bt_login_register);
-        button.setOnClickListener(new View.OnClickListener() {
+        registerBtn = getActivity().findViewById(R.id.bt_loginpsd_register);
+        registerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 JumpToRegister();
             }
         });
+
+        loginBtn = getActivity().findViewById(R.id.bt_loginpsd_submit);
+        loginBtn.setOnClickListener(v -> Login());
+
+
+        input_mobilenum = new InputFrameItem(getActivity().getWindow().getDecorView(), R.id.input_mobilenum_psdlogin, R.id.input_frameitem_editText, R.id.input_frameitem_img, R.drawable.ic_login_username, "手机号/账号/邮箱");
+        intput_psd = new InputFrameItem(getActivity().getWindow().getDecorView(), R.id.input_psd, R.drawable.ic_login_password, "密码");
+
     }
 
     @Override
@@ -91,5 +82,124 @@ public class PsdLoginFragment extends Fragment {
 
     private void JumpToRegister() {
         startActivity(new Intent(getActivity(), RegisterActivity.class));
+    }
+
+    private void Login() {
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                OkHttpClient okHttpClient = new OkHttpClient();
+                MediaType JSON = MediaType.parse("application/json;charset=utf-8");
+                JSONObject json = new JSONObject();
+                try {
+                    json.put("userName", input_mobilenum.GetEditText());
+                    json.put("password", intput_psd.GetEditText());
+                    json.put("code", "1234");
+                    json.put("phone", "1066666655");
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                RequestBody requestBody = RequestBody.create(JSON, String.valueOf(json));
+
+                Request request = new Request.Builder()
+                        .header("Content-Type", "application/json")
+                        .url("http://1.15.31.156:8081/login3")
+                        .post(requestBody)
+                        .build();
+                okHttpClient.newCall(request).enqueue(new Callback() {
+                    @Override
+                    public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                        Log.i("LoginInfo", e.getMessage());
+                        System.out.println(e.getMessage());
+//                            Toast.makeText(LoginActivity.this, "Connection failed!", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                        String responseBodyStr = response.body().string();
+                        Log.i("LoginInfo", responseBodyStr);
+                        System.out.println(responseBodyStr);
+
+                        if (responseBodyStr.contains("登录成功")) {
+                            startActivity(new Intent(getActivity(), MainActivity.class));
+                        } else {
+                            //showAlertDialog("用户不存在或者密码错误");
+                            System.out.println("用户不存在或者密码错误");
+                        }
+//                            SharedPreferences.Editor editor = getSharedPreferences("remember_user", MODE_PRIVATE).edit();
+//                            if(rememberUserCB.isChecked()){
+//                                editor.putString("userName", username);
+//                                editor.putString("password", password);
+//                                editor.apply();
+//                            }else{
+//                                editor.putString("userName", "");
+//                                editor.putString("password", "");
+//                                editor.apply();
+//                            }
+//                            if(responseBodyStr.length() == 5){
+//                                MainActivity.icon = null;
+//                            }else{
+//                                String typeStr = responseBodyStr.substring(0, 5);
+//                                String iconStr = responseBodyStr.substring(5);
+//                                MainActivity.icon = iconStr;
+//                                if(typeStr.equals("phone")){
+//                                    MainActivity.loginType = "phoneNumber";
+//                                }else if(typeStr.equals("userN")){
+//                                    MainActivity.loginType = "userName";
+//                                }else if(typeStr.equals("email")){
+//                                    MainActivity.loginType = "email";
+//                                }
+//                            }
+//                            try {
+//                                JSONObject jsonObject = new JSONObject(responseBodyStr);
+//                                Log.i("LoginInfoInfo", jsonObject.toString());
+//                                MainActivity.loginType = jsonObject.getString("loginType");
+//                                MainActivity.icon = jsonObject.getString("icon");
+//                                MainActivity.name = jsonObject.getString("name");
+//                                MainActivity.phoneNumber = jsonObject.getString("phone");
+//                                Log.i("LoginInfoInfo", MainActivity.phoneNumber);
+//                            } catch (JSONException e) {
+//                                e.printStackTrace();
+//                            }
+//                            Intent intent = new Intent(getActivity(), MainActivity.class);
+//                            intent.putExtra("username", "512739421");
+//                            startActivity(intent);
+                        // }
+                    }
+                });
+
+//                if(username.equals("admin") || username.equals("teacher") || username.equals("student1")
+//                        || username.equals("student2")){
+
+//                }else {
+//                    SharedPreferences preferences;
+//                    if(!new File("/data/data/" + getPackageName().toString() + "/shared_prefs/",
+//                            username + ".xml").exists()){
+//                        showAlertDialog("用户名不存在！");
+//                    }else{
+//                        preferences = getSharedPreferences(username, MODE_PRIVATE);
+//                        if(!preferences.getString("password", "").equals(password)){
+//                            showAlertDialog("密码错误！");
+//                        }else {
+//                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+//                            intent.putExtra("username", username);
+//                            startActivity(intent);
+//                        }
+//                    }
+//
+            }
+
+        }).start();
+    }
+
+
+    protected void showAlertDialog(final String msg) {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
+                .setMessage(msg)
+                .setPositiveButton("确定", null);
+        builder.show();
     }
 }

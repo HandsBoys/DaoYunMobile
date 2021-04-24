@@ -1,15 +1,19 @@
 
-package com.fzu.daoyunmobile.activities;
+package com.fzu.daoyunmobile.Activities;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.widget.Button;
-import android.widget.EditText;
+import android.widget.Toast;
 
 import com.fzu.daoyunmobile.FrameItems.InputFrameItem;
+import com.fzu.daoyunmobile.FrameItems.InputVCodeFrameItem;
 import com.fzu.daoyunmobile.R;
+import com.fzu.daoyunmobile.Utils.StatusBarUtil;
+import com.lxj.xpopup.XPopup;
+import com.lxj.xpopup.interfaces.OnSelectListener;
 
 import java.util.Random;
 
@@ -18,35 +22,42 @@ public class RegisterActivity extends AppCompatActivity {
     private Button veriCodeBtn;
     //注册按钮
     private Button registerBtn;
-    //账号
-    private EditText userName;
-    //密码
-    private EditText password;
-    //确认密码
-    private EditText confPassword;
-    //验证码
-    private EditText veriCode;
-
-
-    
+    //返回按钮
+    private Button backBtn;
     //生成的验证码
     private int verificationCode;
 
-    private InputFrameItem item;
+    private InputFrameItem input_mobilenum;
+    private InputFrameItem intput_psd;
+    private InputFrameItem intput_confpsd;
+    private InputVCodeFrameItem input_vericode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-        veriCodeBtn = findViewById(R.id.bt_veri_submit);
-        userName = findViewById(R.id.et_login_username);
-        password = findViewById(R.id.et_login_pwd);
-        // confPassword = findViewById(R.id.tv_login_forget_pwd);
-        veriCode = findViewById(R.id.et_reg_vericode);
+        StatusBarUtil.transparencyBar(RegisterActivity.this);
+
+
         registerBtn = findViewById(R.id.bt_register_submit);
+        //TODO 注册按钮 后续接入API使用
+        registerBtn.setOnClickListener(v -> {
+            System.out.println(input_mobilenum.GetEditText());
+            System.out.println(intput_psd.GetEditText());
+            System.out.println(input_vericode.GetEditText());
+            finish();
+        });
 
-        item = new InputFrameItem(getWindow().getDecorView(), R.id.testID, R.drawable.ic_login_username);
 
+        backBtn = findViewById(R.id.res_back_button);
+        backBtn.setOnClickListener(v -> finish());
+
+
+        input_mobilenum = new InputFrameItem(getWindow().getDecorView(), R.id.input_mobilenum, R.id.input_frameitem_editText, R.id.input_frameitem_img, R.drawable.ic_login_username, "手机号/邮箱");
+        intput_psd = new InputFrameItem(getWindow().getDecorView(), R.id.input_psd, R.drawable.ic_login_password, "密码");
+        intput_confpsd = new InputFrameItem(getWindow().getDecorView(), R.id.input_confpsd, R.drawable.ic_login_password, "再次输入密码");
+        input_vericode = new InputVCodeFrameItem(getWindow().getDecorView(), R.id.input_vericode, R.drawable.ic_login_password);
+        veriCodeBtn = input_vericode.GetSubBtn();
 
         veriCodeBtn.setOnClickListener(v -> {
             Random r = new Random();
@@ -58,7 +69,8 @@ public class RegisterActivity extends AppCompatActivity {
             builder.show();
             veriCodeBtn.setText("已发送");
             veriCodeBtn.setEnabled(false);
+
         });
-        registerBtn.setOnClickListener(v -> finish());
+
     }
 }
