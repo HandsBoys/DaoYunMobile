@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import com.fzu.daoyunmobile.Activities.CreateClassActivity;
 import com.fzu.daoyunmobile.Activities.MainActivity;
+import com.fzu.daoyunmobile.Adapter.MyCreateCourseAdapter;
 import com.fzu.daoyunmobile.Adapter.MyJoinCourseAdapter;
 import com.fzu.daoyunmobile.Entity.Course;
 import com.fzu.daoyunmobile.R;
@@ -54,7 +55,7 @@ public class HpMainFragment extends Fragment {
 
         //添加按钮
         addTV = view.findViewById(R.id.toolbar_right_tv);
-        
+
         return view;
     }
 
@@ -151,7 +152,7 @@ public class HpMainFragment extends Fragment {
 //                myCreateFragment.adapter.notifyDataSetChanged();
             }
             myCreateFragment.adapter.notifyDataSetChanged();
-            myCreateFragment.adapter = new MyJoinCourseAdapter(getContext(), R.layout.myjoincourse_frameitem_layout
+            myCreateFragment.adapter = new MyCreateCourseAdapter(getContext(), R.layout.mycreatecourse_frameitem_layout
                     , myCreateFragment.courseList, 2);
             myCreateFragment.listView.setAdapter(myCreateFragment.adapter);
         }

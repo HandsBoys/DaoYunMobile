@@ -14,6 +14,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.fzu.daoyunmobile.Activities.ClassTabActivity;
+import com.fzu.daoyunmobile.Adapter.MyCreateCourseAdapter;
 import com.fzu.daoyunmobile.Adapter.MyJoinCourseAdapter;
 import com.fzu.daoyunmobile.Entity.Course;
 import com.fzu.daoyunmobile.R;
@@ -29,7 +30,7 @@ public class MyCreateCourseFragment extends Fragment {
 
     public static List<Course> courseList = new ArrayList<>();
     private int myJoinNum = 0;
-    public MyJoinCourseAdapter adapter;
+    public MyCreateCourseAdapter adapter;
     public ListView listView;
     public ProgressDialog progressDialog;
 
@@ -53,7 +54,7 @@ public class MyCreateCourseFragment extends Fragment {
         progressDialog.setCancelable(true);
         progressDialog.show();
         initCourses();
-        adapter = new MyJoinCourseAdapter(getContext(), R.layout.myjoincourse_frameitem_layout, courseList, 2);
+        adapter = new MyCreateCourseAdapter(getContext(), R.layout.mycreatecourse_frameitem_layout, courseList, 2);
         listView = getActivity().findViewById(R.id.mycreatecourselist_view);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -113,7 +114,7 @@ public class MyCreateCourseFragment extends Fragment {
             public void run() {
                 courseList = temp_courseList;
                 adapter.notifyDataSetChanged();
-                adapter = new MyJoinCourseAdapter(getContext(), R.layout.myjoincourse_frameitem_layout, courseList, 2);
+                adapter = new MyCreateCourseAdapter(getContext(), R.layout.mycreatecourse_frameitem_layout, courseList, 2);
                 listView.setAdapter(adapter);
                 progressDialog.dismiss();
             }

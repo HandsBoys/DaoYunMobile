@@ -96,20 +96,16 @@ public class PsdLoginFragment extends Fragment {
                     json.put("userName", input_mobilenum.GetEditText());
                     json.put("password", intput_psd.GetEditText());
                     json.put("code", "1234");
+                    json.put("phone", "1066666655");
 
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
                 RequestBody requestBody = RequestBody.create(JSON, String.valueOf(json));
 
-//                RequestBody requestBody = new FormBody.Builder()
-//                        .add("userName", "123456")
-//                        .add("password", "512739421")
-//                        .add("code", "1234")
-//                        .build();
                 Request request = new Request.Builder()
                         .header("Content-Type", "application/json")
-                        .url("http://1.15.31.156:8081/login")
+                        .url("http://1.15.31.156:8081/login3")
                         .post(requestBody)
                         .build();
                 okHttpClient.newCall(request).enqueue(new Callback() {
