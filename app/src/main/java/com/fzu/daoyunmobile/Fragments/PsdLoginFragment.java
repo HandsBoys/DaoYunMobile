@@ -113,7 +113,6 @@ public class PsdLoginFragment extends Fragment {
                     public void onFailure(@NotNull Call call, @NotNull IOException e) {
                         Log.i("LoginInfo", e.getMessage());
                         System.out.println(e.getMessage());
-//                            Toast.makeText(LoginActivity.this, "Connection failed!", Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
@@ -125,70 +124,11 @@ public class PsdLoginFragment extends Fragment {
                         if (responseBodyStr.contains("登录成功")) {
                             startActivity(new Intent(getActivity(), MainActivity.class));
                         } else {
-                            //showAlertDialog("用户不存在或者密码错误");
                             System.out.println("用户不存在或者密码错误");
                         }
-//                            SharedPreferences.Editor editor = getSharedPreferences("remember_user", MODE_PRIVATE).edit();
-//                            if(rememberUserCB.isChecked()){
-//                                editor.putString("userName", username);
-//                                editor.putString("password", password);
-//                                editor.apply();
-//                            }else{
-//                                editor.putString("userName", "");
-//                                editor.putString("password", "");
-//                                editor.apply();
-//                            }
-//                            if(responseBodyStr.length() == 5){
-//                                MainActivity.icon = null;
-//                            }else{
-//                                String typeStr = responseBodyStr.substring(0, 5);
-//                                String iconStr = responseBodyStr.substring(5);
-//                                MainActivity.icon = iconStr;
-//                                if(typeStr.equals("phone")){
-//                                    MainActivity.loginType = "phoneNumber";
-//                                }else if(typeStr.equals("userN")){
-//                                    MainActivity.loginType = "userName";
-//                                }else if(typeStr.equals("email")){
-//                                    MainActivity.loginType = "email";
-//                                }
-//                            }
-//                            try {
-//                                JSONObject jsonObject = new JSONObject(responseBodyStr);
-//                                Log.i("LoginInfoInfo", jsonObject.toString());
-//                                MainActivity.loginType = jsonObject.getString("loginType");
-//                                MainActivity.icon = jsonObject.getString("icon");
-//                                MainActivity.name = jsonObject.getString("name");
-//                                MainActivity.phoneNumber = jsonObject.getString("phone");
-//                                Log.i("LoginInfoInfo", MainActivity.phoneNumber);
-//                            } catch (JSONException e) {
-//                                e.printStackTrace();
-//                            }
-//                            Intent intent = new Intent(getActivity(), MainActivity.class);
-//                            intent.putExtra("username", "512739421");
-//                            startActivity(intent);
-                        // }
                     }
                 });
 
-//                if(username.equals("admin") || username.equals("teacher") || username.equals("student1")
-//                        || username.equals("student2")){
-
-//                }else {
-//                    SharedPreferences preferences;
-//                    if(!new File("/data/data/" + getPackageName().toString() + "/shared_prefs/",
-//                            username + ".xml").exists()){
-//                        showAlertDialog("用户名不存在！");
-//                    }else{
-//                        preferences = getSharedPreferences(username, MODE_PRIVATE);
-//                        if(!preferences.getString("password", "").equals(password)){
-//                            showAlertDialog("密码错误！");
-//                        }else {
-//                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-//                            intent.putExtra("username", username);
-//                            startActivity(intent);
-//                        }
-//                    }
-//
             }
 
         }).start();
