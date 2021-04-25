@@ -1,12 +1,12 @@
 package com.fzu.daoyunmobile.Fragments;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
+import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,7 +26,6 @@ import java.io.IOException;
 
 import okhttp3.Call;
 import okhttp3.Callback;
-import okhttp3.FormBody;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -70,6 +69,7 @@ public class PsdLoginFragment extends Fragment {
 
         input_mobilenum = new InputFrameItem(getActivity().getWindow().getDecorView(), R.id.input_mobilenum_psdlogin, R.id.input_frameitem_editText, R.id.input_frameitem_img, R.drawable.ic_login_username, "手机号/账号/邮箱");
         intput_psd = new InputFrameItem(getActivity().getWindow().getDecorView(), R.id.input_psd, R.drawable.ic_login_password, "密码");
+        intput_psd.GetEditText().setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
 
     }
 
@@ -93,8 +93,8 @@ public class PsdLoginFragment extends Fragment {
                 MediaType JSON = MediaType.parse("application/json;charset=utf-8");
                 JSONObject json = new JSONObject();
                 try {
-                    json.put("userName", input_mobilenum.GetEditText());
-                    json.put("password", intput_psd.GetEditText());
+                    json.put("userName", input_mobilenum.GetEditTextStr());
+                    json.put("password", intput_psd.GetEditTextStr());
                     json.put("code", "1234");
                     json.put("phone", "1066666655");
 

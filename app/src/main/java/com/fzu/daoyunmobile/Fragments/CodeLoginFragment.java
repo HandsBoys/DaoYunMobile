@@ -11,15 +11,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.fzu.daoyunmobile.Activities.MainActivity;
-import com.fzu.daoyunmobile.Activities.QRCodeTestActivity;
 import com.fzu.daoyunmobile.FrameItems.InputFrameItem;
 import com.fzu.daoyunmobile.FrameItems.InputVCodeFrameItem;
 import com.fzu.daoyunmobile.R;
-import com.lxj.xpopup.XPopup;
-import com.lxj.xpopup.interfaces.OnSelectListener;
 
 
 import org.jetbrains.annotations.NotNull;
@@ -27,7 +23,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.Random;
 import java.util.regex.Pattern;
 
 import okhttp3.Call;
@@ -89,8 +84,8 @@ public class CodeLoginFragment extends Fragment {
     }
 
     private void sendMessage() {
-        String phone = input_mobilenum.GetEditText();
-        Log.i("phoneInfo", input_mobilenum.GetEditText());
+        String phone = input_mobilenum.GetEditTextStr();
+        Log.i("phoneInfo", input_mobilenum.GetEditTextStr());
         Pattern pattern = Pattern.compile("^[1]\\d{10}$");
         if (pattern.matcher(phone).matches()) {
             input_vericode.GetSubBtn().setText("已发送");
@@ -137,7 +132,7 @@ public class CodeLoginFragment extends Fragment {
 
     //TODO 登录接口待做登录
     private void Login() {
-        String phone = input_mobilenum.GetEditText();
+        String phone = input_mobilenum.GetEditTextStr();
         String vcode = input_vericode.GetEditText();
         Pattern pattern = Pattern.compile("^[1]\\d{10}$");
         if (pattern.matcher(phone).matches()) {

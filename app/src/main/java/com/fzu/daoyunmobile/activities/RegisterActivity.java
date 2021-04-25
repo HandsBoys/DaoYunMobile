@@ -1,8 +1,8 @@
 
 package com.fzu.daoyunmobile.Activities;
 
-import android.content.DialogInterface;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Log;
 import android.widget.Button;
 
@@ -65,7 +65,13 @@ public class RegisterActivity extends AppCompatActivity {
 
         input_mobilenum = new InputFrameItem(getWindow().getDecorView(), R.id.input_mobilenum, R.id.input_frameitem_editText, R.id.input_frameitem_img, R.drawable.ic_login_username, "手机号/邮箱");
         intput_psd = new InputFrameItem(getWindow().getDecorView(), R.id.input_psd, R.drawable.ic_login_password, "密码");
+        intput_psd.GetEditText().setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+
+
+
         intput_confpsd = new InputFrameItem(getWindow().getDecorView(), R.id.input_confpsd, R.drawable.ic_login_password, "再次输入密码");
+        intput_confpsd.GetEditText().setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+
         input_vericode = new InputVCodeFrameItem(getWindow().getDecorView(), R.id.input_vericode, R.drawable.ic_login_password);
         veriCodeBtn = input_vericode.GetSubBtn();
 
@@ -78,8 +84,8 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void sendMessage() {
-        String phone = input_mobilenum.GetEditText();
-        Log.i("phoneInfo", input_mobilenum.GetEditText());
+        String phone = input_mobilenum.GetEditTextStr();
+        Log.i("phoneInfo", input_mobilenum.GetEditTextStr());
         Pattern pattern = Pattern.compile("^[1]\\d{10}$");
         if (pattern.matcher(phone).matches()) {
             input_vericode.GetSubBtn().setText("已发送");
@@ -122,8 +128,8 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void regiseter() {
-        System.out.println(intput_psd.GetEditText() + intput_confpsd.GetEditText());
-        if (!intput_psd.GetEditText().equals(intput_confpsd.GetEditText())) {
+        System.out.println(intput_psd.GetEditTextStr() + intput_confpsd.GetEditTextStr());
+        if (!intput_psd.GetEditTextStr().equals(intput_confpsd.GetEditTextStr())) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this)
                     .setMessage("密码不一致")
                     .setPositiveButton("确定", null);
@@ -133,17 +139,17 @@ public class RegisterActivity extends AppCompatActivity {
                 OkHttpClient okHttpClient = new OkHttpClient();
                 MediaType JSON = MediaType.parse("application/json;charset=utf-8");
                 JSONObject json = new JSONObject();
-                System.out.println(input_mobilenum.GetEditText());
-                System.out.println(intput_psd.GetEditText());
+                System.out.println(input_mobilenum.GetEditTextStr());
+                System.out.println(intput_psd.GetEditTextStr());
                 System.out.println(input_vericode.GetEditText());
-                System.out.println(input_mobilenum.GetEditText());
+                System.out.println(input_mobilenum.GetEditTextStr());
 
 
                 try {
                     json.put("code", input_vericode.GetEditText());
-                    json.put("password", intput_psd.GetEditText());
-                    json.put("phone", input_mobilenum.GetEditText());
-                    json.put("userName", input_mobilenum.GetEditText());
+                    json.put("password", intput_psd.GetEditTextStr());
+                    json.put("phone", input_mobilenum.GetEditTextStr());
+                    json.put("userName", input_mobilenum.GetEditTextStr());
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

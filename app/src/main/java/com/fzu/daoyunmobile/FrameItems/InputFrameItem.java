@@ -44,8 +44,13 @@ public class InputFrameItem {
     /**
      * @return 获取输入框内容
      */
-    public String GetEditText() {
+    public String GetEditTextStr() {
         return editText.getText().toString();
+    }
+
+
+    public EditText GetEditText() {
+        return editText;
     }
 
 
