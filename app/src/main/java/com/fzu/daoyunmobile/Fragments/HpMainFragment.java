@@ -166,7 +166,7 @@ public class HpMainFragment extends Fragment {
                 .hasShadowBg(true)
 //                            .hasBlurBg(true)
 //                            .isDestroyOnDismiss(true) //对于只使用一次的弹窗，推荐设置这个
-                .asBottomList("", new String[]{"创建班课", "使用班课号加入班课"},
+                .asBottomList("", new String[]{"创建班课", "使用班课号加入班课","使用二维码加入班课"},
                         new OnSelectListener() {
                             @Override
                             public void onSelect(int position, String text) {
