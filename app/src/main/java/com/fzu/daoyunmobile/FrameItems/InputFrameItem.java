@@ -17,39 +17,39 @@ public class InputFrameItem {
 
     public InputFrameItem(View view, int priViewId, int editTextId, int icoId, int imgID, String name) {
         actView = view;
-        SetPriView(priViewId);
-        SetEditText(editTextId);
-        SetEditTextHint(name);
-        SetIcoImg(icoId, imgID);
+        setPriView(priViewId);
+        setEditText(editTextId);
+        setEditTextHint(name);
+        setIcoImg(icoId, imgID);
     }
 
 
     public InputFrameItem(View view, int priViewId, int imgID, String name) {
         actView = view;
-        SetPriView(priViewId);
-        SetEditText(R.id.input_frameitem_editText);
-        SetEditTextHint(name);
-        SetIcoImg(R.id.input_frameitem_img, imgID);
+        setPriView(priViewId);
+        setEditText(R.id.input_frameitem_editText);
+        setEditTextHint(name);
+        setIcoImg(R.id.input_frameitem_img, imgID);
     }
 
 
-    public void SetPriView(int id) {
+    public void setPriView(int id) {
         priView = actView.findViewById(id);
     }
 
-    public void SetEditText(int id) {
+    public void setEditText(int id) {
         editText = priView.findViewById(id);
     }
 
     /**
      * @return 获取输入框内容
      */
-    public String GetEditTextStr() {
+    public String getEditTextStr() {
         return editText.getText().toString();
     }
 
 
-    public EditText GetEditText() {
+    public EditText getEditText() {
         return editText;
     }
 
@@ -57,11 +57,11 @@ public class InputFrameItem {
     /**
      * @param name 设值输入框的名称
      */
-    public void SetEditTextHint(String name) {
+    public void setEditTextHint(String name) {
         editText.setHint(name);
     }
 
-    public void SetIcoImg(int id, int imgId) {
+    public void setIcoImg(int id, int imgId) {
         icoImg = priView.findViewById(id);
         Bitmap bm = BitmapFactory.decodeResource(actView.getResources(), imgId);
         icoImg.setImageBitmap(bm);

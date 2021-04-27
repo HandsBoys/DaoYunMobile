@@ -65,31 +65,30 @@ public class RegisterActivity extends AppCompatActivity {
 
         input_mobilenum = new InputFrameItem(getWindow().getDecorView(), R.id.input_mobilenum, R.id.input_frameitem_editText, R.id.input_frameitem_img, R.drawable.ic_login_username, "手机号/邮箱");
         intput_psd = new InputFrameItem(getWindow().getDecorView(), R.id.input_psd, R.drawable.ic_login_password, "密码");
-        intput_psd.GetEditText().setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-
+        // 设置密码格式
+        intput_psd.getEditText().setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
 
 
         intput_confpsd = new InputFrameItem(getWindow().getDecorView(), R.id.input_confpsd, R.drawable.ic_login_password, "再次输入密码");
-        intput_confpsd.GetEditText().setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        intput_confpsd.getEditText().setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
 
         input_vericode = new InputVCodeFrameItem(getWindow().getDecorView(), R.id.input_vericode, R.drawable.ic_login_password);
-        veriCodeBtn = input_vericode.GetSubBtn();
+        veriCodeBtn = input_vericode.getSubBtn();
 
         veriCodeBtn.setOnClickListener(v -> {
+            input_vericode.startBtnDownTime(60);
             sendMessage();
-            veriCodeBtn.setText("已发送");
-            veriCodeBtn.setEnabled(false);
         });
 
     }
 
     private void sendMessage() {
-        String phone = input_mobilenum.GetEditTextStr();
-        Log.i("phoneInfo", input_mobilenum.GetEditTextStr());
+        String phone = input_mobilenum.getEditTextStr();
+        Log.i("phoneInfo", input_mobilenum.getEditTextStr());
         Pattern pattern = Pattern.compile("^((13[0-9])|(14[0,1,4-9])|(15[0-3,5-9])|(16[2,5,6,7])|(17[0-8])|(18[0-9])|(19[0-3,5-9]))\\d{8}$");
         if (pattern.matcher(phone).matches()) {
-            input_vericode.GetSubBtn().setText("已发送");
-            input_vericode.GetSubBtn().setEnabled(false);
+            input_vericode.getSubBtn().setText("已发送");
+            input_vericode.getSubBtn().setEnabled(false);
             new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -128,8 +127,8 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void regiseter() {
-        System.out.println(intput_psd.GetEditTextStr() + intput_confpsd.GetEditTextStr());
-        if (!intput_psd.GetEditTextStr().equals(intput_confpsd.GetEditTextStr())) {
+        System.out.println(intput_psd.getEditTextStr() + intput_confpsd.getEditTextStr());
+        if (!intput_psd.getEditTextStr().equals(intput_confpsd.getEditTextStr())) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this)
                     .setMessage("密码不一致")
                     .setPositiveButton("确定", null);
@@ -139,17 +138,17 @@ public class RegisterActivity extends AppCompatActivity {
                 OkHttpClient okHttpClient = new OkHttpClient();
                 MediaType JSON = MediaType.parse("application/json;charset=utf-8");
                 JSONObject json = new JSONObject();
-                System.out.println(input_mobilenum.GetEditTextStr());
-                System.out.println(intput_psd.GetEditTextStr());
-                System.out.println(input_vericode.GetEditText());
-                System.out.println(input_mobilenum.GetEditTextStr());
+                System.out.println(input_mobilenum.getEditTextStr());
+                System.out.println(intput_psd.getEditTextStr());
+                System.out.println(input_vericode.getEditText());
+                System.out.println(input_mobilenum.getEditTextStr());
 
 
                 try {
-                    json.put("code", input_vericode.GetEditText());
-                    json.put("password", intput_psd.GetEditTextStr());
-                    json.put("phone", input_mobilenum.GetEditTextStr());
-                    json.put("userName", input_mobilenum.GetEditTextStr());
+                    json.put("code", input_vericode.getEditText());
+                    json.put("password", intput_psd.getEditTextStr());
+                    json.put("phone", input_mobilenum.getEditTextStr());
+                    json.put("userName", input_mobilenum.getEditTextStr());
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

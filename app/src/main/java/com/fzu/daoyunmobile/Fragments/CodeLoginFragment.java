@@ -72,10 +72,10 @@ public class CodeLoginFragment extends Fragment {
         input_vericode = new InputVCodeFrameItem(getActivity().getWindow().getDecorView(), R.id.input_vericode, R.drawable.ic_login_password);
 
 
-        input_vericode.GetSubBtn().setOnClickListener(v -> {
+        input_vericode.getSubBtn().setOnClickListener(v -> {
             //startActivity(new Intent(getActivity(), ThirdLoginActivity.class));
             // btnCountDownTimer.start();
-            input_vericode.GetSubBtn().post(runnable);
+            input_vericode.startBtnDownTime(60);
             // sendMessage();
 //            Random r = new Random();
 //            verificationCode = r.nextInt(899999) + 100000;
@@ -92,11 +92,11 @@ public class CodeLoginFragment extends Fragment {
     private Runnable runnable = new Runnable() {
         @Override
         public void run() {
-            input_vericode.GetSubBtn().setText(seconds <= 0 ? "重新获取" : String.format(Locale.CHINA, "%ds", seconds));
-            input_vericode.GetSubBtn().setEnabled(seconds <= 0);
+            input_vericode.getSubBtn().setText(seconds <= 0 ? "重新获取" : String.format(Locale.CHINA, "%ds", seconds));
+            input_vericode.getSubBtn().setEnabled(seconds <= 0);
             seconds--;
             if (seconds >= 0) {
-                input_vericode.GetSubBtn().postDelayed(this, 1000);//递归执行
+                input_vericode.getSubBtn().postDelayed(this, 1000);//递归执行
             } else {
                 seconds = 30;//复位
             }
@@ -111,12 +111,12 @@ public class CodeLoginFragment extends Fragment {
     }
 
     private void sendMessage() {
-        String phone = input_mobilenum.GetEditTextStr();
-        Log.i("phoneInfo", input_mobilenum.GetEditTextStr());
+        String phone = input_mobilenum.getEditTextStr();
+        Log.i("phoneInfo", input_mobilenum.getEditTextStr());
         Pattern pattern = Pattern.compile("^[1]\\d{10}$");
         if (pattern.matcher(phone).matches()) {
-            input_vericode.GetSubBtn().setText("已发送");
-            input_vericode.GetSubBtn().setEnabled(false);
+            input_vericode.getSubBtn().setText("已发送");
+            input_vericode.getSubBtn().setEnabled(false);
             new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -165,8 +165,8 @@ public class CodeLoginFragment extends Fragment {
 
     //TODO 登录接口待做登录
     private void Login() {
-        String phone = input_mobilenum.GetEditTextStr();
-        String vcode = input_vericode.GetEditText();
+        String phone = input_mobilenum.getEditTextStr();
+        String vcode = input_vericode.getEditText();
 
         if (VerifyUtil.isChinaPhoneLegal(phone)) {
             new Thread(() -> {
