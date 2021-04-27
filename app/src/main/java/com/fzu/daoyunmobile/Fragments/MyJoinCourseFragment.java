@@ -42,10 +42,10 @@ public class MyJoinCourseFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        progressDialog = new ProgressDialog(getContext());
-        progressDialog.setMessage("加载中...");
-        progressDialog.setCancelable(true);
-        progressDialog.show();
+//        progressDialog = new ProgressDialog(getContext());
+//        progressDialog.setMessage("加载中...");
+//        progressDialog.setCancelable(true);
+//        progressDialog.show();
         initCourses();
 
     }

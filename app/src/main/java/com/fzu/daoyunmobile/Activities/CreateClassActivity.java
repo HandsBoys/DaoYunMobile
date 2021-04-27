@@ -75,13 +75,10 @@ public class CreateClassActivity extends AppCompatActivity {
         });
 
         classIconIV = findViewById(R.id.class_icon_Iv);
-        classIconIV.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_PICK, null);
-                intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
-                startActivityForResult(intent, IMAGE_SELECT);
-            }
+        classIconIV.setOnClickListener(v -> {
+            Intent intent = new Intent(Intent.ACTION_PICK, null);
+            intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
+            startActivityForResult(intent, IMAGE_SELECT);
         });
 
         final String[] term = new String[]{"2016-2017-1", "2016-2017-2", "2017-2018-1", "2017-2018-2",
