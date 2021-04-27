@@ -48,12 +48,7 @@ public class InputVCodeFrameItem {
     }
 
     public void SetSubBtn(int id) {
-        System.out.println("INITFUCK");
         submitBtn = priView.findViewById(id);
-        submitBtn.setOnClickListener(v -> {
-            System.out.println("FUCK");
-        });
-
     }
 
     public void SetClickListener(View.OnClickListener clickListener) {

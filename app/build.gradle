@@ -46,8 +46,6 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 
     implementation files('libs\\open_sdk_3.5.3.10_r6772050_lite.jar')
-    implementation files('libs\\mid-core-sdk-4.3.0.jar')
-    implementation files('libs\\mta-android-sdk-3.7.1.jar')
 
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'

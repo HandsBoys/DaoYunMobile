@@ -11,12 +11,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.fzu.daoyunmobile.Activities.MainActivity;
-import com.fzu.daoyunmobile.Activities.ThirdLoginActivity;
 import com.fzu.daoyunmobile.FrameItems.InputFrameItem;
 import com.fzu.daoyunmobile.FrameItems.InputVCodeFrameItem;
 import com.fzu.daoyunmobile.R;
+import com.fzu.daoyunmobile.Utils.VerifyUtil;
 
 
 import org.jetbrains.annotations.NotNull;
@@ -24,7 +25,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.List;
+import java.util.Locale;
 import java.util.regex.Pattern;
 
 import okhttp3.Call;
@@ -49,6 +50,7 @@ public class CodeLoginFragment extends Fragment {
     private Button loginBtn;
     //生成的验证码
     private int verificationCode;
+    private int seconds = 30;//秒数
 
     private String session;
 
@@ -68,10 +70,13 @@ public class CodeLoginFragment extends Fragment {
 
         input_mobilenum = new InputFrameItem(getActivity().getWindow().getDecorView(), R.id.input_mobilenum, R.id.input_frameitem_editText, R.id.input_frameitem_img, R.drawable.ic_login_username, "手机号/邮箱");
         input_vericode = new InputVCodeFrameItem(getActivity().getWindow().getDecorView(), R.id.input_vericode, R.drawable.ic_login_password);
-        input_vericode.GetSubBtn().setOnClickListener(v -> {
-            // startActivity(new Intent(getActivity(), ThirdLoginActivity.class));
 
-             sendMessage();
+
+        input_vericode.GetSubBtn().setOnClickListener(v -> {
+            //startActivity(new Intent(getActivity(), ThirdLoginActivity.class));
+            // btnCountDownTimer.start();
+            input_vericode.GetSubBtn().post(runnable);
+            // sendMessage();
 //            Random r = new Random();
 //            verificationCode = r.nextInt(899999) + 100000;
 //            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
@@ -82,6 +87,21 @@ public class CodeLoginFragment extends Fragment {
 
         });
     }
+
+
+    private Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+            input_vericode.GetSubBtn().setText(seconds <= 0 ? "重新获取" : String.format(Locale.CHINA, "%ds", seconds));
+            input_vericode.GetSubBtn().setEnabled(seconds <= 0);
+            seconds--;
+            if (seconds >= 0) {
+                input_vericode.GetSubBtn().postDelayed(this, 1000);//递归执行
+            } else {
+                seconds = 30;//复位
+            }
+        }
+    };
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -147,57 +167,54 @@ public class CodeLoginFragment extends Fragment {
     private void Login() {
         String phone = input_mobilenum.GetEditTextStr();
         String vcode = input_vericode.GetEditText();
-        Pattern pattern = Pattern.compile("^[1]\\d{10}$");
-        if (pattern.matcher(phone).matches()) {
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    OkHttpClient okHttpClient = new OkHttpClient();
-                    MediaType JSON = MediaType.parse("application/json;charset=utf-8");
-                    org.json.JSONObject json = new JSONObject();
-                    try {
-                        json.put("phone", phone);
-                        json.put("code", vcode);
-                        json.put("password", "1234");
-                        json.put("userName", "1234");
 
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    RequestBody requestBody = RequestBody.create(JSON, String.valueOf(json));
-                    Log.i("LoginInfo", session);
-                    Request request = new Request.Builder()
-                            .header("Content-Type", "application/json")
-                            .addHeader("cookie", session)
-                            .url("http://1.15.31.156:8081/login2")
-                            .post(requestBody)
-                            .build();
-                    okHttpClient.newCall(request).enqueue(new Callback() {
-                        @Override
-                        public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                            Log.i("LoginInfo", e.getMessage());
-                            System.out.println(e.getMessage());
-//                            Toast.makeText(LoginActivity.this, "Connection failed!", Toast.LENGTH_SHORT).show();
-                        }
+        if (VerifyUtil.isChinaPhoneLegal(phone)) {
+            new Thread(() -> {
+                OkHttpClient okHttpClient = new OkHttpClient();
+                MediaType JSON = MediaType.parse("application/json;charset=utf-8");
+                JSONObject json = new JSONObject();
+                try {
+                    json.put("phone", phone);
+                    json.put("code", vcode);
+                    json.put("password", "1234");
+                    json.put("userName", "1234");
 
-                        @Override
-                        public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                            String responseBodyStr = response.body().string();
-                            Log.i("LoginInfo", responseBodyStr);
-                            Headers headers = response.headers();
-                            session = response.headers().get("Set-Cookie");
-                            Log.i("LoginInfoAfter", session);
-
-                            if (responseBodyStr.contains("登录成功")) {
-                                startActivity(new Intent(getActivity(), MainActivity.class));
-                            } else {
-                                //showAlertDialog("用户不存在或者密码错误");
-                                System.out.println("验证码错误");
-                            }
-                        }
-                    });
-
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
+                RequestBody requestBody = RequestBody.create(JSON, String.valueOf(json));
+                Log.i("LoginInfo", session);
+                Request request = new Request.Builder()
+                        .header("Content-Type", "application/json")
+                        .addHeader("Cookie", "Session=" + session)
+                        .url("http://1.15.31.156:8081/login2")
+                        .post(requestBody)
+                        .build();
+                okHttpClient.newCall(request).enqueue(new Callback() {
+                    @Override
+                    public void onFailure(@NotNull Call call, @NotNull IOException e) {
+
+                        Log.i("LoginInfo", e.getMessage());
+                        Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
+
+                    }
+
+                    @Override
+                    public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                        String responseBodyStr = response.body().string();
+                        Log.i("LoginInfo", responseBodyStr);
+                        Headers headers = response.headers();
+                        session = response.headers().get("Set-Cookie");
+                        Log.i("LoginInfoAfter", session);
+
+                        if (responseBodyStr.contains("登录成功")) {
+                            startActivity(new Intent(getActivity(), MainActivity.class));
+                        } else {
+                            //showAlertDialog("用户不存在或者密码错误");
+                            System.out.println("验证码错误");
+                        }
+                    }
+                });
 
             }).start();
         } else {

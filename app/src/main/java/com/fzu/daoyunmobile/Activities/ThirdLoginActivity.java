@@ -21,7 +21,7 @@ import com.tencent.tauth.UiError;
 public class ThirdLoginActivity extends AppCompatActivity {
 
     private static final String TAG = "ThirdLogin";
-    private static final String APP_ID = "101949830";//官方获取的APPID
+    private static final String APP_ID = "101950452";//官方获取的APPID
     private Tencent mTencent;
     private BaseUiListener mIUiListener;
     private UserInfo mUserInfo;
