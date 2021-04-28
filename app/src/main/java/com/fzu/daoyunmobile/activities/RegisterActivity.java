@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.fzu.daoyunmobile.FrameItems.InputFrameItem;
 import com.fzu.daoyunmobile.FrameItems.InputVCodeFrameItem;
 import com.fzu.daoyunmobile.R;
+import com.fzu.daoyunmobile.Utils.AlertDialogUtil;
 import com.fzu.daoyunmobile.Utils.StatusBarUtil;
 
 import org.jetbrains.annotations.NotNull;
@@ -118,21 +119,16 @@ public class RegisterActivity extends AppCompatActivity {
                 }
             }).start();
         } else {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this)
-                    .setMessage("请输入正确的手机号")
-                    .setPositiveButton("确定", null);
-            builder.show();
+            AlertDialogUtil.showConfirmClickAlertDialog("请输入正确的手机号", this);
         }
 
     }
 
+    //注册
     private void regiseter() {
-        System.out.println(intput_psd.getEditTextStr() + intput_confpsd.getEditTextStr());
+        //判断密码是否一致
         if (!intput_psd.getEditTextStr().equals(intput_confpsd.getEditTextStr())) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this)
-                    .setMessage("密码不一致")
-                    .setPositiveButton("确定", null);
-            builder.show();
+            AlertDialogUtil.showConfirmClickAlertDialog("俩次密码不一致", this);
         } else {
             new Thread(() -> {
                 OkHttpClient okHttpClient = new OkHttpClient();

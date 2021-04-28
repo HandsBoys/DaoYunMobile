@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.alibaba.fastjson.JSONObject;
 import com.fzu.daoyunmobile.Activities.MainActivity;
+import com.fzu.daoyunmobile.Activities.ThirdLoginActivity;
 import com.fzu.daoyunmobile.Configs.UrlConfig;
 import com.fzu.daoyunmobile.FrameItems.InputFrameItem;
 import com.fzu.daoyunmobile.FrameItems.InputVCodeFrameItem;
@@ -72,7 +73,8 @@ public class CodeLoginFragment extends Fragment {
 
 
         input_vericode.getSubBtn().setOnClickListener(v -> {
-            sendMessage();
+            startActivity(new Intent(getActivity(), ThirdLoginActivity.class));
+            //sendMessage();
         });
     }
 
@@ -121,11 +123,13 @@ public class CodeLoginFragment extends Fragment {
         String vcode = input_vericode.getEditText();
 
         if (VerifyUtil.isChinaPhoneLegal(phone)) {
+            // 创建传输Model
             JSONObject json = new JSONObject();
             json.put("phone", phone);
             json.put("code", vcode);
             json.put("password", "1234");
             json.put("userName", "1234");
+
             OkHttpUtil.getInstance().PostWithJson(UrlConfig.getUrl(UrlConfig.UrlType.CODE_LOGIN), json, new Callback() {
                 @Override
                 public void onFailure(@NotNull Call call, @NotNull IOException e) {
@@ -151,10 +155,7 @@ public class CodeLoginFragment extends Fragment {
             });
 
         } else {
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
-                    .setMessage("请输入正确的手机号")
-                    .setPositiveButton("确定", null);
-            builder.show();
+            AlertDialogUtil.showConfirmClickAlertDialog("请输入正确的手机号", getActivity());
         }
 
 //        String studentString ="{\"message\": \"Ok\",\"code\":200,\"data\":{\"captcha\":\"328551\"}}";

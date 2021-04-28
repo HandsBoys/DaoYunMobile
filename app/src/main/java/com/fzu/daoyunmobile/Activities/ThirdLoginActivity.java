@@ -8,8 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-import com.alibaba.fastjson.JSONException;
-import com.alibaba.fastjson.JSONObject;
+
 import com.fzu.daoyunmobile.R;
 import com.tencent.connect.UserInfo;
 import com.tencent.connect.auth.QQToken;
@@ -17,6 +16,9 @@ import com.tencent.connect.common.Constants;
 import com.tencent.tauth.IUiListener;
 import com.tencent.tauth.Tencent;
 import com.tencent.tauth.UiError;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class ThirdLoginActivity extends AppCompatActivity {
 
@@ -29,7 +31,7 @@ public class ThirdLoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_third_login);
         //传入参数APPID和全局Context上下文
         mTencent = Tencent.createInstance(APP_ID, ThirdLoginActivity.this.getApplicationContext());
     }
@@ -117,8 +119,6 @@ public class ThirdLoginActivity extends AppCompatActivity {
 
         @Override
         public void onWarning(int i) {
-
         }
-
     }
 }

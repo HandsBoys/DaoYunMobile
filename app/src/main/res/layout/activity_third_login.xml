@@ -12,6 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:text="点击QQ登录"
+        android:onClick="buttonLogin"
         android:textColor="#f4736e"
         android:textSize="16sp"
         tools:ignore="MissingConstraints" />
