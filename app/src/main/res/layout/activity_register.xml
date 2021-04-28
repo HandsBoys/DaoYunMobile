@@ -13,8 +13,7 @@
         android:layout_height="wrap_content"
         android:background="@color/account_input_bg_color"
         android:text="返回"
-        android:textColor="@color/account_pressed_true"
-        />
+        android:textColor="@color/account_pressed_true" />
 
     <LinearLayout
         android:id="@+id/lay_login_container"
@@ -29,6 +28,7 @@
             android:id="@+id/logo"
             layout="@layout/logo_frameitem_layout"
             android:layout_width="match_parent" />
+
         <include
             android:id="@+id/input_mobilenum"
             layout="@layout/input_frameitem_layout"
