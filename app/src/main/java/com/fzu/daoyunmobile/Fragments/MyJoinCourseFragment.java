@@ -50,6 +50,7 @@ public class MyJoinCourseFragment extends Fragment {
 
     }
 
+    //初始化课程
     private void initCourses() {
 //        new Thread(new Runnable() {
 //            @Override

@@ -114,7 +114,6 @@ public class ThirdLoginActivity extends AppCompatActivity {
         @Override
         public void onCancel() {
             Toast.makeText(ThirdLoginActivity.this, "授权取消", Toast.LENGTH_SHORT).show();
-
         }
 
         @Override
