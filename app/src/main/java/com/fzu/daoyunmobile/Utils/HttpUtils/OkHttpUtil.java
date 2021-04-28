@@ -16,18 +16,6 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-
-interface MyCallBack {
-
-    void onLoadingBefore(Request request);
-
-    void onSuccess(Response response);
-
-    void onFailure(Request request, Exception e);
-
-    void onError(Response response);
-}
-
 public class OkHttpUtil {
     /**
      * 网络访问要求singleton

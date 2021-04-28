@@ -3,7 +3,6 @@ package com.fzu.daoyunmobile.Fragments;
 import android.content.Intent;
 import android.os.Bundle;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
@@ -15,7 +14,6 @@ import android.widget.Toast;
 
 import com.alibaba.fastjson.JSONObject;
 import com.fzu.daoyunmobile.Activities.MainActivity;
-import com.fzu.daoyunmobile.Activities.ThirdLoginActivity;
 import com.fzu.daoyunmobile.Configs.UrlConfig;
 import com.fzu.daoyunmobile.FrameItems.InputFrameItem;
 import com.fzu.daoyunmobile.FrameItems.InputVCodeFrameItem;
@@ -27,11 +25,8 @@ import com.fzu.daoyunmobile.Utils.VerifyUtil;
 
 
 import org.jetbrains.annotations.NotNull;
-import org.json.JSONException;
 
 import java.io.IOException;
-import java.util.Locale;
-import java.util.regex.Pattern;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -65,16 +60,17 @@ public class CodeLoginFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         // 登录按钮设置
         loginBtn = getActivity().findViewById(R.id.bt_login_submit);
-        loginBtn.setOnClickListener(v -> Login());
+        loginBtn.setOnClickListener(v -> login());
 
-
-        input_mobilenum = new InputFrameItem(getActivity().getWindow().getDecorView(), R.id.input_mobilenum, R.id.input_frameitem_editText, R.id.input_frameitem_img, R.drawable.ic_login_username, "手机号/邮箱");
+        //绑定手机号框
+        input_mobilenum = new InputFrameItem(getActivity().getWindow().getDecorView(), R.id.input_mobilenum, R.id.input_frameitem_editText, R.id.input_frameitem_img, R.drawable.ic_login_username, "手机号");
+        //输入框
         input_vericode = new InputVCodeFrameItem(getActivity().getWindow().getDecorView(), R.id.input_vericode, R.drawable.ic_login_password);
 
 
         input_vericode.getSubBtn().setOnClickListener(v -> {
-            startActivity(new Intent(getActivity(), ThirdLoginActivity.class));
-            //sendMessage();
+            //startActivity(new Intent(getActivity(), ThirdLoginActivity.class));
+            sendMessage();
         });
     }
 
@@ -86,6 +82,7 @@ public class CodeLoginFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_code_login, container, false);
     }
 
+    //发送短信消息
     private void sendMessage() {
         String phone = input_mobilenum.getEditTextStr();
         Log.i("phoneInfo", input_mobilenum.getEditTextStr());
@@ -117,8 +114,8 @@ public class CodeLoginFragment extends Fragment {
 
     }
 
-    //TODO 登录接口待做登录
-    private void Login() {
+    //登录
+    private void login() {
         String phone = input_mobilenum.getEditTextStr();
         String vcode = input_vericode.getEditText();
 
@@ -148,8 +145,9 @@ public class CodeLoginFragment extends Fragment {
                     if (responseBodyStr.contains("登录成功")) {
                         startActivity(new Intent(getActivity(), MainActivity.class));
                     } else {
+                        AlertDialogUtil.showConfirmClickAlertDialog("验证码错误", getActivity());
                         //showAlertDialog("用户不存在或者密码错误");
-                        System.out.println("验证码错误");
+                        //System.out.println("验证码错误");
                     }
                 }
             });

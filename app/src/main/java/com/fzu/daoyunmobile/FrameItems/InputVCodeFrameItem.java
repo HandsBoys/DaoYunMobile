@@ -54,7 +54,7 @@ public class InputVCodeFrameItem {
     public void setSubBtn(int id) {
         submitBtn = priView.findViewById(id);
     }
-
+    
     public Button getSubBtn() {
         return submitBtn;
     }
@@ -81,12 +81,17 @@ public class InputVCodeFrameItem {
         icoImg.setImageBitmap(bm);
     }
 
+    //倒计时
     public void startBtnDownTime(int seconds) {
         this.seconds = seconds;
         this.oriSeconds = seconds;
         submitBtn.post(downTimrRunnable);
     }
 
+
+    /**
+     * 倒计时线程
+     */
     private Runnable downTimrRunnable = new Runnable() {
         @Override
         public void run() {
