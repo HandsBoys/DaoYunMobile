@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSONObject;
@@ -48,6 +49,7 @@ public class CodeLoginFragment extends Fragment {
     private int verificationCode;
 
     private String session;
+    private TextView qqLogin;
 
     public CodeLoginFragment() {
 
@@ -67,6 +69,10 @@ public class CodeLoginFragment extends Fragment {
         //输入框
         input_vericode = new InputVCodeFrameItem(getActivity().getWindow().getDecorView(), R.id.input_vericode, R.drawable.ic_login_password);
 
+        qqLogin = getActivity().findViewById(R.id.qq_login_btn);
+        qqLogin.setOnClickListener(v -> {
+            System.out.println("FUCKYOU");
+        });
 
         input_vericode.getSubBtn().setOnClickListener(v -> {
             //startActivity(new Intent(getActivity(), ThirdLoginActivity.class));
@@ -168,5 +174,9 @@ public class CodeLoginFragment extends Fragment {
         //System.out.println("Login ");
         //startActivity(new Intent(getActivity(), QRCodeTestActivity.class));
         //startActivity(new Intent(getActivity(), MainActivity.class));
+    }
+
+    private void qqThirdLogin() {
+
     }
 }

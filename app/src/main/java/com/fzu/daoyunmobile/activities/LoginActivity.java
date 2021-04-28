@@ -43,6 +43,7 @@ public class LoginActivity extends AppCompatActivity {
         Fragment[] fragments = {code_loginFragment, psdLoginFragment};
         String[] titles = {"验证码登录", "密码登录"};
 
+
         //每项只进入一次
         vp.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
             @Override
@@ -63,5 +64,6 @@ public class LoginActivity extends AppCompatActivity {
 
         tabLayout.setupWithViewPager(vp);
         tabLayout.getTabAt(0).select();//设置第一个为选中
+        tabLayout.setTabTextColors(getResources().getColor(R.color.fragement_tab_comtitle), getResources().getColor(R.color.fragement_tab_selecttitle));
     }
 }
