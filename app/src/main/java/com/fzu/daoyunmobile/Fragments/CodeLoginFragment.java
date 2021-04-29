@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.alibaba.fastjson.JSONObject;
 import com.fzu.daoyunmobile.Activities.MainActivity;
+import com.fzu.daoyunmobile.Activities.ThirdLoginActivity;
 import com.fzu.daoyunmobile.Configs.UrlConfig;
 import com.fzu.daoyunmobile.FrameItems.InputFrameItem;
 import com.fzu.daoyunmobile.FrameItems.InputVCodeFrameItem;
@@ -23,9 +24,15 @@ import com.fzu.daoyunmobile.Utils.AlertDialogUtil;
 import com.fzu.daoyunmobile.Utils.HttpUtils.HttpUtil;
 import com.fzu.daoyunmobile.Utils.HttpUtils.OkHttpUtil;
 import com.fzu.daoyunmobile.Utils.VerifyUtil;
+import com.tencent.connect.UserInfo;
+import com.tencent.connect.auth.QQToken;
+import com.tencent.tauth.IUiListener;
+import com.tencent.tauth.Tencent;
+import com.tencent.tauth.UiError;
 
 
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONException;
 
 import java.io.IOException;
 
@@ -50,6 +57,14 @@ public class CodeLoginFragment extends Fragment {
 
     private String session;
     private TextView qqLogin;
+
+
+    private static final String TAG = "ThirdLogin";
+    private static final String APP_ID = "101950452";//官方获取的APPID
+    private Tencent mTencent;
+    private BaseUiListener mIUiListener;
+    private UserInfo mUserInfo;
+
 
     public CodeLoginFragment() {
 
@@ -179,4 +194,67 @@ public class CodeLoginFragment extends Fragment {
     private void qqThirdLogin() {
 
     }
+
+
+    /**
+     * 自定义监听器实现IUiListener接口后，需要实现的3个方法
+     * onComplete完成 onError错误 onCancel取消
+     */
+    private class BaseUiListener implements IUiListener {
+
+        @Override
+        public void onComplete(Object response) {
+            Toast.makeText(getActivity(), "授权成功", Toast.LENGTH_SHORT).show();
+            Log.e(TAG, "response:" + response);
+            org.json.JSONObject obj = (org.json.JSONObject) response;
+            try {
+                String openID = obj.getString("openid");
+                String accessToken = obj.getString("access_token");
+                String expires = obj.getString("expires_in");
+                mTencent.setOpenId(openID);
+                mTencent.setAccessToken(accessToken, expires);
+                QQToken qqToken = mTencent.getQQToken();
+                mUserInfo = new UserInfo(getContext(), qqToken);
+                mUserInfo.getUserInfo(new IUiListener() {
+                    @Override
+                    public void onComplete(Object response) {
+                        Log.e(TAG, "登录成功" + response.toString());
+                    }
+
+                    @Override
+                    public void onError(UiError uiError) {
+                        Log.e(TAG, "登录失败" + uiError.toString());
+                    }
+
+                    @Override
+                    public void onCancel() {
+                        Log.e(TAG, "登录取消");
+                    }
+
+                    @Override
+                    public void onWarning(int i) {
+
+                    }
+                });
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        @Override
+        public void onError(UiError uiError) {
+            Toast.makeText(getActivity(), "授权失败", Toast.LENGTH_SHORT).show();
+
+        }
+
+        @Override
+        public void onCancel() {
+            Toast.makeText(getActivity(), "授权取消", Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onWarning(int i) {
+        }
+    }
+
 }
