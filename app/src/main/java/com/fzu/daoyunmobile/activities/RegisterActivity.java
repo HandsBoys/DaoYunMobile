@@ -9,15 +9,19 @@ import android.widget.Button;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.alibaba.fastjson.JSONObject;
+import com.fzu.daoyunmobile.Configs.UrlConfig;
 import com.fzu.daoyunmobile.FrameItems.InputFrameItem;
 import com.fzu.daoyunmobile.FrameItems.InputVCodeFrameItem;
 import com.fzu.daoyunmobile.R;
 import com.fzu.daoyunmobile.Utils.AlertDialogUtil;
+import com.fzu.daoyunmobile.Utils.HttpUtils.HttpUtil;
+import com.fzu.daoyunmobile.Utils.HttpUtils.OkHttpUtil;
 import com.fzu.daoyunmobile.Utils.StatusBarUtil;
+import com.fzu.daoyunmobile.Utils.VerifyUtil;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.regex.Pattern;
@@ -54,7 +58,6 @@ public class RegisterActivity extends AppCompatActivity {
 
 
         registerBtn = findViewById(R.id.bt_register_submit);
-        //TODO 注册按钮 后续接入API使用
         registerBtn.setOnClickListener(v -> {
             regiseter();
         });
@@ -86,38 +89,21 @@ public class RegisterActivity extends AppCompatActivity {
     private void sendMessage() {
         String phone = input_mobilenum.getEditTextStr();
         Log.i("phoneInfo", input_mobilenum.getEditTextStr());
-        Pattern pattern = Pattern.compile("^((13[0-9])|(14[0,1,4-9])|(15[0-3,5-9])|(16[2,5,6,7])|(17[0-8])|(18[0-9])|(19[0-3,5-9]))\\d{8}$");
-        if (pattern.matcher(phone).matches()) {
-            input_vericode.getSubBtn().setText("已发送");
-            input_vericode.getSubBtn().setEnabled(false);
-            new Thread(new Runnable() {
+        if (VerifyUtil.isChinaPhoneLegal(phone)) {
+            HttpUtil.sendMessage(phone, new Callback() {
                 @Override
-                public void run() {
-                    OkHttpClient okHttpClient = new OkHttpClient();
-
-                    verificationCode = (int) ((Math.random() * 9 + 1) * 100000);
-
-                    // MediaType mediaType = MediaType.parse("text/plain; charset=utf-8");
-                    String url = "http://1.15.31.156:8081/message?phone=" + phone;
-                    Request request = new Request.Builder()
-                            .url(url)
-                            //.get(RequestBody.create(mediaType, requestBody))
-                            .build();
-                    okHttpClient.newCall(request).enqueue(new Callback() {
-                        @Override
-                        public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                            System.out.println(e.getMessage());
-//                                    Toast.makeText(RegisterActivity.this, "Connection failed!", Toast.LENGTH_SHORT).show();
-                        }
-
-                        @Override
-                        public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                            String responseBodyStr = response.body().string();
-                            Log.i("RegisterInfo", responseBodyStr);
-                        }
-                    });
+                public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                    System.out.println(e.getMessage());
+                    //Toast.makeText(RegisterActivity.this, "Connection failed!", Toast.LENGTH_SHORT).show();
                 }
-            }).start();
+
+                @Override
+                public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                    String responseBodyStr = response.body().string();
+                    Log.i("RegisterInfo", responseBodyStr);
+                }
+            });
+
         } else {
             AlertDialogUtil.showConfirmClickAlertDialog("请输入正确的手机号", this);
         }
@@ -130,53 +116,38 @@ public class RegisterActivity extends AppCompatActivity {
         if (!intput_psd.getEditTextStr().equals(intput_confpsd.getEditTextStr())) {
             AlertDialogUtil.showConfirmClickAlertDialog("俩次密码不一致", this);
         } else {
-            new Thread(() -> {
-                OkHttpClient okHttpClient = new OkHttpClient();
-                MediaType JSON = MediaType.parse("application/json;charset=utf-8");
-                JSONObject json = new JSONObject();
-                System.out.println(input_mobilenum.getEditTextStr());
-                System.out.println(intput_psd.getEditTextStr());
-                System.out.println(input_vericode.getEditText());
-                System.out.println(input_mobilenum.getEditTextStr());
 
+            JSONObject json = new JSONObject();
+            System.out.println(input_mobilenum.getEditTextStr());
+            System.out.println(intput_psd.getEditTextStr());
+            System.out.println(input_vericode.getEditText());
+            System.out.println(input_mobilenum.getEditTextStr());
+            json.put("code", input_vericode.getEditText());
+            json.put("password", intput_psd.getEditTextStr());
+            json.put("phone", input_mobilenum.getEditTextStr());
+            json.put("userName", input_mobilenum.getEditTextStr());
 
-                try {
-                    json.put("code", input_vericode.getEditText());
-                    json.put("password", intput_psd.getEditTextStr());
-                    json.put("phone", input_mobilenum.getEditTextStr());
-                    json.put("userName", input_mobilenum.getEditTextStr());
-                } catch (JSONException e) {
-                    e.printStackTrace();
+            OkHttpUtil.getInstance().PostWithJson(UrlConfig.getUrl(UrlConfig.UrlType.QUiCK_REGISTER), json, (new Callback() {
+                @Override
+                public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                    Log.i("LoginInfo", e.getMessage());
                 }
-                RequestBody requestBody = RequestBody.create(JSON, String.valueOf(json));
 
-                Request request = new Request.Builder()
-                        .header("Content-Type", "application/json")
-                        .url("http://1.15.31.156:8081/sign2")
-                        .post(requestBody)
-                        .build();
-                okHttpClient.newCall(request).enqueue(new Callback() {
-                    @Override
-                    public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                        Log.i("LoginInfo", e.getMessage());
-                    }
+                @Override
+                public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                    String responseBodyStr = response.body().string();
+                    Log.i("LoginInfo", responseBodyStr);
 
-                    @Override
-                    public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                        String responseBodyStr = response.body().string();
-                        Log.i("LoginInfo", responseBodyStr);
-                        System.out.println(responseBodyStr);
-
-                        if (responseBodyStr.contains("注册成功")) {
-                            // alterDialog();
+                    if (responseBodyStr.contains("注册成功")) {
+                        AlertDialogUtil.showConfirmClickAlertDialogWithLister("注册成功", RegisterActivity.this, (dialog, i) -> {
                             finish();
-                        } else {
-                            //System.out.println("用户不存在或者密码错误");
-                        }
+                        });
+                        //finish();
+                    } else {
+                        System.out.println("用户不存在或者密码错误");
                     }
-                });
-
-            }).start();
+                }
+            }));
         }
     }
 

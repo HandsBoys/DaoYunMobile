@@ -26,6 +26,7 @@ import com.fzu.daoyunmobile.Utils.HttpUtils.OkHttpUtil;
 import com.fzu.daoyunmobile.Utils.VerifyUtil;
 import com.tencent.connect.UserInfo;
 import com.tencent.connect.auth.QQToken;
+import com.tencent.connect.common.Constants;
 import com.tencent.tauth.IUiListener;
 import com.tencent.tauth.Tencent;
 import com.tencent.tauth.UiError;
@@ -79,6 +80,9 @@ public class CodeLoginFragment extends Fragment {
         loginBtn = getActivity().findViewById(R.id.bt_login_submit);
         loginBtn.setOnClickListener(v -> login());
 
+        //获取腾讯第三方登录
+        mTencent = Tencent.createInstance(APP_ID, getActivity().getApplicationContext());
+
         //绑定手机号框
         input_mobilenum = new InputFrameItem(getActivity().getWindow().getDecorView(), R.id.input_mobilenum, R.id.input_frameitem_editText, R.id.input_frameitem_img, R.drawable.ic_login_username, "手机号");
         //输入框
@@ -86,7 +90,8 @@ public class CodeLoginFragment extends Fragment {
 
         qqLogin = getActivity().findViewById(R.id.qq_login_btn);
         qqLogin.setOnClickListener(v -> {
-            System.out.println("FUCKYOU");
+            //startActivity(new Intent(getActivity(), ThirdLoginActivity.class));
+            qqThirdLogin();
         });
 
         input_vericode.getSubBtn().setOnClickListener(v -> {
@@ -186,13 +191,28 @@ public class CodeLoginFragment extends Fragment {
 //
 //        System.out.println( messjsonObject.getJSONObject("data").getString("captcha"));
 
-        //System.out.println("Login ");
         //startActivity(new Intent(getActivity(), QRCodeTestActivity.class));
         //startActivity(new Intent(getActivity(), MainActivity.class));
     }
 
     private void qqThirdLogin() {
+        mIUiListener = new BaseUiListener();
+        //all表示获取所有权限
+        //new Thread(() -> mTencent.login(getActivity(), "all", mIUiListener)).start();
+        mTencent.login(getActivity(), "all", mIUiListener);
 
+    }
+
+
+    /**
+     * 由上层Activity调用，获取第三方QQ登录的内容 由于Fragement无法读取
+     *
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
+    public void onTencentCallBack(int requestCode, int resultCode, Intent data) {
+        Tencent.onActivityResultData(requestCode, resultCode, data, mIUiListener);
     }
 
 
@@ -244,7 +264,6 @@ public class CodeLoginFragment extends Fragment {
         @Override
         public void onError(UiError uiError) {
             Toast.makeText(getActivity(), "授权失败", Toast.LENGTH_SHORT).show();
-
         }
 
         @Override

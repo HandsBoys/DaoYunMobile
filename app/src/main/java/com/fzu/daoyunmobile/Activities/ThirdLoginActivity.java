@@ -34,6 +34,7 @@ public class ThirdLoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_third_login);
         //传入参数APPID和全局Context上下文
         mTencent = Tencent.createInstance(APP_ID, ThirdLoginActivity.this.getApplicationContext());
+        //all表示获取所有权限
     }
 
     public void buttonLogin(View v) {
