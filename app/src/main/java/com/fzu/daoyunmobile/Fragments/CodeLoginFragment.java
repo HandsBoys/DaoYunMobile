@@ -76,6 +76,7 @@ public class CodeLoginFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        startActivity(new Intent(getActivity(), MainActivity.class));
         // 登录按钮设置
         loginBtn = getActivity().findViewById(R.id.bt_login_submit);
         loginBtn.setOnClickListener(v -> login());
@@ -192,7 +193,7 @@ public class CodeLoginFragment extends Fragment {
 //        System.out.println( messjsonObject.getJSONObject("data").getString("captcha"));
 
         //startActivity(new Intent(getActivity(), QRCodeTestActivity.class));
-        //startActivity(new Intent(getActivity(), MainActivity.class));
+
     }
 
     private void qqThirdLogin() {

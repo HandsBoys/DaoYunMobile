@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="80dp"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:descendantFocusability="afterDescendants"
+    >
 
     <ImageView
         android:id="@+id/course_image"
@@ -59,22 +61,23 @@
             android:orientation="horizontal">
 
             <ImageView
-                android:id="@+id/signIn_Iv"
+                android:id="@+id/crsignIn_Iv"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:layout_gravity="center"
                 android:src="@mipmap/list_my_menu" />
 
             <TextView
-                android:id="@+id/signIn_Tv"
+                android:id="@+id/crsignIn_Tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="5dp"
+                android:focusable="false"
                 android:text="签到" />
 
             <ImageView
-                android:id="@+id/qrCode_Iv"
+                android:id="@+id/crqrCode_Iv"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:layout_gravity="center"
@@ -83,7 +86,7 @@
                 tools:srcCompat="@mipmap/qc_code" />
 
             <TextView
-                android:id="@+id/qrCode_Tv"
+                android:id="@+id/crqrCode_Tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"

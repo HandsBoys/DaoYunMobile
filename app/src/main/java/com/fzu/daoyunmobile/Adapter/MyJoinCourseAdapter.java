@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -77,6 +78,9 @@ public class MyJoinCourseAdapter extends ArrayAdapter<Course> {
             viewHolder.signInImg.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    Toast.makeText(getContext(), "FUCK U", Toast.LENGTH_SHORT).show();
+
+
 //                    Toast.makeText(getContext(), "viewHolder.courseName.getText()", Toast.LENGTH_SHORT).show();
 //                    Intent intent = new Intent(v.getContext(), GestureSettingActivity.class);
 //                    v.getContext().startActivity(intent);
@@ -112,7 +116,7 @@ public class MyJoinCourseAdapter extends ArrayAdapter<Course> {
             viewHolder.signInTv.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-//                    Toast.makeText(getContext(), viewHolder.courseName.getText(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "FUCK U", Toast.LENGTH_SHORT).show();
                 }
             });
         }

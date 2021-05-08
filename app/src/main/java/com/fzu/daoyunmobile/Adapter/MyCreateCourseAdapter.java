@@ -1,6 +1,7 @@
 package com.fzu.daoyunmobile.Adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,12 +9,15 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.fzu.daoyunmobile.Activities.OneClickSignInActivity;
 import com.fzu.daoyunmobile.Entity.Course;
 import com.fzu.daoyunmobile.R;
+import com.lxj.xpopup.XPopup;
 
 import java.util.List;
 
@@ -37,50 +41,52 @@ public class MyCreateCourseAdapter extends ArrayAdapter<Course> {
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         Course course = getItem(position);
         final View view;
-        final MyCreateCourseAdapter.ViewHolder viewHolder;
+        final MyCreateCourseViewHolder myCreateCourseViewHolder;
         if (convertView == null) {
             view = LayoutInflater.from(getContext()).inflate(resourceId, parent, false);
-            viewHolder = new MyCreateCourseAdapter.ViewHolder();
-            viewHolder.courseImage = view.findViewById(R.id.course_image);
-            viewHolder.courseName = view.findViewById(R.id.course_name);
-            viewHolder.teacherName = view.findViewById(R.id.teacher_name);
-            viewHolder.courseDate = view.findViewById(R.id.course_date);
+            myCreateCourseViewHolder = new MyCreateCourseViewHolder();
+            myCreateCourseViewHolder.courseImage = view.findViewById(R.id.course_image);
+            myCreateCourseViewHolder.courseName = view.findViewById(R.id.course_name);
+            //viewHolder.teacherName = view.findViewById(R.id.teacher_name);
+            //viewHolder.courseDate = view.findViewById(R.id.course_date);
             // viewHolder.className = view.findViewById(R.id.class_name);
-            viewHolder.signInImg = view.findViewById(R.id.signIn_Iv);
-            viewHolder.signInTv = view.findViewById(R.id.signIn_Tv);
+            myCreateCourseViewHolder.signInImg = view.findViewById(R.id.crsignIn_Iv);
+            myCreateCourseViewHolder.signInTv = view.findViewById(R.id.crsignIn_Tv);
+
+            myCreateCourseViewHolder.codeImg = view.findViewById(R.id.crqrCode_Iv);
+            myCreateCourseViewHolder.codeTv = view.findViewById(R.id.crqrCode_Tv);
 //            if(flag != 1){
             //viewHolder.courseImage.setImageBitmap(BitmapFactory.decodeFile(course.getImgFilePath()));
-            viewHolder.signInImg.setVisibility(View.VISIBLE);
-            viewHolder.signInTv.setVisibility(View.VISIBLE);
+            myCreateCourseViewHolder.signInImg.setVisibility(View.VISIBLE);
+            myCreateCourseViewHolder.signInTv.setVisibility(View.VISIBLE);
 //            }
-            view.setTag(viewHolder);
+            view.setTag(myCreateCourseViewHolder);
         } else {
             view = convertView;
-            viewHolder = (MyCreateCourseAdapter.ViewHolder) view.getTag();
+            myCreateCourseViewHolder = (MyCreateCourseViewHolder) view.getTag();
         }
 
 
         if (course.getImgFilePath().equals("")) {
-            viewHolder.courseImage.setImageResource(course.getImageId());
-            viewHolder.courseName.setText(course.getCourseName());
-            viewHolder.teacherName.setText(course.getTeacherName());
+            myCreateCourseViewHolder.courseImage.setImageResource(course.getImageId());
+            myCreateCourseViewHolder.courseName.setText(course.getCourseName());
+            //viewHolder.teacherName.setText(course.getTeacherName());
             // viewHolder.className.setText(course.getClassName());
-            viewHolder.courseDate.setText(course.getCourseDate());
+//            viewHolder.courseDate.setText(course.getCourseDate());
         } else if (course.getImageId() == -1) {
-            viewHolder.courseImage.setImageBitmap(BitmapFactory.decodeFile(course.getImgFilePath()));
+            myCreateCourseViewHolder.courseImage.setImageBitmap(BitmapFactory.decodeFile(course.getImgFilePath()));
 //            viewHolder.courseName.setText(course.getCourseName());
 //            viewHolder.teacherName.setText(course.getTeacherName());
 //            viewHolder.className.setText(course.getClassName());
         }
 
-        if (flag == 1) {
-            viewHolder.signInImg.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+        if (flag == 2) {
+            myCreateCourseViewHolder.signInImg.setOnClickListener(v -> {
+                showPopupMenu(v);
+
 //                    Toast.makeText(getContext(), "viewHolder.courseName.getText()", Toast.LENGTH_SHORT).show();
 //                    Intent intent = new Intent(v.getContext(), GestureSettingActivity.class);
 //                    v.getContext().startActivity(intent);
-                    System.out.println(course.teacherPhone);
 //                    SharedPreferences preferences = getSharedPreferences("sigin", Context.MODE_PRIVATE);
 //                    GraphicLockView.mPassword = preferences.getString("gestureSignIn", null);
 //                    OneBtnSignInSettingActivity.startOrNot = preferences.getBoolean("oneBtnSignIn", false);
@@ -107,20 +113,46 @@ public class MyCreateCourseAdapter extends ArrayAdapter<Course> {
 //                        Log.i("memberInfo", PropertiesUtill.getProperties(getContext(), "gesturePassword"));
 //                        Toast.makeText(getContext(), "教师尚未发起签到或签到已结束", Toast.LENGTH_SHORT).show();
 //                    }
-                }
             });
-            viewHolder.signInTv.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-//                    Toast.makeText(getContext(), viewHolder.courseName.getText(), Toast.LENGTH_SHORT).show();
-                }
+            myCreateCourseViewHolder.signInTv.setOnClickListener(v -> {
+                showPopupMenu(v);
+
+                Toast.makeText(getContext(), "FUCKUO", Toast.LENGTH_SHORT).show();
+
             });
+            myCreateCourseViewHolder.codeTv.setOnClickListener(v -> Toast.makeText(getContext(), "FUCKUOTO", Toast.LENGTH_SHORT).show()
+            );
         }
 
         return view;
     }
 
-    class ViewHolder {
+    //添加选择按钮框
+    private void showPopupMenu(View view) {
+        //
+        new XPopup.Builder(getContext())
+                .isDarkTheme(false)
+                .hasShadowBg(true)
+//                            .hasBlurBg(true)
+//                            .isDestroyOnDismiss(true) //对于只使用一次的弹窗，推荐设置这个
+                .asBottomList("签到类型", new String[]{"限时签到", "一键签到"},
+                        (position, text) -> {
+                            //TODO 这里接入转换接口
+                            Toast.makeText(getContext(), text, Toast.LENGTH_SHORT).show();
+                            switch (position) {
+                                case 0:
+
+                                    break;
+                                case 1:
+                                    Intent intent = new Intent(getContext(), OneClickSignInActivity.class);
+                                    view.getContext().startActivity(intent);
+                                default:
+                                    break;
+                            }
+                        }).show();
+    }
+
+    class MyCreateCourseViewHolder {
         ImageView courseImage;
         TextView courseName;
         TextView teacherName;
@@ -128,5 +160,7 @@ public class MyCreateCourseAdapter extends ArrayAdapter<Course> {
         TextView courseDate;
         ImageView signInImg;
         TextView signInTv;
+        ImageView codeImg;
+        TextView codeTv;
     }
 }

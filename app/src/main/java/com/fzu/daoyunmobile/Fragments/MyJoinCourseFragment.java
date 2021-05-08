@@ -102,10 +102,10 @@ public class MyJoinCourseFragment extends Fragment {
                         startActivity(intent);
                     }
                 });
-                progressDialog.dismiss();
+//                progressDialog.dismiss();
             }
         });
-        progressDialog.dismiss();
+  //      progressDialog.dismiss();
     }
 
     private List<Course> parseJsonWithJsonObject(String jsonData) {
