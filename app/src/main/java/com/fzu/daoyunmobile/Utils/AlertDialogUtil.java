@@ -2,8 +2,16 @@ package com.fzu.daoyunmobile.Utils;
 
 import android.app.Activity;
 import android.content.DialogInterface;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Matrix;
+import android.graphics.Paint;
 
 import androidx.appcompat.app.AlertDialog;
+
+import com.fzu.daoyunmobile.CustomUI.QRCodeDialog;
+import com.google.zxing.common.BitmapUtils;
 
 /**
  * 常见的弹框工具类
@@ -39,6 +47,47 @@ public class AlertDialogUtil {
                             .setMessage(msg)
                             .setPositiveButton("确定", listener);
                     builder.show();
+                });
+    }
+
+    /**
+     * 弹出二维码
+     *
+     * @param qrcodecontent 二维码内容
+     * @param activity      需要弹出的activity
+     */
+    public static void alertQRCode(String qrcodecontent, Activity activity) {
+        activity.runOnUiThread(
+                () -> {
+                    Bitmap bitmap = null;
+                    try {
+                        bitmap = BitmapUtils.create2DCode(qrcodecontent);//根据内容生成二维码
+
+                        int width = bitmap.getWidth();
+                        int height = bitmap.getHeight();
+                        // 取得想要缩放的matrix参数.
+                        Matrix matrix = new Matrix();
+                        //设置xy 放大比例
+                        matrix.postScale(2, 2);
+                        // 得到新的图片.
+                        bitmap = Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, true);
+
+                        Paint paint = new Paint();
+                        paint.setColor(Color.WHITE);
+                        Bitmap newbitmap = Bitmap.createBitmap(bitmap.getWidth(),
+                                bitmap.getHeight(), bitmap.getConfig());
+                        Canvas canvas = new Canvas(newbitmap);
+                        canvas.drawRect(0, 0, bitmap.getWidth(), bitmap.getHeight(), paint);
+                        canvas.drawBitmap(bitmap, 0, 0, paint);
+
+                        QRCodeDialog.Builder dialogBuild = new QRCodeDialog.Builder(activity);
+                        dialogBuild.setImage(newbitmap);
+                        QRCodeDialog dialog = dialogBuild.create();
+                        dialog.setCanceledOnTouchOutside(true);// 点击外部区域关闭
+                        dialog.show();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 });
     }
 

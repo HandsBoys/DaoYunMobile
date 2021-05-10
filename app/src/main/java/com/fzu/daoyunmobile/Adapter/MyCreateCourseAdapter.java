@@ -1,7 +1,9 @@
 package com.fzu.daoyunmobile.Adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,8 +17,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.fzu.daoyunmobile.Activities.OneClickSignInActivity;
+import com.fzu.daoyunmobile.Activities.OneClickSignInSettingActivity;
 import com.fzu.daoyunmobile.Entity.Course;
 import com.fzu.daoyunmobile.R;
+import com.fzu.daoyunmobile.Utils.AlertDialogUtil;
+import com.google.zxing.WriterException;
+import com.google.zxing.common.BitmapUtils;
 import com.lxj.xpopup.XPopup;
 
 import java.util.List;
@@ -47,6 +53,7 @@ public class MyCreateCourseAdapter extends ArrayAdapter<Course> {
             myCreateCourseViewHolder = new MyCreateCourseViewHolder();
             myCreateCourseViewHolder.courseImage = view.findViewById(R.id.course_image);
             myCreateCourseViewHolder.courseName = view.findViewById(R.id.course_name);
+            myCreateCourseViewHolder.courseId = view.findViewById(R.id.course_id);
             //viewHolder.teacherName = view.findViewById(R.id.teacher_name);
             //viewHolder.courseDate = view.findViewById(R.id.course_date);
             // viewHolder.className = view.findViewById(R.id.class_name);
@@ -120,12 +127,15 @@ public class MyCreateCourseAdapter extends ArrayAdapter<Course> {
                 Toast.makeText(getContext(), "FUCKUO", Toast.LENGTH_SHORT).show();
 
             });
-            myCreateCourseViewHolder.codeTv.setOnClickListener(v -> Toast.makeText(getContext(), "FUCKUOTO", Toast.LENGTH_SHORT).show()
+            myCreateCourseViewHolder.codeTv.setOnClickListener(v -> {
+                        AlertDialogUtil.alertQRCode(myCreateCourseViewHolder.courseId.getText().toString(), (Activity) v.getContext());
+                    }
             );
         }
 
         return view;
     }
+
 
     //添加选择按钮框
     private void showPopupMenu(View view) {
@@ -144,7 +154,7 @@ public class MyCreateCourseAdapter extends ArrayAdapter<Course> {
 
                                     break;
                                 case 1:
-                                    Intent intent = new Intent(getContext(), OneClickSignInActivity.class);
+                                    Intent intent = new Intent(getContext(), OneClickSignInSettingActivity.class);
                                     view.getContext().startActivity(intent);
                                 default:
                                     break;
@@ -158,6 +168,8 @@ public class MyCreateCourseAdapter extends ArrayAdapter<Course> {
         TextView teacherName;
         TextView className;
         TextView courseDate;
+        TextView courseId;
+
         ImageView signInImg;
         TextView signInTv;
         ImageView codeImg;

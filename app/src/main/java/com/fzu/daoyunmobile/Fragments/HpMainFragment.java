@@ -21,9 +21,9 @@ import android.widget.Toast;
 import com.fzu.daoyunmobile.Activities.CreateClassActivity;
 import com.fzu.daoyunmobile.Activities.MainActivity;
 import com.fzu.daoyunmobile.Adapter.MyCreateCourseAdapter;
-import com.fzu.daoyunmobile.Adapter.MyJoinCourseAdapter;
 import com.fzu.daoyunmobile.Entity.Course;
 import com.fzu.daoyunmobile.R;
+import com.google.zxing.activity.CaptureActivity;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.interfaces.OnSelectListener;
 
@@ -40,10 +40,10 @@ public class HpMainFragment extends Fragment {
     protected View myJoinView;
     protected MyCreateCourseFragment myCreateFragment = new MyCreateCourseFragment();
     protected MyJoinCourseFragment myJoinFragment = new MyJoinCourseFragment();
+    private final static int SCAN_CODE = 1028;
 
+    public HpMainFragment() {        // Required empty public constructor
 
-    public HpMainFragment() {
-        // Required empty public constructor
     }
 
 
@@ -176,7 +176,6 @@ public class HpMainFragment extends Fragment {
                                         startActivityForResult(new Intent(getContext(), CreateClassActivity.class), 1);
                                         break;
                                     case 1:
-                                    default:
                                         final EditText editText = new EditText(getContext());
                                         AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
                                                 .setTitle("请输入七位班课号")
@@ -190,6 +189,12 @@ public class HpMainFragment extends Fragment {
                                         });
                                         builder.setNegativeButton("取消", null);
                                         builder.show();
+                                        break;
+                                    case 2:
+                                    default:
+                                        Intent intent = new Intent(getContext(), CaptureActivity.class);
+                                        //必须要通过父activity下的forresult才能使接收和输入相同的code
+                                        getActivity().startActivityForResult(intent, SCAN_CODE);
                                         break;
                                 }
                             }
@@ -358,6 +363,7 @@ public class HpMainFragment extends Fragment {
 //        });
     }
 
+
     public void setAdapter() {
         getActivity().runOnUiThread(new Runnable() {
             @Override
@@ -367,15 +373,7 @@ public class HpMainFragment extends Fragment {
         });
     }
 
-    public void showAlertDialog(final String msg) {
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
-                        .setMessage(msg)
-                        .setPositiveButton("确定", null);
-                builder.show();
-            }
-        });
+    public void onScanQRCode(String result) {
+        System.out.println("FUCK" + result);
     }
 }

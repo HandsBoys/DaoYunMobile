@@ -3,6 +3,8 @@ package com.fzu.daoyunmobile.Activities;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
@@ -14,6 +16,7 @@ import com.fzu.daoyunmobile.Fragments.HpMainFragment;
 import com.fzu.daoyunmobile.Fragments.MyInfoFragment;
 import com.fzu.daoyunmobile.R;
 import com.fzu.daoyunmobile.Utils.StatusBarUtil;
+import com.google.zxing.activity.CaptureActivity;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -27,10 +30,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected MyInfoFragment mInfoFragment = new MyInfoFragment();//我的
     public static String userName;
     public static String icon = "";
+
     public static String loginType;
     public static String name = null;
     public static String phoneNumber = "106666655";
     public int BUFFER_SIZE = 8192;
+    private final static int SCANQR_CODE = 1028;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +45,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         initView();
         //将状态栏设置透明
         StatusBarUtil.transparencyBar(MainActivity.this);
-        
+
         //获取管理类
         this.getSupportFragmentManager()
                 .beginTransaction()
@@ -97,4 +103,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
         }
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        // 获取扫描二维码的点击事件
+        if (requestCode == SCANQR_CODE) {
+            String result = data.getStringExtra(CaptureActivity.SCAN_QRCODE_RESULT);
+            mMainFragment.onScanQRCode(result);
+        }
+    }
+
 }

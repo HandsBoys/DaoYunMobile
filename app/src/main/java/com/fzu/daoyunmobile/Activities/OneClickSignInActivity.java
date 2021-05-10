@@ -22,6 +22,16 @@ public class OneClickSignInActivity extends AppCompatActivity {
         mLocationClient = new LocationClient(getApplicationContext());
         //声明LocationClient类
         mLocationClient.registerLocationListener(myListener);
+        mLocationClient.setLocOption(getBdOp());
+        //mLocationClient为第二步初始化过的LocationClient对象
+        //需将配置好的LocationClientOption对象，通过setLocOption方法传递给LocationClient对象使用
+        //更多LocationClientOption的配置，请参照类参考中LocationClientOption类的详细说明
+        //注册监听函数
+        mLocationClient.start();
+    }
+
+
+    private LocationClientOption getBdOp() {
         LocationClientOption option = new LocationClientOption();
 
         option.setLocationMode(LocationClientOption.LocationMode.Hight_Accuracy);
@@ -65,14 +75,7 @@ public class OneClickSignInActivity extends AppCompatActivity {
 
         option.setNeedNewVersionRgc(true);
 //可选，设置是否需要最新版本的地址信息。默认需要，即参数为true
-
-        mLocationClient.setLocOption(option);
-//mLocationClient为第二步初始化过的LocationClient对象
-//需将配置好的LocationClientOption对象，通过setLocOption方法传递给LocationClient对象使用
-//更多LocationClientOption的配置，请参照类参考中LocationClientOption类的详细说明
-
-        //注册监听函数
-        mLocationClient.start();
+        return option;
     }
 
     public class MyLocationListener extends BDAbstractLocationListener {

@@ -36,14 +36,12 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void initView() {
-        vp = (ViewPager) findViewById(R.id.vp_login);
-        tabLayout = (TabLayout) findViewById(R.id.lg_tabs);
+        vp = findViewById(R.id.vp_login);
+        tabLayout = findViewById(R.id.lg_tabs);
         code_loginFragment = new CodeLoginFragment();
         psdLoginFragment = new PsdLoginFragment();
         Fragment[] fragments = {code_loginFragment, psdLoginFragment};
         String[] titles = {"验证码登录", "密码登录"};
-
-
         //每项只进入一次
         vp.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
             @Override
@@ -61,7 +59,6 @@ public class LoginActivity extends AppCompatActivity {
                 return titles[position];
             }
         });
-
         tabLayout.setupWithViewPager(vp);
         tabLayout.getTabAt(0).select();//设置第一个为选中
         tabLayout.setTabTextColors(getResources().getColor(R.color.fragement_tab_comtitle), getResources().getColor(R.color.fragement_tab_selecttitle));
@@ -71,7 +68,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == Constants.REQUEST_LOGIN) {
-            code_loginFragment.onTencentCallBack(requestCode,resultCode,data);
+            code_loginFragment.onTencentCallBack(requestCode, resultCode, data);
         }
     }
 

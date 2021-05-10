@@ -64,19 +64,18 @@ public class MyCreateCourseFragment extends Fragment {
         adapter = new MyCreateCourseAdapter(getContext(), R.layout.mycreatecourse_frameitem_layout, courseList, 2);
         listView = getActivity().findViewById(R.id.mycreatecourselist_view);
         listView.setAdapter(adapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Course course = courseList.get(position);
-                Intent intent = new Intent(getContext(), ClassTabActivity.class);
-                intent.putExtra("courseName", course.getCourseName());
-                intent.putExtra("classId", course.getClassId());
-                intent.putExtra("enterType", "create");
-                startActivity(intent);
-            }
+        // listview点击事件
+        listView.setOnItemClickListener((parent, view, position, id) -> {
+            Course course = courseList.get(position);
+            Intent intent = new Intent(getContext(), ClassTabActivity.class);
+            intent.putExtra("courseName", course.getCourseName());
+            intent.putExtra("classId", course.getClassId());
+            intent.putExtra("enterType", "create");
+            startActivity(intent);
         });
     }
 
+    //TODO 初始化课程
     private void initCourses() {
         new Thread(new Runnable() {
             @Override
