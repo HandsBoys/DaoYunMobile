@@ -4,6 +4,7 @@ package com.fzu.daoyunmobile.Activities;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.widget.Button;
 
 import androidx.appcompat.app.AlertDialog;
@@ -83,6 +84,14 @@ public class RegisterActivity extends AppCompatActivity {
             sendMessage();
         });
 
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            return true;
+        }
+        return false;
     }
 
     private void sendMessage() {

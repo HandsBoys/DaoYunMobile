@@ -3,12 +3,14 @@ package com.fzu.daoyunmobile.Utils.HttpUtils;
 import android.os.Handler;
 
 import com.alibaba.fastjson.JSONObject;
+import com.fzu.daoyunmobile.Configs.GlobalConfig;
 
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 
 import okhttp3.Callback;
+import okhttp3.Credentials;
 import okhttp3.FormBody;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -73,6 +75,23 @@ public class OkHttpUtil {
     }
 
     /**
+     * 对外提供的Get方法访问 带有token
+     *
+     * @param url
+     * @param callBack
+     */
+    public void GetWithToken(String url, Callback callBack) {
+        /**
+         * 通过url和GET方式构建Request
+         */
+        Request request = bulidRequestForGetWithToken(url);
+        /**
+         * 请求网络的逻辑
+         */
+        requestNetWork(request, callBack);
+    }
+
+    /**
      * 对外提供的Post方法访问
      *
      * @param url
@@ -110,6 +129,26 @@ public class OkHttpUtil {
 
     }
 
+
+    /**
+     * 对外提供的Post方法访问
+     *
+     * @param url
+     * @param json:    提交内容为json数据
+     * @param callBack
+     */
+    public void PostWithJsonToken(String url, JSONObject json, Callback callBack) {
+        /**
+         * 通过url和POST方式构建Request
+         */
+        Request request = bulidRequestForPostByJsonWithToken(url, String.valueOf(json));
+        /**
+         * 请求网络的逻辑
+         */
+        requestNetWork(request, callBack);
+
+    }
+
     /**
      * POST方式构建Request {json}
      *
@@ -125,6 +164,25 @@ public class OkHttpUtil {
                 .post(body)
                 .build();
     }
+
+
+    /**
+     * POST方式构建Request {json} 带token
+     *
+     * @param url
+     * @param json
+     * @return
+     */
+    private Request bulidRequestForPostByJsonWithToken(String url, String json) {
+        RequestBody body = RequestBody.create(JSON, json);
+
+        return new Request.Builder()
+                .url(url)
+                .addHeader("Authorization", "Bearer " + GlobalConfig.getUserToken()) // 添加授权认证
+                .post(body)
+                .build();
+    }
+
 
     /**
      * POST方式构建Request {Form}
@@ -164,6 +222,20 @@ public class OkHttpUtil {
 
         return new Request.Builder()
                 .url(url)
+                .get()
+                .build();
+    }
+
+    /**
+     * GET方式构建Request带有token
+     *
+     * @param url
+     * @return
+     */
+    private Request bulidRequestForGetWithToken(String url) {
+        return new Request.Builder()
+                .url(url)
+                .addHeader("Authorization", "Bearer " + GlobalConfig.getUserToken()) // 添加授权认证
                 .get()
                 .build();
     }

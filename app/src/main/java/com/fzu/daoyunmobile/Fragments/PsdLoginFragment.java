@@ -1,6 +1,7 @@
 package com.fzu.daoyunmobile.Fragments;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -13,7 +14,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSONObject;
@@ -35,6 +38,10 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
+import android.content.SharedPreferences;
+
+import static android.content.Context.MODE_PRIVATE;
+
 /**
  * 密码登录视图
  */
@@ -53,6 +60,10 @@ public class PsdLoginFragment extends Fragment {
     private InputFrameItem input_vercode;
     //图片验证码
     private ImageView pic_vercode;
+    //是否记住密码
+    private CheckBox rememberUserCB;
+    //忘记密码
+    protected TextView forgetPasswordTV;
 
     public PsdLoginFragment() {
         // Required empty public constructor
@@ -82,6 +93,14 @@ public class PsdLoginFragment extends Fragment {
         pic_vercode = getActivity().findViewById(R.id.pic_vercode);
         setPicVcode();
         pic_vercode.setOnClickListener(v -> setPicVcode());
+
+        // 根据是否记住密码获取
+        SharedPreferences preferences = getActivity().getSharedPreferences("remember_user", MODE_PRIVATE);
+        if (!preferences.getString("userName", "").equals("") && !preferences.getString("password", "").equals("")) {
+            input_mobilenum.getEditText().setText(preferences.getString("userName", ""));
+            intput_psd.getEditText().setText(preferences.getString("password", ""));
+        }
+        rememberUserCB = getActivity().findViewById(R.id.cb_remember_login);
     }
 
     @Override
@@ -116,26 +135,31 @@ public class PsdLoginFragment extends Fragment {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 String responseBodyStr = response.body().string();
-                Log.i("LoginInfo", responseBodyStr);
-                System.out.println(responseBodyStr);
 
-                //        String studentString ="{\"message\": \"Ok\",\"code\":200,\"data\":{\"captcha\":\"328551\"}}";
+                if (responseBodyStr.contains("登陆成功") || responseBodyStr.contains("登录成功") || responseBodyStr.contains("token")) {
 
+                    //存放账号密码
+                    SharedPreferences.Editor editor = getActivity().getSharedPreferences("remember_user", MODE_PRIVATE).edit();
+                    if (rememberUserCB.isChecked()) {
+                        editor.putString("userName", input_mobilenum.getEditTextStr());
+                        editor.putString("password", intput_psd.getEditTextStr());
+                        editor.apply();
+                    } else {
+                        editor.putString("userName", "");
+                        editor.putString("password", "");
+                        editor.apply();
+                    }
 
-                if (responseBodyStr.contains("登陆成功")) {
-                    startActivity(new Intent(getActivity(), MainActivity.class));
-//        //JSON字符串转换成JSON对象
+                    //JSON字符串转换成JSON对象
                     JSONObject messjsonObject = JSONObject.parseObject(responseBodyStr);
-//
-//        System.out.println(messjsonObject.get("data"));
-//
+
                     String token = messjsonObject.getJSONObject("data").getString("token");
                     //设置全局token
                     GlobalConfig.setUserToken(token);
-                    AlertDialogUtil.showToastText(token, getActivity());
+                    AlertDialogUtil.showToastText(GlobalConfig.getUserToken(), getActivity());
+                    getUserInfo();
 
                 } else {
-//                    System.out.println("用户不存在或者密码错误");
                     AlertDialogUtil.showConfirmClickAlertDialog("用户不存在或者密码错误", getActivity());
                 }
             }
@@ -153,8 +177,8 @@ public class PsdLoginFragment extends Fragment {
 
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-//                String responseBodyStr = response.body().string();
-//                Log.i("CodeLoginInfo", responseBodyStr);
+                //String responseBodyStr = response.body().string();
+                //Log.i("CodeLoginInfo", responseBodyStr);
                 InputStream inputStream = response.body().byteStream();//得到图片的流
                 Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
                 try {
@@ -163,6 +187,42 @@ public class PsdLoginFragment extends Fragment {
                     //Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
                     System.out.println("PictureErro" + e.getMessage());
                 }
+            }
+        });
+    }
+
+    private void getUserInfo() {
+        System.out.println("FUCK GETUSERINFO");
+        //获取用户信息
+        OkHttpUtil.getInstance().GetWithToken(UrlConfig.getUrl(UrlConfig.UrlType.USER_INFO), new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                System.out.println("FUCK GETUSERINFO Error" + e.getMessage());
+                AlertDialogUtil.showToastText(e.getMessage(), getActivity());
+            }
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+
+                try {
+                    String responseBodyStr = response.body().string();
+                    //JSON字符串转换成JSON对象
+                    JSONObject messjsonObject = JSONObject.parseObject(responseBodyStr);
+                    GlobalConfig.setUserID(messjsonObject.get("id").toString());
+                    GlobalConfig.setUserPhone(messjsonObject.get("phone").toString());
+                    GlobalConfig.setNickName(messjsonObject.get("nickName").toString());
+                    GlobalConfig.setUserName(messjsonObject.get("userName").toString());
+                    GlobalConfig.setSEX(messjsonObject.get("sex").toString());
+
+                    AlertDialogUtil.showToastText(responseBodyStr, getActivity());
+                    startActivity(new Intent(getActivity(), MainActivity.class));
+                } catch (Exception e) {
+                    //获取不到用户信息则取消登陆 需要重新登陆
+                    AlertDialogUtil.showToastText(e.getMessage(), getActivity());
+                    AlertDialogUtil.showConfirmClickAlertDialog("网络超时请重新登陆", getActivity());
+                }
+
+
             }
         });
     }

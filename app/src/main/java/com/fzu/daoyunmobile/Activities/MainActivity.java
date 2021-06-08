@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -74,7 +75,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mainImageView.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.mipmap.nav_main_click));
         mainTV.setTextColor(Color.parseColor("#008CC9"));
     }
-
 
     @Override
     public void onClick(View view) {

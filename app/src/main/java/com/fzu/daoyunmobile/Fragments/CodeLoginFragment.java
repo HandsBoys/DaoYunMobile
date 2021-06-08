@@ -166,7 +166,7 @@ public class CodeLoginFragment extends Fragment {
                     String responseBodyStr = response.body().string();
                     Log.i("CodeLoginInfo", responseBodyStr);
 
-                    if (responseBodyStr.contains("登陆成功")) {
+                    if (responseBodyStr.contains("登陆成功") || responseBodyStr.contains("登录成功") || responseBodyStr.contains("token")) {
                         JSONObject messjsonObject = JSONObject.parseObject(responseBodyStr);
 //
 //        System.out.println(messjsonObject.get("data"));
@@ -174,7 +174,7 @@ public class CodeLoginFragment extends Fragment {
                         String token = messjsonObject.getJSONObject("data").getString("token");
                         //设置全局token
                         GlobalConfig.setUserToken(token);
-                        startActivity(new Intent(getActivity(), MainActivity.class));
+                        getUserInfo();
                     } else {
                         AlertDialogUtil.showConfirmClickAlertDialog("验证码错误", getActivity());
                         //showAlertDialog("用户不存在或者密码错误");
@@ -200,12 +200,12 @@ public class CodeLoginFragment extends Fragment {
 
     }
 
+    //QQ第三方登陆
     private void qqThirdLogin() {
         mIUiListener = new BaseUiListener();
         //all表示获取所有权限
         //new Thread(() -> mTencent.login(getActivity(), "all", mIUiListener)).start();
         mTencent.login(getActivity(), "all", mIUiListener);
-
     }
 
 
@@ -279,6 +279,42 @@ public class CodeLoginFragment extends Fragment {
         @Override
         public void onWarning(int i) {
         }
+    }
+
+    private void getUserInfo() {
+        System.out.println("FUCK GETUSERINFO");
+        //获取用户信息
+        OkHttpUtil.getInstance().GetWithToken(UrlConfig.getUrl(UrlConfig.UrlType.USER_INFO), new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                System.out.println("FUCK GETUSERINFO Error" + e.getMessage());
+                AlertDialogUtil.showToastText(e.getMessage(), getActivity());
+            }
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+
+                try {
+                    String responseBodyStr = response.body().string();
+                    //JSON字符串转换成JSON对象
+                    JSONObject messjsonObject = JSONObject.parseObject(responseBodyStr);
+                    GlobalConfig.setUserID(messjsonObject.get("id").toString());
+                    GlobalConfig.setUserPhone(messjsonObject.get("phone").toString());
+                    GlobalConfig.setNickName(messjsonObject.get("nickName").toString());
+                    GlobalConfig.setUserName(messjsonObject.get("userName").toString());
+                    GlobalConfig.setSEX(messjsonObject.get("sex").toString());
+
+                    AlertDialogUtil.showToastText(responseBodyStr, getActivity());
+                    startActivity(new Intent(getActivity(), MainActivity.class));
+                } catch (Exception e) {
+                    //获取不到用户信息则取消登陆 需要重新登陆
+                    AlertDialogUtil.showToastText(e.getMessage(), getActivity());
+                    AlertDialogUtil.showConfirmClickAlertDialog("网络超时请重新登陆", getActivity());
+                }
+
+
+            }
+        });
     }
 
 }
