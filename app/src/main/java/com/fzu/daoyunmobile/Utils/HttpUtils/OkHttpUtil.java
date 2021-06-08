@@ -226,6 +226,7 @@ public class OkHttpUtil {
                 .build();
     }
 
+
     /**
      * GET方式构建Request带有token
      *
@@ -242,6 +243,42 @@ public class OkHttpUtil {
 
 
     /**
+     * PUT方式构建Request {json} 带token
+     *
+     * @param url
+     * @param json
+     * @return
+     */
+    private Request bulidRequestForPutByJsonWithToken(String url, String json) {
+        RequestBody body = RequestBody.create(JSON, json);
+
+        return new Request.Builder()
+                .url(url)
+                .addHeader("Authorization", "Bearer " + GlobalConfig.getUserToken()) // 添加授权认证
+                .put(body)
+                .build();
+    }
+
+    /**
+     * 对外提供的Put方法访问
+     *
+     * @param url
+     * @param json:    提交内容为json数据
+     * @param callBack
+     */
+    public void PutWithJsonToken(String url, JSONObject json, Callback callBack) {
+        /**
+         * 通过url和POST方式构建Request
+         */
+        Request request = bulidRequestForPutByJsonWithToken(url, String.valueOf(json));
+        /**
+         * 请求网络的逻辑
+         */
+        requestNetWork(request, callBack);
+
+    }
+
+    /**
      * 发送网络请求
      *
      * @param request
@@ -251,5 +288,4 @@ public class OkHttpUtil {
         //多线程运行
         new Thread(() -> mOkHttpClient.newCall(request).enqueue(callBack)).start();
     }
-
 }

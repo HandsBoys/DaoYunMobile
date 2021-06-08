@@ -54,6 +54,7 @@ public class MyCreateCourseAdapter extends ArrayAdapter<Course> {
             myCreateCourseViewHolder.courseImage = view.findViewById(R.id.course_image);
             myCreateCourseViewHolder.courseName = view.findViewById(R.id.course_name);
             myCreateCourseViewHolder.courseId = view.findViewById(R.id.course_id);
+            myCreateCourseViewHolder.className = view.findViewById(R.id.class_name);
             //viewHolder.teacherName = view.findViewById(R.id.teacher_name);
             //viewHolder.courseDate = view.findViewById(R.id.course_date);
             // viewHolder.className = view.findViewById(R.id.class_name);
@@ -73,10 +74,12 @@ public class MyCreateCourseAdapter extends ArrayAdapter<Course> {
             myCreateCourseViewHolder = (MyCreateCourseViewHolder) view.getTag();
         }
 
-
+        //设置内容 暂时不用上传图片文件
         if (course.getImgFilePath().equals("")) {
             myCreateCourseViewHolder.courseImage.setImageResource(course.getImageId());
             myCreateCourseViewHolder.courseName.setText(course.getCourseName());
+            myCreateCourseViewHolder.courseId.setText(course.getClassId());
+            myCreateCourseViewHolder.className.setText(course.getClassName());
             //viewHolder.teacherName.setText(course.getTeacherName());
             // viewHolder.className.setText(course.getClassName());
 //            viewHolder.courseDate.setText(course.getCourseDate());
@@ -123,16 +126,20 @@ public class MyCreateCourseAdapter extends ArrayAdapter<Course> {
             });
             myCreateCourseViewHolder.signInTv.setOnClickListener(v -> {
                 showPopupMenu(v);
-
-                Toast.makeText(getContext(), "FUCKUO", Toast.LENGTH_SHORT).show();
-
             });
+            myCreateCourseViewHolder.signInImg.setOnClickListener(v -> {
+                showPopupMenu(v);
+            });
+
             myCreateCourseViewHolder.codeTv.setOnClickListener(v -> {
                         AlertDialogUtil.alertQRCode(myCreateCourseViewHolder.courseId.getText().toString(), (Activity) v.getContext());
                     }
             );
+            myCreateCourseViewHolder.codeImg.setOnClickListener(v -> {
+                        AlertDialogUtil.alertQRCode(myCreateCourseViewHolder.courseId.getText().toString(), (Activity) v.getContext());
+                    }
+            );
         }
-
         return view;
     }
 

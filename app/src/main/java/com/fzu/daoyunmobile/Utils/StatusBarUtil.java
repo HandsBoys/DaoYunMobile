@@ -86,7 +86,6 @@ public class StatusBarUtil {
                         window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
                     }
                 }
-
             } catch (Exception ignore) {
 
             }

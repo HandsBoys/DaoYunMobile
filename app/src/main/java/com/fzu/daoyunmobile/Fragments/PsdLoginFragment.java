@@ -156,7 +156,6 @@ public class PsdLoginFragment extends Fragment {
                     String token = messjsonObject.getJSONObject("data").getString("token");
                     //设置全局token
                     GlobalConfig.setUserToken(token);
-                    AlertDialogUtil.showToastText(GlobalConfig.getUserToken(), getActivity());
                     getUserInfo();
 
                 } else {
@@ -192,7 +191,6 @@ public class PsdLoginFragment extends Fragment {
     }
 
     private void getUserInfo() {
-        System.out.println("FUCK GETUSERINFO");
         //获取用户信息
         OkHttpUtil.getInstance().GetWithToken(UrlConfig.getUrl(UrlConfig.UrlType.USER_INFO), new Callback() {
             @Override
@@ -213,8 +211,6 @@ public class PsdLoginFragment extends Fragment {
                     GlobalConfig.setNickName(messjsonObject.get("nickName").toString());
                     GlobalConfig.setUserName(messjsonObject.get("userName").toString());
                     GlobalConfig.setSEX(messjsonObject.get("sex").toString());
-
-                    AlertDialogUtil.showToastText(responseBodyStr, getActivity());
                     startActivity(new Intent(getActivity(), MainActivity.class));
                 } catch (Exception e) {
                     //获取不到用户信息则取消登陆 需要重新登陆

@@ -3,15 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="80dp"
-    android:orientation="horizontal"
+    android:layout_height="100dp"
     android:descendantFocusability="afterDescendants"
-    >
+    android:orientation="horizontal">
 
     <ImageView
         android:id="@+id/course_image"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
         android:layout_margin="10dp"
         app:srcCompat="@drawable/course_img_1" />
 
@@ -56,14 +55,14 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="30dp"
+            android:layout_height="50dp"
             android:layout_marginTop="50dp"
             android:orientation="horizontal">
 
             <ImageView
                 android:id="@+id/crsignIn_Iv"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
                 android:layout_gravity="center"
                 android:src="@mipmap/list_my_menu" />
 
@@ -74,12 +73,13 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="5dp"
                 android:focusable="false"
-                android:text="签到" />
+                android:text="签到"
+                android:textSize="18sp" />
 
             <ImageView
                 android:id="@+id/crqrCode_Iv"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
                 android:layout_gravity="center"
                 android:layout_marginLeft="20dp"
                 android:src="@mipmap/list_my_menu"
@@ -91,7 +91,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="5dp"
-                android:text="二维码" />
+                android:text="二维码"
+                android:textSize="18sp" />
 
         </LinearLayout>
 

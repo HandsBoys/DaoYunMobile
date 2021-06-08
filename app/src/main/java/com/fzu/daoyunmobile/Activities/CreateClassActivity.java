@@ -81,8 +81,7 @@ public class CreateClassActivity extends AppCompatActivity {
             startActivityForResult(intent, IMAGE_SELECT);
         });
 
-        final String[] term = new String[]{"2016-2017-1", "2016-2017-2", "2017-2018-1", "2017-2018-2",
-                "2018-2019-1", "2018-2019-2", "2019-2020-1", "2019-2020-2", "2020-2021-1", "2020-2021-2",
+        final String[] term = new String[]{"2020-2021-1", "2020-2021-2",
                 "2021-2022-1", "2021-2022-2", "2022-2023-1", "2022-2023-2", "2023-2024-1", "2023-2024-2",
                 "2024-2025-1", "2024-2025-2", "2025-2026-1", "2025-2026-2", "2026-2027-1", "2026-2027-2",};
         termLayout = findViewById(R.id.term_layout);
@@ -292,17 +291,4 @@ public class CreateClassActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
-
-    public void showAlertDialog(final String msg) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                AlertDialog.Builder builder = new AlertDialog.Builder(CreateClassActivity.this)
-                        .setMessage(msg)
-                        .setPositiveButton("确定", null);
-                builder.show();
-            }
-        });
-    }
-
 }

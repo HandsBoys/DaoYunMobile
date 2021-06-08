@@ -56,8 +56,6 @@ public class MyInfoFragment extends Fragment {
                 userIconIV.setImageBitmap(bitmap);
             }
         }
-
-        Log.i("MeFragmentInfo", "onActivityResult");
     }
 
     @Override

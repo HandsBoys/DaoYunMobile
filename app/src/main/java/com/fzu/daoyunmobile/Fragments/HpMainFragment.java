@@ -18,14 +18,27 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.alibaba.fastjson.JSONObject;
 import com.fzu.daoyunmobile.Activities.CreateClassActivity;
 import com.fzu.daoyunmobile.Activities.MainActivity;
 import com.fzu.daoyunmobile.Adapter.MyCreateCourseAdapter;
+import com.fzu.daoyunmobile.Configs.GlobalConfig;
+import com.fzu.daoyunmobile.Configs.UrlConfig;
 import com.fzu.daoyunmobile.Entity.Course;
 import com.fzu.daoyunmobile.R;
+import com.fzu.daoyunmobile.Utils.AlertDialogUtil;
+import com.fzu.daoyunmobile.Utils.HttpUtils.OkHttpUtil;
 import com.google.zxing.activity.CaptureActivity;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.interfaces.OnSelectListener;
+
+import org.jetbrains.annotations.NotNull;
+
+import java.io.IOException;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
 
 
 /**
@@ -178,14 +191,11 @@ public class HpMainFragment extends Fragment {
                                     case 1:
                                         final EditText editText = new EditText(getContext());
                                         AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
-                                                .setTitle("请输入七位班课号")
+                                                .setTitle("请输入班课号")
                                                 .setView(editText);
-                                        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                String classStr = editText.getText().toString();
-                                                joinClass(classStr);
-                                            }
+                                        builder.setPositiveButton("确定", (dialog, which) -> {
+                                            String classStr = editText.getText().toString();
+                                            joinClass(classStr);
                                         });
                                         builder.setNegativeButton("取消", null);
                                         builder.show();
@@ -201,179 +211,40 @@ public class HpMainFragment extends Fragment {
                         }).show();
     }
 
+    //加入班级
     private void joinClass(final String classStr) {
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                final OkHttpClient okHttpClient = new OkHttpClient();
-//                String str = "phoneNumber=" + MainActivity.phoneNumber + "&classNumber=" + classStr;
-//                RequestBody requestBody = RequestBody.create(MediaType.parse("application/x-www-form-urlencoded; charset=utf-8"),
-//                        str);
-////                final RequestBody requestBody = new FormBody.Builder()
-////                        .add("phoneNumber", MainActivity.phoneNumber)
-////                        .add("classNumber", classStr)
-////                        .build();
-//                final Request request = new Request.Builder()
-//                        .url("http://47.98.236.0:8080/joinclass")
-//                        .post(requestBody)
-//                        .build();
-//                okHttpClient.newCall(request).enqueue(new Callback() {
-//                    @Override
-//                    public void onFailure(@NotNull Call call, @NotNull IOException e) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-////                        String responseBodyStr = response.body().string();
-//                        String responseBodyStr = new String(response.body().bytes(), "utf-8");
-//                        if (responseBodyStr.equals("class_not_exists")) {
-//                            showAlertDialog("加入班课失败！此班课不存在！");
-//                        } else if (responseBodyStr.equals("have_joined")) {
-//                            showAlertDialog("你已经加入此班课，请勿重复加入！");
-//                        } else {
-//                            try {
-//                                JSONObject jsonObject = new JSONObject(responseBodyStr);
-//                                final String classId = jsonObject.getString("classId");
-//                                final String className = jsonObject.getString("className");
-//                                final String teacherName = jsonObject.getString("teacherName");
-//                                final String classIcon = jsonObject.getString("classIcon");
-//                                final String gradeClass = jsonObject.getString("gradeClass");
-//
-//                                final String school = jsonObject.getString("schoolDepartment");
-//                                final String term = jsonObject.getString("term");
-//                                final String classIntruction = jsonObject.getString("classIntruction");
-//
-//                                joinClassAlertDialog(classId, className, classIcon, gradeClass, teacherName, term, school, classIntruction);
-//                                Log.i("MainFragInfo1", responseBodyStr);
-//
-//                                if (classIcon == null) {
-//                                    Course course = new Course(R.drawable.course_img_1, className, teacherName, gradeClass, classId);
-//                                    myJoinFragment.courseList.add(course);
-//                                    myJoinFragment.adapter = new CourseAdapter(getContext(), R.layout.course_item, myJoinFragment.courseList);
-//                                    setAdapter();
-//                                } else {
-//                                    final File classIconFile = new File(Environment.getExternalStorageDirectory() + "/daoyun/"
-//                                            + classIcon);
-//                                    if (!classIconFile.exists()) {
-//                                        new Thread(new Runnable() {
-//                                            @Override
-//                                            public void run() {
-//                                                OkHttpClient okHttpClient1 = new OkHttpClient();
-//                                                RequestBody requestBody1 = new FormBody.Builder()
-//                                                        .add("type", "classicon")
-//                                                        .add("icon", classIcon)
-//                                                        .build();
-//                                                Request request1 = new Request.Builder()
-//                                                        .url("http://47.98.236.0:8080/downloadicon")
-//                                                        .post(requestBody1)
-//                                                        .build();
-//                                                okHttpClient1.newCall(request1).enqueue(new Callback() {
-//                                                    @Override
-//                                                    public void onFailure(@NotNull Call call, @NotNull IOException e) {
-//
-//                                                    }
-//
-//                                                    @Override
-//                                                    public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-//                                                        FileOutputStream os = new FileOutputStream(classIconFile);
-//                                                        byte[] BytesArray = response.body().bytes();
-//                                                        os.write(BytesArray);
-//                                                        os.flush();
-//                                                        os.close();
-//                                                        Course course1;
-//                                                        if (teacherName == null) {
-//                                                            course1 = new Course(classIconFile.getAbsolutePath(), className, "", gradeClass, classId);
-//                                                        } else {
-//                                                            course1 = new Course(classIconFile.getAbsolutePath(), className, teacherName, gradeClass, classId);
-//                                                        }
-//                                                        myJoinFragment.courseList.add(course1);
-//                                                        myJoinFragment.adapter = new CourseAdapter(getContext(), R.layout.course_item, myJoinFragment.courseList);
-//                                                        setAdapter();
-//                                                    }
-//                                                });
-//                                            }
-//                                        }).start();
-//                                    } else {
-//                                        Course course = new Course(classIconFile.getAbsolutePath(), className, teacherName, gradeClass, classId);
-//                                        myJoinFragment.courseList.add(course);
-//                                        myJoinFragment.adapter = new CourseAdapter(getContext(), R.layout.course_item, myJoinFragment.courseList);
-//                                        setAdapter();
-//                                    }
-//                                }
-//
-//                            } catch (JSONException e) {
-//                                e.printStackTrace();
-//                            }
-//                        }
-//                    }
-//                });
-//            }
-//        }).start();
-    }
 
-    public void joinClassAlertDialog(final String classId, final String className, final String classIcon, final String gradeClass, final String teacherName,
-                                     final String term, final String school, final String classIntruction) {
-//        getActivity().runOnUiThread(new Runnable() {
-//            @Override
-//            public void run() {
-//                AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
-//                        .setMessage("成功加入" + className + "班课！")
-//                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-//                            @Override
-//                            public void onClick(DialogInterface dialog, int which) {
-//                                File classFile = new File(Environment.getExternalStorageDirectory()
-//                                        + "/daoyun/" + MainActivity.phoneNumber + "_join.json");
-//                                try {
-//                                    FileInputStream in = new FileInputStream(classFile);
-//                                    BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-////                                                            byte[] bt = new byte[4096];
-//                                    String classJsonStr = reader.readLine();
-////                                                            Log.i("CreateClassInfo", classJsonStr+" "+"hello");
-//                                    JSONArray classJsonArray = new JSONArray(classJsonStr);
-//                                    JSONObject jsonObject = new JSONObject();
-//                                    jsonObject.put("classId", classId);
-//                                    jsonObject.put("className", className);
-//                                    jsonObject.put("classIcon", classIcon);
-//                                    jsonObject.put("gradeClass", gradeClass);
-//                                    jsonObject.put("teacherName", teacherName);
-//                                    jsonObject.put("school", school);
-//                                    jsonObject.put("term", term);
-//                                    jsonObject.put("classIntruction", classIntruction);
-////                                                            Log.i("CreateClassInfo", jsonObject.toString());
-//                                    classJsonArray.put(jsonObject);
-//                                    if (classFile.exists()) {
-//                                        classFile.delete();
-//                                    }
-////                                                            Log.i("CreateClassInfo", classJsonArray.get(classJsonArray.length()-1).toString());
-//                                    FileOutputStream out = new FileOutputStream(classFile);
-//                                    out.write(classJsonArray.toString().getBytes("utf-8"));
-//                                    out.close();
-//                                } catch (FileNotFoundException e) {
-//                                    e.printStackTrace();
-//                                } catch (IOException e) {
-//                                    e.printStackTrace();
-//                                } catch (JSONException e) {
-//                                    e.printStackTrace();
-//                                }
-//                            }
-//                        });
-//                builder.show();
-//            }
-//        });
-    }
-
-
-    public void setAdapter() {
-        getActivity().runOnUiThread(new Runnable() {
+        //获取用户信息
+        OkHttpUtil.getInstance().PutWithJsonToken(UrlConfig.getUrl(UrlConfig.UrlType.JOIN_COURSE) + "?courseId=" + classStr, new JSONObject(), new Callback() {
             @Override
-            public void run() {
-                myJoinFragment.listView.setAdapter(myJoinFragment.adapter);
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                System.out.println("FUCK GETUSERINFO Error" + e.getMessage());
+                AlertDialogUtil.showToastText(e.getMessage(), getActivity());
+            }
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                try {
+                    String responseBodyStr = response.body().string();
+                    AlertDialogUtil.showToastText(responseBodyStr, getActivity());
+                    if (responseBodyStr.contains("操作成功")) {
+                        myJoinFragment.initCourses();
+                        AlertDialogUtil.showConfirmClickAlertDialog("加入班课成功!", getActivity());
+                    } else {
+                        AlertDialogUtil.showConfirmClickAlertDialog(responseBodyStr, getActivity());
+                    }
+                } catch (Exception e) {
+                    //获取不到用户信息则取消登陆 需要重新登陆
+                    AlertDialogUtil.showToastText(e.getMessage(), getActivity());
+                    AlertDialogUtil.showConfirmClickAlertDialog("加入班课失败请重试", getActivity());
+                    System.out.println(e.getMessage());
+                }
             }
         });
     }
 
+    //扫描二维码
     public void onScanQRCode(String result) {
-        System.out.println("FUCK" + result);
+        joinClass(result);
     }
 }
