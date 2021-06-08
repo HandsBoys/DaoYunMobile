@@ -1,6 +1,8 @@
 package com.fzu.daoyunmobile.Fragments;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -11,9 +13,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.alibaba.fastjson.JSONObject;
 import com.fzu.daoyunmobile.Activities.MainActivity;
+import com.fzu.daoyunmobile.Configs.GlobalConfig;
 import com.fzu.daoyunmobile.Configs.UrlConfig;
 import com.fzu.daoyunmobile.FrameItems.InputFrameItem;
 import com.fzu.daoyunmobile.R;
@@ -24,6 +29,7 @@ import com.fzu.daoyunmobile.Utils.HttpUtils.OkHttpUtil;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
+import java.io.InputStream;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -43,7 +49,10 @@ public class PsdLoginFragment extends Fragment {
     private InputFrameItem input_mobilenum;
     //输入密码框
     private InputFrameItem intput_psd;
-
+    //验证码输入框
+    private InputFrameItem input_vercode;
+    //图片验证码
+    private ImageView pic_vercode;
 
     public PsdLoginFragment() {
         // Required empty public constructor
@@ -63,9 +72,16 @@ public class PsdLoginFragment extends Fragment {
 
         //绑定输入框
         input_mobilenum = new InputFrameItem(getActivity().getWindow().getDecorView(), R.id.input_mobilenum_psdlogin, R.id.input_frameitem_editText, R.id.input_frameitem_img, R.drawable.ic_login_username, "手机号/账号/邮箱");
+        //密码框
         intput_psd = new InputFrameItem(getActivity().getWindow().getDecorView(), R.id.input_psd, R.drawable.ic_login_password, "密码");
         intput_psd.getEditText().setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        //验证码输入框
+        input_vercode = new InputFrameItem(getActivity().getWindow().getDecorView(), R.id.input_vercode, R.drawable.ic_login_password, "验证码");
 
+        //绑定图片验证码
+        pic_vercode = getActivity().findViewById(R.id.pic_vercode);
+        setPicVcode();
+        pic_vercode.setOnClickListener(v -> setPicVcode());
     }
 
     @Override
@@ -85,15 +101,16 @@ public class PsdLoginFragment extends Fragment {
         //发送Model
         JSONObject json = new JSONObject();
         json.put("phone", input_mobilenum.getEditTextStr());
-        json.put("code", input_mobilenum.getEditTextStr());
-        json.put("password", "1234");
-        json.put("userName", "1234");
+        json.put("code", input_vercode.getEditTextStr());
+        json.put("password", intput_psd.getEditTextStr());
+        json.put("userName", input_mobilenum.getEditTextStr());
 
         OkHttpUtil.getInstance().PostWithJson(UrlConfig.getUrl(UrlConfig.UrlType.PSD_LOGIN), json, new Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
                 Log.i("LoginInfo", e.getMessage());
-                System.out.println(e.getMessage());
+                Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
+
             }
 
             @Override
@@ -102,14 +119,52 @@ public class PsdLoginFragment extends Fragment {
                 Log.i("LoginInfo", responseBodyStr);
                 System.out.println(responseBodyStr);
 
-                if (responseBodyStr.contains("登录成功")) {
+                //        String studentString ="{\"message\": \"Ok\",\"code\":200,\"data\":{\"captcha\":\"328551\"}}";
+
+
+                if (responseBodyStr.contains("登陆成功")) {
                     startActivity(new Intent(getActivity(), MainActivity.class));
+//        //JSON字符串转换成JSON对象
+                    JSONObject messjsonObject = JSONObject.parseObject(responseBodyStr);
+//
+//        System.out.println(messjsonObject.get("data"));
+//
+                    String token = messjsonObject.getJSONObject("data").getString("token");
+                    //设置全局token
+                    GlobalConfig.setUserToken(token);
+                    AlertDialogUtil.showToastText(token, getActivity());
+
                 } else {
 //                    System.out.println("用户不存在或者密码错误");
                     AlertDialogUtil.showConfirmClickAlertDialog("用户不存在或者密码错误", getActivity());
                 }
             }
         });
+    }
 
+    //设置图片验证码
+    private void setPicVcode() {
+        OkHttpUtil.getInstance().PostWithJson(UrlConfig.getUrl(UrlConfig.UrlType.PIC_VERCODE), new JSONObject(), new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                Log.i("LoginInfo", e.getMessage());
+                Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+//                String responseBodyStr = response.body().string();
+//                Log.i("CodeLoginInfo", responseBodyStr);
+                InputStream inputStream = response.body().byteStream();//得到图片的流
+                Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+                try {
+                    pic_vercode.setImageBitmap(bitmap);
+                } catch (Exception e) {
+                    //Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                    System.out.println("PictureErro" + e.getMessage());
+                }
+            }
+        });
     }
 }
+

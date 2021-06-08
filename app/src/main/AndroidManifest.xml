@@ -70,6 +70,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+
         <activity android:name=".Activities.RegisterActivity" /> <!-- 注册SDKActivity -->
         <activity
             android:name="com.tencent.tauth.AuthActivity"

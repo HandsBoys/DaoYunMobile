@@ -7,6 +7,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 
@@ -88,6 +89,21 @@ public class AlertDialogUtil {
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
+                });
+    }
+
+
+    /**
+     * 展示广播文本框
+     *
+     * @param msg      提示消息
+     * @param activity 创建提示的框的act
+     */
+    public static void showToastText(final String msg, Activity activity) {
+
+        activity.runOnUiThread(
+                () -> {
+                    Toast.makeText(activity, msg, Toast.LENGTH_SHORT).show();
                 });
     }
 

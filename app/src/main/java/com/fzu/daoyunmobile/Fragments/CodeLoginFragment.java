@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.alibaba.fastjson.JSONObject;
 import com.fzu.daoyunmobile.Activities.MainActivity;
 import com.fzu.daoyunmobile.Activities.ThirdLoginActivity;
+import com.fzu.daoyunmobile.Configs.GlobalConfig;
 import com.fzu.daoyunmobile.Configs.UrlConfig;
 import com.fzu.daoyunmobile.FrameItems.InputFrameItem;
 import com.fzu.daoyunmobile.FrameItems.InputVCodeFrameItem;
@@ -56,7 +57,6 @@ public class CodeLoginFragment extends Fragment {
     //生成的验证码
     private int verificationCode;
 
-    private String session;
     private TextView qqLogin;
 
 
@@ -76,7 +76,7 @@ public class CodeLoginFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        startActivity(new Intent(getActivity(), MainActivity.class));
+        // startActivity(new Intent(getActivity(), MainActivity.class));
         // 登录按钮设置
         loginBtn = getActivity().findViewById(R.id.bt_login_submit);
         loginBtn.setOnClickListener(v -> login());
@@ -126,11 +126,11 @@ public class CodeLoginFragment extends Fragment {
                 @Override
                 public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                     String responseBodyStr = response.body().string();
-                    Headers headers = response.headers();
-                    session = response.headers().get("Set-Cookie");
-                    Log.i("LoginInfoPre", session);
-                    session = session.substring(0, session.indexOf(";")).substring(11);
-                    Log.i("LoginInfoLast", session);
+//                    Headers headers = response.headers();
+//                    session = response.headers().get("Set-Cookie");
+//                    Log.i("LoginInfoPre", session);
+//                    session = session.substring(0, session.indexOf(";")).substring(11);
+//                    Log.i("LoginInfoLast", session);
                     Log.i("LoginInfo", responseBodyStr);
                 }
             });
@@ -164,12 +164,16 @@ public class CodeLoginFragment extends Fragment {
                 @Override
                 public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                     String responseBodyStr = response.body().string();
-                    Log.i("LoginInfo", responseBodyStr);
-                    Headers headers = response.headers();
-                    session = response.headers().get("Set-Cookie");
-                    Log.i("LoginInfoAfter", session);
+                    Log.i("CodeLoginInfo", responseBodyStr);
 
-                    if (responseBodyStr.contains("登录成功")) {
+                    if (responseBodyStr.contains("登陆成功")) {
+                        JSONObject messjsonObject = JSONObject.parseObject(responseBodyStr);
+//
+//        System.out.println(messjsonObject.get("data"));
+//
+                        String token = messjsonObject.getJSONObject("data").getString("token");
+                        //设置全局token
+                        GlobalConfig.setUserToken(token);
                         startActivity(new Intent(getActivity(), MainActivity.class));
                     } else {
                         AlertDialogUtil.showConfirmClickAlertDialog("验证码错误", getActivity());

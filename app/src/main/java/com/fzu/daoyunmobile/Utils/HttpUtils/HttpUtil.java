@@ -1,5 +1,6 @@
 package com.fzu.daoyunmobile.Utils.HttpUtils;
 
+import com.alibaba.fastjson.JSONObject;
 import com.fzu.daoyunmobile.Configs.UrlConfig;
 
 import okhttp3.Callback;
@@ -17,6 +18,8 @@ public class HttpUtil {
      * @param callback 回调函数
      */
     public static void sendMessage(String phone, Callback callback) {
-        OkHttpUtil.getInstance().Get(UrlConfig.getUrl(UrlConfig.UrlType.MESSAGE) + phone, callback);
+        //OkHttpUtil.getInstance().Get(UrlConfig.getUrl(UrlConfig.UrlType.MESSAGE) + phone, callback);
+        OkHttpUtil.getInstance().PostWithJson(UrlConfig.getUrl(UrlConfig.UrlType.MESSAGE) + phone, new JSONObject(),callback);
+
     }
 }

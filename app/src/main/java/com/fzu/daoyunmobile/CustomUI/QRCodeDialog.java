@@ -45,13 +45,10 @@ public class QRCodeDialog extends Dialog {
                     android.view.ViewGroup.LayoutParams.WRAP_CONTENT
                     , android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
             // dialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
-
             dialog.setContentView(layout);
             ImageView img = layout.findViewById(R.id.img_qrcode);
             img.setImageBitmap(getImage());
             return dialog;
         }
     }
-
-
 }

@@ -48,7 +48,6 @@ public class RegisterActivity extends AppCompatActivity {
     private InputFrameItem intput_psd;
     private InputFrameItem intput_confpsd;
     private InputVCodeFrameItem input_vericode;
-    private boolean tag = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,7 +93,6 @@ public class RegisterActivity extends AppCompatActivity {
                 @Override
                 public void onFailure(@NotNull Call call, @NotNull IOException e) {
                     System.out.println(e.getMessage());
-                    //Toast.makeText(RegisterActivity.this, "Connection failed!", Toast.LENGTH_SHORT).show();
                 }
 
                 @Override
@@ -149,14 +147,5 @@ public class RegisterActivity extends AppCompatActivity {
                 }
             }));
         }
-    }
-
-    private void alterDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this)
-                .setMessage("注册成功")
-                .setPositiveButton("确定", (dialog, i) -> {
-                    finish();
-                });
-        builder.show();
     }
 }
