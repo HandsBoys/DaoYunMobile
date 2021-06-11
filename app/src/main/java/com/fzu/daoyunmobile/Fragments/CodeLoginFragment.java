@@ -282,7 +282,6 @@ public class CodeLoginFragment extends Fragment {
     }
 
     private void getUserInfo() {
-        System.out.println("FUCK GETUSERINFO");
         //获取用户信息
         OkHttpUtil.getInstance().GetWithToken(UrlConfig.getUrl(UrlConfig.UrlType.USER_INFO), new Callback() {
             @Override
@@ -311,8 +310,6 @@ public class CodeLoginFragment extends Fragment {
                     AlertDialogUtil.showToastText(e.getMessage(), getActivity());
                     AlertDialogUtil.showConfirmClickAlertDialog("网络超时请重新登陆", getActivity());
                 }
-
-
             }
         });
     }

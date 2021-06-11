@@ -23,6 +23,7 @@ import com.fzu.daoyunmobile.Activities.CreateClassActivity;
 import com.fzu.daoyunmobile.Activities.MainActivity;
 import com.fzu.daoyunmobile.Adapter.MyCreateCourseAdapter;
 import com.fzu.daoyunmobile.Configs.GlobalConfig;
+import com.fzu.daoyunmobile.Configs.RequestCodeConfig;
 import com.fzu.daoyunmobile.Configs.UrlConfig;
 import com.fzu.daoyunmobile.Entity.Course;
 import com.fzu.daoyunmobile.R;
@@ -53,7 +54,6 @@ public class HpMainFragment extends Fragment {
     protected View myJoinView;
     protected MyCreateCourseFragment myCreateFragment = new MyCreateCourseFragment();
     protected MyJoinCourseFragment myJoinFragment = new MyJoinCourseFragment();
-    private final static int SCAN_CODE = 1028;
 
     public HpMainFragment() {        // Required empty public constructor
 
@@ -100,13 +100,6 @@ public class HpMainFragment extends Fragment {
             showPopupMenu(addTV);
         });
 
-//        add_btn = (Button) activity.findViewById(R.id.toolbar_right_btn);
-//        add_btn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                showPopupMenu(add_btn);
-//            }
-//        });
 
         myJoinTV.setOnClickListener(v -> {
             myJoinTV.setTextColor(Color.parseColor("#ff00bfff"));
@@ -136,6 +129,7 @@ public class HpMainFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        System.out.println("HPMAINGETACT");
         Log.i("MainFragInfo", requestCode + " " + resultCode + " " + "gradeClass");
         if (requestCode == 1 && resultCode == getActivity().RESULT_OK) {
 //            BitmapDrawable bitmapDrawable = getImageDrawable(data.getStringExtra("classIcon"));
@@ -186,7 +180,7 @@ public class HpMainFragment extends Fragment {
                                 Toast.makeText(getContext(), text, Toast.LENGTH_SHORT).show();
                                 switch (position) {
                                     case 0:
-                                        startActivityForResult(new Intent(getContext(), CreateClassActivity.class), 1);
+                                        getActivity().startActivityForResult(new Intent(getContext(), CreateClassActivity.class), RequestCodeConfig.getCreateCourse());
                                         break;
                                     case 1:
                                         final EditText editText = new EditText(getContext());
@@ -204,7 +198,7 @@ public class HpMainFragment extends Fragment {
                                     default:
                                         Intent intent = new Intent(getContext(), CaptureActivity.class);
                                         //必须要通过父activity下的forresult才能使接收和输入相同的code
-                                        getActivity().startActivityForResult(intent, SCAN_CODE);
+                                        getActivity().startActivityForResult(intent, RequestCodeConfig.getScanqrCode());
                                         break;
                                 }
                             }
@@ -246,5 +240,10 @@ public class HpMainFragment extends Fragment {
     //扫描二维码
     public void onScanQRCode(String result) {
         joinClass(result);
+    }
+
+    //创建班课成功后
+    public void onCreateCourese() {
+        myCreateFragment.initCourses();
     }
 }

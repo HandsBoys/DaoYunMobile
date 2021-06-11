@@ -217,8 +217,6 @@ public class PsdLoginFragment extends Fragment {
                     AlertDialogUtil.showToastText(e.getMessage(), getActivity());
                     AlertDialogUtil.showConfirmClickAlertDialog("网络超时请重新登陆", getActivity());
                 }
-
-
             }
         });
     }

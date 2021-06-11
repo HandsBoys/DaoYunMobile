@@ -31,6 +31,8 @@ public class LoginActivity extends AppCompatActivity {
         initView();
         //设置顶部状态栏为透明
         StatusBarUtil.transparencyBar(LoginActivity.this);
+       // startActivity(new Intent(this, SelectFacultyActivity.class));
+
 //        getWindow().setStatusBarColor(Color.TRANSPARENT);
 //        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
     }

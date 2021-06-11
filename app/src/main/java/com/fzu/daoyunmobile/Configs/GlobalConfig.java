@@ -1,5 +1,12 @@
 package com.fzu.daoyunmobile.Configs;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+/**
+ * 存放一些用户信息等全局变量
+ */
 public class GlobalConfig {
     //用户Token
     private static String USER_TOKEN = "";
@@ -73,5 +80,36 @@ public class GlobalConfig {
         GlobalConfig.SEX = SEX;
     }
 
+    //学校数据测试样例
+    private static List<String> shcoolList = new ArrayList<String>() {//这个大括号 就相当于我们  new 接口
+        {//这个大括号 就是 构造代码块 会在构造函数前 调用
+            this.add("福州大学");//this 可以省略  这里加上 只是为了让读者 更容易理解
+            add("福建师范大学");
+            add("福建理工大学");
+            add("福州大学2");//this 可以省略  这里加上 只是为了让读者 更容易理解
+            add("福建师范大学2");
+            add("福建理工大学2");
+        }
+    };
 
+    //获取学校测试样例
+    public static List<String> getShcoolList() {
+        return shcoolList;
+    }
+
+    private static ArrayList<List<String>> facultyList = new ArrayList<List<String>>() {
+        {
+            this.add(Arrays.asList("化工", "数计", "人文"));
+            add(Arrays.asList("化工1", "数计", "人文"));
+            add(Arrays.asList("化工2", "数计", "人文"));
+            add(Arrays.asList("化工3", "数计", "人文"));
+            add(Arrays.asList("化工4", "数计231222", "人文", "FUCK"));
+            add(Arrays.asList("化工5", "数计22123", "人文"));
+            add(Arrays.asList("化工6", "数计22132", "人文"));
+        }
+    };
+
+    public static ArrayList<List<String>> getFacultyList() {
+        return facultyList;
+    }
 }

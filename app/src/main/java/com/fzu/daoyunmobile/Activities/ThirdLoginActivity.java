@@ -109,7 +109,6 @@ public class ThirdLoginActivity extends AppCompatActivity {
         @Override
         public void onError(UiError uiError) {
             Toast.makeText(ThirdLoginActivity.this, "授权失败", Toast.LENGTH_SHORT).show();
-
         }
 
         @Override

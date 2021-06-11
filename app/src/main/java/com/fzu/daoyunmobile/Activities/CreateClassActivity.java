@@ -4,6 +4,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -21,12 +22,16 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSONObject;
+import com.fzu.daoyunmobile.Configs.RequestCodeConfig;
+import com.fzu.daoyunmobile.Configs.UrlConfig;
 import com.fzu.daoyunmobile.R;
+import com.fzu.daoyunmobile.Utils.AlertDialogUtil;
+import com.fzu.daoyunmobile.Utils.HttpUtils.OkHttpUtil;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -37,6 +42,10 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
 
 public class CreateClassActivity extends AppCompatActivity {
 
@@ -53,6 +62,9 @@ public class CreateClassActivity extends AppCompatActivity {
     private final int IMAGE_CUT = 2;
     private File cropFile = null;
     private String selectedTerm;
+    private String school;
+    private String academy;
+    private final int CREATE_COURSE_OK = 123456;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,16 +75,17 @@ public class CreateClassActivity extends AppCompatActivity {
         termTV = findViewById(R.id.term_Tv);
         classNameET = findViewById(R.id.class_name_Et);
         schoolET = findViewById(R.id.school_Et);
+
+        schoolET.setFocusable(false);//让EditText失去焦点，然后获取点击事件
+
+        schoolET.setOnClickListener(v -> {
+            startActivityForResult(new Intent(this, SelectFacultyActivity.class), RequestCodeConfig.getSelectFaculty());
+        });
+
         gradeClassET = findViewById(R.id.grade_class_Et);
-        classIntroductionET = findViewById(R.id.class_introduction_Et);
         createClassBtn = findViewById(R.id.create_class_btn);
         backBtn = findViewById(R.id.toolbar_left_btn);
-        backBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        backBtn.setOnClickListener(v -> finish());
 
         classIconIV = findViewById(R.id.class_icon_Iv);
         classIconIV.setOnClickListener(v -> {
@@ -85,149 +98,68 @@ public class CreateClassActivity extends AppCompatActivity {
                 "2021-2022-1", "2021-2022-2", "2022-2023-1", "2022-2023-2", "2023-2024-1", "2023-2024-2",
                 "2024-2025-1", "2024-2025-2", "2025-2026-1", "2025-2026-2", "2026-2027-1", "2026-2027-2",};
         termLayout = findViewById(R.id.term_layout);
-        termLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(CreateClassActivity.this)
-                        .setTitle("选择班课学期")
-                        .setSingleChoiceItems(term, 0, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                selectedTerm = term[which];
-                            }
-                        });
-                builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        termTV.setText(selectedTerm);
-                    }
-                });
-                builder.setNegativeButton("取消", null);
-                builder.show();
-            }
+        termLayout.setOnClickListener(v -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(CreateClassActivity.this)
+                    .setTitle("选择班课学期")
+                    .setSingleChoiceItems(term, 0, (dialog, which) -> selectedTerm = term[which]);
+            builder.setPositiveButton("确定", (dialog, which) -> termTV.setText(selectedTerm));
+            builder.setNegativeButton("取消", null);
+            builder.show();
         });
 
-        createClassBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                if (classNameET.getText().toString().equals("")) {
-//                    showAlertDialog("请输入班课名！");
-//                } else if (schoolET.getText().toString().equals("")) {
-//                    showAlertDialog("请输入学校院系！");
-//                } else if (gradeClassET.getText().toString().equals("")) {
-//                    showAlertDialog("请输入班级！");
-//                } else if (termTV.getText().toString().equals("班课学期未选择")) {
-//                    showAlertDialog("请选择班课学期！");
-//                } else if (classIntroductionET.getText().toString().equals("")) {
-//                    showAlertDialog("请输入班课简介！");
-//                }
-//                new Thread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        OkHttpClient okHttpClient = new OkHttpClient();
-//                        RequestBody requestBody;
-//                        if (cropFile != null) {
-//                            requestBody = new MultipartBody.Builder()
-//                                    .setType(MultipartBody.FORM)
-//                                    .addFormDataPart("class_icon", cropFile.getName(),
-//                                            MultipartBody.create(MediaType.parse("img/jpg"), cropFile))
-//                                    .addFormDataPart("className", classNameET.getText().toString())
-//                                    .addFormDataPart("school", schoolET.getText().toString())
-//                                    .addFormDataPart("gradeClass", gradeClassET.getText().toString())
-//                                    .addFormDataPart("term", termTV.getText().toString())
-//                                    .addFormDataPart("classIntruction", classIntroductionET.getText().toString())
-//                                    .addFormDataPart("phoneNumber", MainActivity.phoneNumber)
-//                                    .addFormDataPart("name", MainActivity.name)
-//                                    .build();
-//                        } else {
-//                            requestBody = new MultipartBody.Builder()
-//                                    .setType(MultipartBody.FORM)
-//                                    .addFormDataPart("className", classNameET.getText().toString())
-//                                    .addFormDataPart("school", schoolET.getText().toString())
-//                                    .addFormDataPart("gradeClass", gradeClassET.getText().toString())
-//                                    .addFormDataPart("term", termTV.getText().toString())
-//                                    .addFormDataPart("classIntruction", classIntroductionET.getText().toString())
-//                                    .addFormDataPart("phoneNumber", MainActivity.phoneNumber)
-//                                    .addFormDataPart("name", MainActivity.name)
-//                                    .build();
-//                        }
-//                        Request request = new Request.Builder()
-//                                .url("http://47.98.236.0:8080/createclass")
-//                                .post(requestBody)
-//                                .build();
-//                        okHttpClient.newCall(request).enqueue(new Callback() {
-//                            @Override
-//                            public void onFailure(@NotNull Call call, @NotNull IOException e) {
-//
-//                            }
-//
-//                            @Override
-//                            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-//                                final String responseBodyStr = response.body().string();
-//                                runOnUiThread(new Runnable() {
-//                                    @Override
-//                                    public void run() {
-//                                        final String path;
-//                                        if (cropFile == null) {
-//                                            path = "";
-//                                        } else {
-//                                            path = cropFile.getAbsolutePath();
-//                                        }
-//                                        AlertDialog.Builder builder = new AlertDialog.Builder(CreateClassActivity.this)
-//                                                .setTitle("创建成功")
-//                                                .setMessage("班课创建成功！七位班课号为：" + responseBodyStr + ",请邀请同学加入班课吧！")
-//                                                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-//                                                    @Override
-//                                                    public void onClick(DialogInterface dialog, int which) {
-//                                                        File classFile = new File(Environment.getExternalStorageDirectory()
-//                                                                + "/daoyun/" + MainActivity.phoneNumber + ".json");
-//                                                        try {
-//                                                            FileInputStream in = new FileInputStream(classFile);
-//                                                            BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-////                                                            byte[] bt = new byte[4096];
-//                                                            String classJsonStr = reader.readLine();
-////                                                            Log.i("CreateClassInfo", classJsonStr+" "+"hello");
-//                                                            JSONArray classJsonArray = new JSONArray(classJsonStr);
-//                                                            JSONObject jsonObject = new JSONObject();
-//                                                            jsonObject.put("classId", responseBodyStr);
-//                                                            jsonObject.put("className", classNameET.getText().toString());
-//                                                            jsonObject.put("classIcon", cropFile.getName());
-//                                                            jsonObject.put("gradeClass", gradeClassET.getText().toString());
-//                                                            jsonObject.put("school", schoolET.getText().toString());
-//                                                            jsonObject.put("term", termTV.getText().toString());
-//                                                            jsonObject.put("classIntruction", classIntroductionET.getText().toString());
-////                                                            Log.i("CreateClassInfo", jsonObject.toString());
-//                                                            classJsonArray.put(jsonObject);
-//                                                            if (classFile.exists()) {
-//                                                                classFile.delete();
-//                                                            }
-////                                                            Log.i("CreateClassInfo", classJsonArray.get(classJsonArray.length()-1).toString());
-//                                                            FileOutputStream out = new FileOutputStream(classFile);
-//                                                            out.write(classJsonArray.toString().getBytes("utf-8"));
-//                                                            out.close();
-//                                                        } catch (FileNotFoundException e) {
-//                                                            e.printStackTrace();
-//                                                        } catch (IOException e) {
-//                                                            e.printStackTrace();
-//                                                        } catch (JSONException e) {
-//                                                            e.printStackTrace();
-//                                                        }
-//                                                        Intent intent = new Intent();
-//                                                        intent.putExtra("classId", responseBodyStr);
-//                                                        intent.putExtra("classIcon", path);
-//                                                        intent.putExtra("className", classNameET.getText().toString());
-//                                                        intent.putExtra("gradeClass", gradeClassET.getText().toString());
-//                                                        setResult(RESULT_OK, intent);
-//                                                        finish();
-//                                                    }
-//                                                });
-//                                        builder.show();
-//                                    }
-//                                });
-//                            }
-//                        });
-//                    }
-//                }).start();
+        createClassBtn.setOnClickListener(v -> {
+            if (classNameET.getText().toString().equals("")) {
+                AlertDialogUtil.showConfirmClickAlertDialog("请输入班课名！", CreateClassActivity.this);
+            } else if (schoolET.getText().toString().equals("")) {
+                AlertDialogUtil.showConfirmClickAlertDialog("请输入学校院系！", CreateClassActivity.this);
+            } else if (gradeClassET.getText().toString().equals("")) {
+                AlertDialogUtil.showConfirmClickAlertDialog("请输入班级！", CreateClassActivity.this);
+            } else if (termTV.getText().toString().equals("班课学期未选择")) {
+                AlertDialogUtil.showConfirmClickAlertDialog("请选择班课学期！", CreateClassActivity.this);
+            } else {
+
+                JSONObject json = new JSONObject();
+                json.put("id", "0");
+                json.put("courseName", classNameET.getText().toString());
+                json.put("term", termTV.getText().toString());
+                json.put("teacherId", "0");
+                json.put("enableJoin", "true");
+                JSONObject classDto = new JSONObject();
+                classDto.put("id", "0");
+                classDto.put("className", gradeClassET.getText().toString());
+                json.put("classDto", classDto);
+
+                //获取用户信息
+                OkHttpUtil.getInstance().PutWithJsonToken(UrlConfig.getUrl(UrlConfig.UrlType.CREATE_COURSE), json, new Callback() {
+                    @Override
+                    public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                        System.out.println("FUCK CreateCourse" + e.getMessage());
+                        AlertDialogUtil.showToastText(e.getMessage(), CreateClassActivity.this);
+                    }
+
+                    @Override
+                    public void onResponse(@NotNull Call call, @NotNull Response response) {
+                        try {
+                            String responseBodyStr = response.body().string();
+                            AlertDialogUtil.showToastText(responseBodyStr, CreateClassActivity.this);
+                            if (responseBodyStr.contains("操作成功")) {
+                                // myJoinFragment.initCourses();
+                                AlertDialogUtil.showToastText("创建班课成功!", CreateClassActivity.this);
+                                Intent intent = new Intent();
+                                // 设置返回码和返回携带的数据
+                                setResult(CREATE_COURSE_OK, intent);
+                                finish();
+                            } else {
+                                AlertDialogUtil.showConfirmClickAlertDialog("创建班课失败请重试！" + responseBodyStr, CreateClassActivity.this);
+                            }
+                        } catch (Exception e) {
+                            //获取不到用户信息则取消登陆 需要重新登陆
+                            AlertDialogUtil.showToastText(e.getMessage(), CreateClassActivity.this);
+                            AlertDialogUtil.showConfirmClickAlertDialog("创建班课失败请重试", CreateClassActivity.this);
+                            System.out.println(e.getMessage());
+                        }
+                    }
+                });
             }
         });
     }
@@ -246,6 +178,10 @@ public class CreateClassActivity extends AppCompatActivity {
                 } else if (requestCode == IMAGE_SELECT) {
                     Uri iconUri = data.getData();
                     startCropImage(iconUri);
+                } else if (requestCode == RequestCodeConfig.getSelectFaculty()) {//院系选择
+                    school = data.getStringExtra("school");
+                    academy = data.getStringExtra("academy");
+                    schoolET.setText(school + academy);
                 }
                 break;
             default:

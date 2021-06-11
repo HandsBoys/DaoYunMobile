@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 
 import com.fzu.daoyunmobile.Activities.OneClickSignInActivity;
 import com.fzu.daoyunmobile.Activities.OneClickSignInSettingActivity;
@@ -30,16 +31,20 @@ import java.util.List;
 public class MyCreateCourseAdapter extends ArrayAdapter<Course> {
     private int resourceId;
     private int flag = 1;
+    private Context mContext;
 
     public MyCreateCourseAdapter(@NonNull Context context, int textViewResourceId, @NonNull List<Course> objects) {
         super(context, textViewResourceId, objects);
         resourceId = textViewResourceId;
+        mContext = context;
     }
 
     public MyCreateCourseAdapter(@NonNull Context context, int textViewResourceId, @NonNull List<Course> objects, int flag) {
         super(context, textViewResourceId, objects);
         resourceId = textViewResourceId;
         this.flag = flag;
+        mContext = context;
+
     }
 
     @NonNull
@@ -63,11 +68,10 @@ public class MyCreateCourseAdapter extends ArrayAdapter<Course> {
 
             myCreateCourseViewHolder.codeImg = view.findViewById(R.id.crqrCode_Iv);
             myCreateCourseViewHolder.codeTv = view.findViewById(R.id.crqrCode_Tv);
-//            if(flag != 1){
-            //viewHolder.courseImage.setImageBitmap(BitmapFactory.decodeFile(course.getImgFilePath()));
-            myCreateCourseViewHolder.signInImg.setVisibility(View.VISIBLE);
-            myCreateCourseViewHolder.signInTv.setVisibility(View.VISIBLE);
-//            }
+
+            myCreateCourseViewHolder.codeImg.setImageDrawable(ContextCompat.getDrawable(mContext, R.mipmap.qc_code));
+
+
             view.setTag(myCreateCourseViewHolder);
         } else {
             view = convertView;
@@ -91,39 +95,6 @@ public class MyCreateCourseAdapter extends ArrayAdapter<Course> {
         }
 
         if (flag == 2) {
-            myCreateCourseViewHolder.signInImg.setOnClickListener(v -> {
-                showPopupMenu(v);
-
-//                    Toast.makeText(getContext(), "viewHolder.courseName.getText()", Toast.LENGTH_SHORT).show();
-//                    Intent intent = new Intent(v.getContext(), GestureSettingActivity.class);
-//                    v.getContext().startActivity(intent);
-//                    SharedPreferences preferences = getSharedPreferences("sigin", Context.MODE_PRIVATE);
-//                    GraphicLockView.mPassword = preferences.getString("gestureSignIn", null);
-//                    OneBtnSignInSettingActivity.startOrNot = preferences.getBoolean("oneBtnSignIn", false);
-//                    OneBtnSignInSettingActivity.distanceLimit = preferences.getInt("distanceLimit", -1);
-//                    if(MainActivity.userName.equals("teacher")){
-//
-//                        if(GraphicLockView.mPassword != null){
-//                            startActivity(new Intent(getContext(), FinishSignInActivity.class)
-//                                    .putExtra("signin_mode","gesture_signin_mode"));
-//                        }else if(OneBtnSignInSettingActivity.startOrNot == true){
-//                            startActivity(new Intent(getContext(), FinishSignInActivity.class)
-//                                    .putExtra("signin_mode","one_btn_mode"));
-//                        }else{
-//                            Intent intent = new Intent(getContext(), SignInTypeActivity.class);
-//                            startActivity(intent);
-//                        }
-//                    }else if(GraphicLockView.mPassword != null){
-//                        Intent intent = new Intent(getContext(), GestureUnlockActivity.class);
-//                        startActivity(intent);
-//                    }else if(OneBtnSignInSettingActivity.startOrNot == true){
-//                        Intent intent = new Intent(getContext(), OneBtnSignInActivity.class);
-//                        startActivity(intent);
-//                    }else{
-//                        Log.i("memberInfo", PropertiesUtill.getProperties(getContext(), "gesturePassword"));
-//                        Toast.makeText(getContext(), "教师尚未发起签到或签到已结束", Toast.LENGTH_SHORT).show();
-//                    }
-            });
             myCreateCourseViewHolder.signInTv.setOnClickListener(v -> {
                 showPopupMenu(v);
             });

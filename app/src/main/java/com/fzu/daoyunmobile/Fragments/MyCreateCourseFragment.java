@@ -76,7 +76,7 @@ public class MyCreateCourseFragment extends Fragment {
 
     }
 
-    private void initCourses() {
+    public void initCourses() {
         //获取用户信息
         OkHttpUtil.getInstance().GetWithToken(UrlConfig.getUrl(UrlConfig.UrlType.GET_CREATED_COURSES), new Callback() {
             @Override
@@ -86,7 +86,7 @@ public class MyCreateCourseFragment extends Fragment {
             }
 
             @Override
-            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+            public void onResponse(@NotNull Call call, @NotNull Response response) {
 
                 try {
                     String responseBodyStr = response.body().string();

@@ -52,6 +52,24 @@ public class AlertDialogUtil {
     }
 
     /**
+     * 添加确认框带有监听事件
+     *
+     * @param msg      提示消息
+     * @param activity 创建提示的框
+     */
+    public static void showConfirmClickAlertDialogTwoButtonWithLister(final String msg, Activity activity, DialogInterface.OnClickListener listener) {
+        activity.runOnUiThread(
+                () -> {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(activity)
+                            .setMessage(msg)
+                            .setNegativeButton("确定", listener)
+                            .setPositiveButton("取消", null);
+                    builder.show();
+                });
+        //.setNeutralButton("Neutral", listener)("取消", null); 中间按钮
+    }
+
+    /**
      * 弹出二维码
      *
      * @param qrcodecontent 二维码内容

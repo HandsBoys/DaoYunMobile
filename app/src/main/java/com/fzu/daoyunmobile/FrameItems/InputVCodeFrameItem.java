@@ -54,7 +54,7 @@ public class InputVCodeFrameItem {
     public void setSubBtn(int id) {
         submitBtn = priView.findViewById(id);
     }
-    
+
     public Button getSubBtn() {
         return submitBtn;
     }

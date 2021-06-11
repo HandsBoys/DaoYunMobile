@@ -176,31 +176,6 @@
 
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#D8DDE1"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    android:text="班课简介"
-                    android:textSize="15dp" />
-
-            </LinearLayout>
-
-            <EditText
-                android:id="@+id/class_introduction_Et"
-                android:layout_width="match_parent"
-                android:layout_height="130dp"
-                android:layout_marginBottom="10dp"
-                android:gravity="start"
-                android:hint="请输入班课简介"
-                android:lineSpacingExtra="5dp"
-                android:scrollbars="vertical" />
-
             <Button
                 android:id="@+id/create_class_btn"
                 android:layout_width="match_parent"

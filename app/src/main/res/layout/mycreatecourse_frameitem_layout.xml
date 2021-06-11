@@ -38,7 +38,7 @@
             <TextView
                 android:id="@+id/class_name"
                 android:layout_width="100dp"
-                android:layout_height="wrap_content"
+                android:layout_height="30dp"
                 android:layout_marginLeft="0dp"
                 android:text="1班"
                 android:textSize="15sp" />
@@ -61,8 +61,8 @@
 
             <ImageView
                 android:id="@+id/crsignIn_Iv"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
                 android:layout_gravity="center"
                 android:src="@mipmap/list_my_menu" />
 
@@ -78,11 +78,12 @@
 
             <ImageView
                 android:id="@+id/crqrCode_Iv"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
                 android:layout_gravity="center"
                 android:layout_marginLeft="20dp"
                 android:src="@mipmap/list_my_menu"
+                app:srcCompat="@mipmap/qc_code"
                 tools:srcCompat="@mipmap/qc_code" />
 
             <TextView
