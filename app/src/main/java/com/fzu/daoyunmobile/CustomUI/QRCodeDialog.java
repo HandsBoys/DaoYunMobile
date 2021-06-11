@@ -40,7 +40,7 @@ public class QRCodeDialog extends Dialog {
             LayoutInflater inflater = (LayoutInflater) context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             final QRCodeDialog dialog = new QRCodeDialog(context, R.style.Dialog);
-            View layout = inflater.inflate(R.layout.qrcode_dialog_layout, null);
+            View layout = inflater.inflate(R.layout.layout_qrcode_dialog, null);
             dialog.addContentView(layout, new LayoutParams(
                     android.view.ViewGroup.LayoutParams.WRAP_CONTENT
                     , android.view.ViewGroup.LayoutParams.WRAP_CONTENT));

@@ -78,7 +78,7 @@ public class CustomToolBar extends LinearLayout {
         typedArray.recycle();
 
         /**-------------设置内容------------*/
-        View barLayoutView = View.inflate(getContext(), R.layout.common_toolbar_layout, null);
+        View barLayoutView = View.inflate(getContext(), R.layout.layout_common_toolbar, null);
         Button leftBtn = (Button) barLayoutView.findViewById(R.id.toolbar_left_btn);
         TextView leftTv = (TextView) barLayoutView.findViewById(R.id.toolbar_left_tv);
         TextView titleTv = (TextView) barLayoutView.findViewById(R.id.toolbar_title_tv);

@@ -1,6 +1,5 @@
 package com.fzu.daoyunmobile.Fragments;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -22,7 +21,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.fzu.daoyunmobile.Activities.CreateClassActivity;
 import com.fzu.daoyunmobile.Activities.MainActivity;
 import com.fzu.daoyunmobile.Adapter.MyCreateCourseAdapter;
-import com.fzu.daoyunmobile.Configs.GlobalConfig;
 import com.fzu.daoyunmobile.Configs.RequestCodeConfig;
 import com.fzu.daoyunmobile.Configs.UrlConfig;
 import com.fzu.daoyunmobile.Entity.Course;
@@ -158,7 +156,7 @@ public class HpMainFragment extends Fragment {
 //                myCreateFragment.adapter.notifyDataSetChanged();
             }
             myCreateFragment.adapter.notifyDataSetChanged();
-            myCreateFragment.adapter = new MyCreateCourseAdapter(getContext(), R.layout.mycreatecourse_frameitem_layout
+            myCreateFragment.adapter = new MyCreateCourseAdapter(getContext(), R.layout.item_mycreatecourse
                     , myCreateFragment.courseList, 2);
             myCreateFragment.listView.setAdapter(myCreateFragment.adapter);
         }

@@ -46,13 +46,13 @@ public class TreeAdapter extends RecyclerView.Adapter<BaseTelecomHolder> {
         //根据返回的类型生成viewHolder
         switch (viewType) {
             case TreeBean.ONELIST:
-                view = mInflater.inflate(R.layout.trunk_item, parent, false);
+                view = mInflater.inflate(R.layout.item_trunk, parent, false);
                 return new TrunkHolder(context, view);
             case TreeBean.TWOLIST:
-                view = mInflater.inflate(R.layout.leaf_item, parent, false);
+                view = mInflater.inflate(R.layout.item_leaf, parent, false);
                 return new LeafViewHolder(context, view);
             default:
-                view = mInflater.inflate(R.layout.trunk_item, parent, false);
+                view = mInflater.inflate(R.layout.item_trunk, parent, false);
                 return new TrunkHolder(context, view);
         }
     }

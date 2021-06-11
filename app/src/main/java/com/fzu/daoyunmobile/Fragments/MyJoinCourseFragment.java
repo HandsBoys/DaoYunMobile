@@ -92,7 +92,7 @@ public class MyJoinCourseFragment extends Fragment {
 
     private void afterAction() {
         getActivity().runOnUiThread(() -> {
-            adapter = new MyJoinCourseAdapter(getContext(), R.layout.myjoincourse_frameitem_layout, courseList);
+            adapter = new MyJoinCourseAdapter(getContext(), R.layout.item_myjoincourse, courseList);
             listView = getActivity().findViewById(R.id.myjoincourselist_view);
             listView.setAdapter(adapter);
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

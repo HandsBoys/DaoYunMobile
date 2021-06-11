@@ -1,36 +1,26 @@
 package com.fzu.daoyunmobile.Fragments;
 
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.fzu.daoyunmobile.Activities.ClassTabActivity;
-import com.fzu.daoyunmobile.Activities.CreateClassActivity;
 import com.fzu.daoyunmobile.Adapter.MyCreateCourseAdapter;
-import com.fzu.daoyunmobile.Adapter.MyJoinCourseAdapter;
 import com.fzu.daoyunmobile.Configs.UrlConfig;
 import com.fzu.daoyunmobile.Entity.Course;
 import com.fzu.daoyunmobile.R;
 import com.fzu.daoyunmobile.Utils.AlertDialogUtil;
 import com.fzu.daoyunmobile.Utils.HttpUtils.OkHttpUtil;
-import com.lxj.xpopup.XPopup;
-import com.lxj.xpopup.interfaces.OnSelectListener;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -103,7 +93,7 @@ public class MyCreateCourseFragment extends Fragment {
 
     private void afterAction() {
         getActivity().runOnUiThread(() -> {
-            adapter = new MyCreateCourseAdapter(getContext(), R.layout.mycreatecourse_frameitem_layout, courseList, 2);
+            adapter = new MyCreateCourseAdapter(getContext(), R.layout.item_mycreatecourse, courseList, 2);
             listView = getActivity().findViewById(R.id.mycreatecourselist_view);
             listView.setAdapter(adapter);
             // listview点击事件

@@ -26,27 +26,27 @@
 
         <include
             android:id="@+id/logo"
-            layout="@layout/logo_frameitem_layout"
+            layout="@layout/frameitem_logo"
             android:layout_width="match_parent" />
 
         <include
             android:id="@+id/input_mobilenum"
-            layout="@layout/input_frameitem_layout"
+            layout="@layout/frameitem_input"
             android:layout_width="match_parent" />
 
         <include
             android:id="@+id/input_vericode"
-            layout="@layout/intputvcode_frameitem_layout"
+            layout="@layout/frameitem_intputvcode"
             android:layout_width="match_parent" />
 
         <include
             android:id="@+id/input_psd"
-            layout="@layout/input_frameitem_layout"
+            layout="@layout/frameitem_input"
             android:layout_width="match_parent" />
 
         <include
             android:id="@+id/input_confpsd"
-            layout="@layout/input_frameitem_layout"
+            layout="@layout/frameitem_input"
             android:layout_width="match_parent" />
 
         <Button
