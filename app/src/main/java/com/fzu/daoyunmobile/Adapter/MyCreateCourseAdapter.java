@@ -20,6 +20,7 @@ import androidx.core.content.ContextCompat;
 import com.fzu.daoyunmobile.Activities.OneClickSignInActivity;
 import com.fzu.daoyunmobile.Activities.OneClickSignInSettingActivity;
 import com.fzu.daoyunmobile.Entity.Course;
+import com.fzu.daoyunmobile.Holder.MyCreateCourseViewHolder;
 import com.fzu.daoyunmobile.R;
 import com.fzu.daoyunmobile.Utils.AlertDialogUtil;
 import com.google.zxing.WriterException;
@@ -140,17 +141,4 @@ public class MyCreateCourseAdapter extends ArrayAdapter<Course> {
                         }).show();
     }
 
-    class MyCreateCourseViewHolder {
-        ImageView courseImage;
-        TextView courseName;
-        TextView teacherName;
-        TextView className;
-        TextView courseDate;
-        TextView courseId;
-
-        ImageView signInImg;
-        TextView signInTv;
-        ImageView codeImg;
-        TextView codeTv;
-    }
 }

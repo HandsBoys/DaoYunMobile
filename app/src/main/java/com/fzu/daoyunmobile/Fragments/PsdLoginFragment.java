@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import com.alibaba.fastjson.JSONObject;
 import com.fzu.daoyunmobile.Activities.MainActivity;
+import com.fzu.daoyunmobile.Activities.SelectFacultyActivity;
 import com.fzu.daoyunmobile.Configs.GlobalConfig;
 import com.fzu.daoyunmobile.Configs.UrlConfig;
 import com.fzu.daoyunmobile.FrameItems.InputFrameItem;
@@ -174,7 +175,7 @@ public class PsdLoginFragment extends Fragment {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
                 Log.i("LoginInfo", e.getMessage());
-                Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                AlertDialogUtil.showToastText(e.getMessage(), getActivity());
             }
 
             @Override

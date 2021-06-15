@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.fzu.daoyunmobile.Entity.Course;
+import com.fzu.daoyunmobile.Holder.MyJoinCourseViewHolder;
 import com.fzu.daoyunmobile.R;
 
 import java.util.List;
@@ -38,44 +39,44 @@ public class MyJoinCourseAdapter extends ArrayAdapter<Course> {
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         Course course = getItem(position);
         final View view;
-        final ViewHolder viewHolder;
+        final MyJoinCourseViewHolder myJoinCourseViewHolder;
         if (convertView == null) {
             view = LayoutInflater.from(getContext()).inflate(resourceId, parent, false);
-            viewHolder = new ViewHolder();
-            viewHolder.courseImage = view.findViewById(R.id.course_image);
-            viewHolder.courseName = view.findViewById(R.id.course_name);
-            viewHolder.teacherName = view.findViewById(R.id.teacher_name);
-            viewHolder.courseDate = view.findViewById(R.id.course_date);
+            myJoinCourseViewHolder = new MyJoinCourseViewHolder();
+            myJoinCourseViewHolder.courseImage = view.findViewById(R.id.course_image);
+            myJoinCourseViewHolder.courseName = view.findViewById(R.id.course_name);
+            myJoinCourseViewHolder.teacherName = view.findViewById(R.id.teacher_name);
+            myJoinCourseViewHolder.courseDate = view.findViewById(R.id.course_date);
             // viewHolder.className = view.findViewById(R.id.class_name);
-            viewHolder.signInImg = view.findViewById(R.id.signIn_Iv);
-            viewHolder.signInTv = view.findViewById(R.id.signIn_Tv);
+            myJoinCourseViewHolder.signInImg = view.findViewById(R.id.signIn_Iv);
+            myJoinCourseViewHolder.signInTv = view.findViewById(R.id.signIn_Tv);
 //            if(flag != 1){
             //viewHolder.courseImage.setImageBitmap(BitmapFactory.decodeFile(course.getImgFilePath()));
-            viewHolder.signInImg.setVisibility(View.VISIBLE);
-            viewHolder.signInTv.setVisibility(View.VISIBLE);
+            myJoinCourseViewHolder.signInImg.setVisibility(View.VISIBLE);
+            myJoinCourseViewHolder.signInTv.setVisibility(View.VISIBLE);
 //            }
-            view.setTag(viewHolder);
+            view.setTag(myJoinCourseViewHolder);
         } else {
             view = convertView;
-            viewHolder = (ViewHolder) view.getTag();
+            myJoinCourseViewHolder = (MyJoinCourseViewHolder) view.getTag();
         }
 
 
         if (course.getImgFilePath().equals("")) {
-            viewHolder.courseImage.setImageResource(course.getImageId());
-           viewHolder.courseName.setText(course.getCourseName());
-            viewHolder.teacherName.setText(course.getTeacherName());
+            myJoinCourseViewHolder.courseImage.setImageResource(course.getImageId());
+            myJoinCourseViewHolder.courseName.setText(course.getCourseName());
+            myJoinCourseViewHolder.teacherName.setText(course.getTeacherName());
             // viewHolder.className.setText(course.getClassName());
-            viewHolder.courseDate.setText(course.getCourseDate());
+            myJoinCourseViewHolder.courseDate.setText(course.getCourseDate());
         } else if (course.getImageId() == -1) {
-            viewHolder.courseImage.setImageBitmap(BitmapFactory.decodeFile(course.getImgFilePath()));
+            myJoinCourseViewHolder.courseImage.setImageBitmap(BitmapFactory.decodeFile(course.getImgFilePath()));
 //            viewHolder.courseName.setText(course.getCourseName());
 //            viewHolder.teacherName.setText(course.getTeacherName());
 //            viewHolder.className.setText(course.getClassName());
         }
 
         if (flag == 1) {
-            viewHolder.signInImg.setOnClickListener(new View.OnClickListener() {
+            myJoinCourseViewHolder.signInImg.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Toast.makeText(getContext(), "FUCK U", Toast.LENGTH_SHORT).show();
@@ -113,7 +114,7 @@ public class MyJoinCourseAdapter extends ArrayAdapter<Course> {
 //                    }
                 }
             });
-            viewHolder.signInTv.setOnClickListener(new View.OnClickListener() {
+            myJoinCourseViewHolder.signInTv.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Toast.makeText(getContext(), "FUCK U", Toast.LENGTH_SHORT).show();
@@ -122,15 +123,5 @@ public class MyJoinCourseAdapter extends ArrayAdapter<Course> {
         }
 
         return view;
-    }
-
-    class ViewHolder {
-        ImageView courseImage;
-        TextView courseName;
-        TextView teacherName;
-        TextView className;
-        TextView courseDate;
-        ImageView signInImg;
-        TextView signInTv;
     }
 }
