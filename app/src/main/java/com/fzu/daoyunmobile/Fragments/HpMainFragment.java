@@ -1,5 +1,6 @@
 package com.fzu.daoyunmobile.Fragments;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -21,6 +22,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.fzu.daoyunmobile.Activities.CreateClassActivity;
 import com.fzu.daoyunmobile.Activities.MainActivity;
 import com.fzu.daoyunmobile.Adapter.MyCreateCourseAdapter;
+import com.fzu.daoyunmobile.Configs.GlobalConfig;
 import com.fzu.daoyunmobile.Configs.RequestCodeConfig;
 import com.fzu.daoyunmobile.Configs.UrlConfig;
 import com.fzu.daoyunmobile.Entity.Course;
@@ -171,36 +173,84 @@ public class HpMainFragment extends Fragment {
 //                            .hasBlurBg(true)
 //                            .isDestroyOnDismiss(true) //对于只使用一次的弹窗，推荐设置这个
                 .asBottomList("", new String[]{"创建班课", "使用班课号加入班课", "使用二维码加入班课"},
-                        new OnSelectListener() {
-                            @Override
-                            public void onSelect(int position, String text) {
-                                //TODO 这里接入转换接口
-                                Toast.makeText(getContext(), text, Toast.LENGTH_SHORT).show();
-                                switch (position) {
-                                    case 0:
-                                        getActivity().startActivityForResult(new Intent(getContext(), CreateClassActivity.class), RequestCodeConfig.getCreateCourse());
-                                        break;
-                                    case 1:
-                                        final EditText editText = new EditText(getContext());
-                                        AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
-                                                .setTitle("请输入班课号")
-                                                .setView(editText);
-                                        builder.setPositiveButton("确定", (dialog, which) -> {
-                                            String classStr = editText.getText().toString();
-                                            joinClass(classStr);
-                                        });
-                                        builder.setNegativeButton("取消", null);
-                                        builder.show();
-                                        break;
-                                    case 2:
-                                    default:
-                                        Intent intent = new Intent(getContext(), CaptureActivity.class);
-                                        //必须要通过父activity下的forresult才能使接收和输入相同的code
-                                        getActivity().startActivityForResult(intent, RequestCodeConfig.getScanqrCode());
-                                        break;
-                                }
+                        (position, text) -> {
+                            //TODO 这里接入转换接口
+                            Toast.makeText(getContext(), text, Toast.LENGTH_SHORT).show();
+                            switch (position) {
+                                case 0:
+                                    getActivity().startActivityForResult(new Intent(getContext(), CreateClassActivity.class), RequestCodeConfig.getCreateCourse());
+                                    break;
+                                case 1:
+                                    final EditText editText = new EditText(getContext());
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
+                                            .setTitle("请输入班课号")
+                                            .setView(editText);
+                                    builder.setPositiveButton("确定", (dialog, which) -> {
+                                        String classStr = editText.getText().toString();
+                                        searchClass(classStr);
+                                    });
+                                    builder.setNegativeButton("取消", null);
+                                    builder.show();
+                                    break;
+                                case 2:
+                                default:
+                                    Intent intent = new Intent(getContext(), CaptureActivity.class);
+                                    //必须要通过父activity下的forresult才能使接收和输入相同的code
+                                    getActivity().startActivityForResult(intent, RequestCodeConfig.getScanqrCode());
+                                    break;
                             }
                         }).show();
+    }
+
+
+    //加入班课之前搜索班级
+    private void searchClass(final String classStr) {
+        //获取用户信息
+        OkHttpUtil.getInstance().GetWithToken(UrlConfig.getUrl(UrlConfig.UrlType.GET_COURSE_INFO) + classStr, new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                System.out.println("FUCK GETUSERINFO Error" + e.getMessage());
+                AlertDialogUtil.showToastText(e.getMessage(), getActivity());
+            }
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) {
+                try {
+                    String responseBodyStr = response.body().string();
+                    if (responseBodyStr.contains("班课获取失败")) {
+                        AlertDialogUtil.showConfirmClickAlertDialog("班课不存在", getActivity());
+                    } else {
+                        JSONObject jsonObject = JSONObject.parseObject(responseBodyStr).getJSONObject("data");
+                        final String teacherID = jsonObject.getString("teacherId");
+                        if (teacherID.equals(GlobalConfig.getUserID())) {
+                            AlertDialogUtil.showConfirmClickAlertDialog("不能加入自己创建的班课", getActivity());
+                        } else {
+                            final String finish = jsonObject.getString("finish");
+                            if (finish.equals("true")) {
+                                AlertDialogUtil.showConfirmClickAlertDialog("班课已结束", getActivity());
+                            } else {
+                                final String enableJoin = jsonObject.getString("enableJoin");
+                                if (enableJoin.equals("false")) {
+                                    AlertDialogUtil.showConfirmClickAlertDialog("班课不允许加入", getActivity());
+                                } else {
+
+                                    final String className = jsonObject.getJSONObject("classDto").getString("className");
+                                    final String courseName = jsonObject.getString("courseName");
+                                    AlertDialogUtil.showConfirmClickAlertDialogTwoButtonWithLister("确定加入" + courseName + className, getActivity(), (dialog, i) -> {
+                                        joinClass(classStr);
+                                    });
+                                }
+                            }
+                        }
+                    }
+                } catch (Exception e) {
+                    //获取不到用户信息则取消登陆 需要重新登陆
+                    AlertDialogUtil.showToastText(e.getMessage(), getActivity());
+                    AlertDialogUtil.showConfirmClickAlertDialog("加入班课失败请重试", getActivity());
+                    System.out.println(e.getMessage());
+                }
+            }
+        });
     }
 
     //加入班级
@@ -218,8 +268,9 @@ public class HpMainFragment extends Fragment {
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 try {
                     String responseBodyStr = response.body().string();
-                    AlertDialogUtil.showToastText(responseBodyStr, getActivity());
-                    if (responseBodyStr.contains("操作成功")) {
+                    if (responseBodyStr.contains("已经加入班课")) {
+                        AlertDialogUtil.showConfirmClickAlertDialog("已经加入该班课!", getActivity());
+                    } else if (responseBodyStr.contains("操作成功")) {
                         myJoinFragment.initCourses();
                         AlertDialogUtil.showConfirmClickAlertDialog("加入班课成功!", getActivity());
                     } else {
@@ -237,7 +288,7 @@ public class HpMainFragment extends Fragment {
 
     //扫描二维码
     public void onScanQRCode(String result) {
-        joinClass(result);
+        searchClass(result);
     }
 
     //创建班课成功后

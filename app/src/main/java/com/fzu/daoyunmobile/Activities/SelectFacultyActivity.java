@@ -7,10 +7,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.Bundle;
 import android.widget.Button;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.fzu.daoyunmobile.Adapter.TreeAdapter;
 import com.fzu.daoyunmobile.Bean.TreeBean;
 import com.fzu.daoyunmobile.Configs.GlobalConfig;
 import com.fzu.daoyunmobile.Configs.UrlConfig;
+import com.fzu.daoyunmobile.Entity.Course;
 import com.fzu.daoyunmobile.R;
 import com.fzu.daoyunmobile.Utils.AlertDialogUtil;
 import com.fzu.daoyunmobile.Utils.HttpUtils.OkHttpUtil;
@@ -44,24 +47,16 @@ public class SelectFacultyActivity extends AppCompatActivity {
         treeRecycleView.setLayoutManager(new LinearLayoutManager(this));
         list = new ArrayList<>();
         initData();
-        treeAdapter = new TreeAdapter(this, list);
-        treeRecycleView.setAdapter(treeAdapter);
+
     }
 
     private void initData() {
-        List<String> schoolList = GlobalConfig.getShcoolList();
-        //TODO 后续使用院系接口
-        for (int i = 0; i < schoolList.size(); i++) {
-            TreeBean bean = new TreeBean();
-            bean.setTrunk1(schoolList.get(i));
-            list.add(bean);
-        }
 
         //获取用户信息
         OkHttpUtil.getInstance().GetWithToken(UrlConfig.getUrl(UrlConfig.UrlType.GET_DEPT), new Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                System.out.println("GET CreateCourse" + e.getMessage());
+                System.out.println("GET DeptCourse" + e.getMessage());
                 AlertDialogUtil.showToastText(e.getMessage(), SelectFacultyActivity.this);
             }
 
@@ -69,14 +64,53 @@ public class SelectFacultyActivity extends AppCompatActivity {
             public void onResponse(@NotNull Call call, @NotNull Response response) {
                 try {
                     String responseBodyStr = response.body().string();
-                    System.out.println(responseBodyStr);
+                    if (responseBodyStr.contains("获取成功")) {
+                        JSONArray jsonArray = JSONObject.parseObject(responseBodyStr).getJSONArray("data");
+                        List<String> schoolList = new ArrayList<>();
+                        ArrayList<List<String>> facultList = new ArrayList<>();
+                        for (int i = 0; i < jsonArray.size(); i++) {
+                            JSONObject jsonObject = jsonArray.getJSONObject(i);
+                            final String shoolName = jsonObject.getString("deptName");
+                            //获取学校信息
+                            schoolList.add(shoolName);
+                            //TODO 也是需要的 班级信息
+                            JSONArray facults = jsonObject.getJSONArray("children");
+                            List<String> fList = new ArrayList<String>();
+                            for (int j = 0; j < facults.size(); j++) {
+                                JSONObject f = facults.getJSONObject(j);
+                                String fname = f.getString("deptName");
+                                //获取学校信息
+                                fList.add(fname);
+                            }
+                            facultList.add(fList);
+                        }
+                        GlobalConfig.setShcoolList(schoolList);
+                        GlobalConfig.setFacultyList(facultList);
+                        //TODO 后续使用院系接口
+                        for (int i = 0; i < schoolList.size(); i++) {
+                            TreeBean bean = new TreeBean();
+                            bean.setTrunk1(schoolList.get(i));
+                            list.add(bean);
+                        }
+                        SelectFacultyActivity.this.runOnUiThread(
+                                () -> {
+                                    treeAdapter = new TreeAdapter(SelectFacultyActivity.this, list);
+                                    treeRecycleView.setAdapter(treeAdapter);
+                                }
+                        );
+
+                    } else {
+                        AlertDialogUtil.showConfirmClickAlertDialogWithLister("获取院校信息失败请重试", SelectFacultyActivity.this, (dialog, i) -> {
+                            finish();
+                        });
+                    }
+
                 } catch (Exception e) {
-                    //获取不到用户信息则取消登陆 需要重新登陆
-                    AlertDialogUtil.showConfirmClickAlertDialog(e.getMessage(), SelectFacultyActivity.this);
-                    finish();
+                    AlertDialogUtil.showConfirmClickAlertDialogWithLister(e.getMessage(), SelectFacultyActivity.this, (dialog, i) -> {
+                        finish();
+                    });
                 }
             }
         });
-
     }
 }

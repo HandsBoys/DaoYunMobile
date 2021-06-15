@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.fzu.daoyunmobile.CustomUI.CustomToolBar xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    app:left_btn_src="@mipmap/icon_back"
+    app:left_btn_visible="true"
+    app:title_text="班课详情"
+    app:title_visible="true"
+    tools:context=".Fragments.DetailFragment">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:background="#D8DDE1" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="20dp"
+                android:text="班课名"
+                android:textColor="@android:color/black"
+                android:textSize="16dp" />
+
+            <TextView
+                android:id="@+id/class_coursename_Tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="20dp"
+                android:text="未设置" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginRight="20dp"
+                android:background="#D8DDE1" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="20dp"
+                android:text="班级名"
+                android:textColor="@android:color/black"
+                android:textSize="16dp" />
+
+            <TextView
+                android:id="@+id/class_classname_Tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="20dp"
+                android:text="未设置" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginRight="20dp"
+                android:background="#D8DDE1" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="20dp"
+                android:text="班课学期"
+                android:textColor="@android:color/black"
+                android:textSize="16dp" />
+
+            <TextView
+                android:id="@+id/class_coursedate_Tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="20dp"
+                android:text="未设置" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginRight="20dp"
+                android:background="#D8DDE1" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="20dp"
+                android:text="学校院系"
+                android:textColor="@android:color/black"
+                android:textSize="16dp" />
+
+            <TextView
+                android:id="@+id/cloud_school_Tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="5dp"
+                android:text="福州大学 数学与计算机科学学院" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginRight="20dp"
+                android:background="#D8DDE1" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginLeft="24dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginRight="24dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="允许加入"
+                    android:textColor="@color/contents_text"
+                    android:textSize="16sp"
+                    android:visibility="visible" />
+
+
+                <CheckBox
+                    android:id="@+id/cb_permit_addclass"
+                    android:layout_width="40dp"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/ic_selector_checkbox"
+                    android:button="@null"
+                    android:checked="true"
+                    android:contentDescription="@null"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textSize="@dimen/font_12"
+                    tools:visibility="visible" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/exit_dismiss_btn"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_margin="20dp"
+                android:background="#32A082"
+                android:text="结束班课"
+                android:textColor="@android:color/white"
+                android:textSize="18dp" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+
+</com.fzu.daoyunmobile.CustomUI.CustomToolBar>

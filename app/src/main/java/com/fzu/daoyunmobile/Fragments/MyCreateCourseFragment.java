@@ -16,6 +16,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.fzu.daoyunmobile.Activities.ClassTabActivity;
 import com.fzu.daoyunmobile.Adapter.MyCreateCourseAdapter;
+import com.fzu.daoyunmobile.Configs.GlobalConfig;
 import com.fzu.daoyunmobile.Configs.UrlConfig;
 import com.fzu.daoyunmobile.Entity.Course;
 import com.fzu.daoyunmobile.R;
@@ -26,6 +27,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import okhttp3.Call;
@@ -103,6 +105,9 @@ public class MyCreateCourseFragment extends Fragment {
                 intent.putExtra("courseName", course.getCourseName());
                 intent.putExtra("classId", course.getClassId());
                 intent.putExtra("enterType", "create");
+                intent.putExtra("teacherPhone", course.teacherPhone);
+                intent.putExtra("term", course.getCourseDate());
+                intent.putExtra("className", course.getClassName());
                 startActivity(intent);
             });
             progressDialog.dismiss();
@@ -112,6 +117,7 @@ public class MyCreateCourseFragment extends Fragment {
     private List<Course> parseJsonWithJsonObject(String jsonData) throws IOException {
         JSONArray jsonArray = JSONObject.parseObject(jsonData).getJSONArray("data");
         List<Course> cList = new ArrayList<>();
+        List<String> courseList = GlobalConfig.getCourseList();
         for (int i = 0; i < jsonArray.size(); i++) {
             JSONObject jsonObject = jsonArray.getJSONObject(i);
             final String classId = jsonObject.getString("id");
@@ -120,10 +126,16 @@ public class MyCreateCourseFragment extends Fragment {
             //TODO 也是需要的 班级信息
             final String className = jsonObject.getJSONObject("classDto").getString("className");
             final String term = jsonObject.getString("term");
+            courseList.add(courseName);
             Course course = new Course(R.drawable.course_img_1, courseName, teacherName, className, classId, term);
             course.teacherPhone = "1066666655";
             cList.add(course);
         }
+        //List 去重
+        HashSet h = new HashSet(courseList);
+        courseList.clear();
+        courseList.addAll(h);
+        GlobalConfig.setCourseList(courseList);
         return cList;
     }
 

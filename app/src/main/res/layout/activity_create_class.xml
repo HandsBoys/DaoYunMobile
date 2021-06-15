@@ -34,6 +34,7 @@
                 android:layout_height="20dp"
                 android:background="#D8DDE1" />
 
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -43,12 +44,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
-                    android:text="班课名"
+                    android:text="班级"
                     android:textColor="@android:color/black"
                     android:textSize="18dp" />
 
                 <EditText
-                    android:id="@+id/class_name_Et"
+                    android:id="@+id/grade_class_Et"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
@@ -57,6 +58,50 @@
                     android:background="@null"
                     android:gravity="right|center_vertical"
                     android:hint="未设置" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#D8DDE1" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:text="课程"
+                    android:textColor="@android:color/black"
+                    android:textSize="18dp" />
+
+                <AutoCompleteTextView
+                    android:id="@+id/class_name_Et"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="15dp"
+                    android:background="@null"
+                    android:completionThreshold="0"
+                    android:gravity="right|center_vertical"
+                    android:hint="未设置" />
+
+                <!--                <EditText-->
+                <!--                    android:id="@+id/class_name_Et"-->
+                <!--                    android:layout_width="match_parent"-->
+                <!--                    android:layout_height="wrap_content"-->
+                <!--                    android:layout_marginLeft="10dp"-->
+                <!--                    android:layout_marginTop="10dp"-->
+                <!--                    android:layout_marginRight="15dp"-->
+                <!--                    android:background="@null"-->
+                <!--                    android:gravity="right|center_vertical"-->
+                <!--                    android:hint="未设置"-->
+                <!--                    android:windowSoftInputMode="stateVisible" />-->
 
             </LinearLayout>
 
@@ -91,36 +136,6 @@
 
             </LinearLayout>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#D8DDE1" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    android:text="班级"
-                    android:textColor="@android:color/black"
-                    android:textSize="18dp" />
-
-                <EditText
-                    android:id="@+id/grade_class_Et"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginRight="15dp"
-                    android:background="@null"
-                    android:gravity="right|center_vertical"
-                    android:hint="未设置" />
-
-            </LinearLayout>
 
             <View
                 android:layout_width="match_parent"

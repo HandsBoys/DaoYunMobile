@@ -5,6 +5,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -13,10 +14,15 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.telephony.gsm.GsmCellLocation;
 import android.text.format.Time;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -25,6 +31,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSONObject;
+import com.fzu.daoyunmobile.Configs.GlobalConfig;
 import com.fzu.daoyunmobile.Configs.RequestCodeConfig;
 import com.fzu.daoyunmobile.Configs.UrlConfig;
 import com.fzu.daoyunmobile.R;
@@ -47,6 +54,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -57,7 +65,8 @@ public class CreateClassActivity extends AppCompatActivity {
     private ImageView classIconIV;
     private LinearLayout termLayout;
     private TextView termTV;
-    private EditText classNameET;
+    //  private EditText classNameET;
+    private AutoCompleteTextView classNameET;
     private EditText schoolET;
     private EditText gradeClassET;
     private EditText classIntroductionET;
@@ -81,6 +90,20 @@ public class CreateClassActivity extends AppCompatActivity {
 
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         classNameET = findViewById(R.id.class_name_Et);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_dropdown_item_1line, GlobalConfig.getCourseList());
+        classNameET.setAdapter(adapter);
+        classNameET.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus)
+                classNameET.showDropDown();
+        });
+
+        classNameET.setOnTouchListener((v, event) -> {
+            classNameET.showDropDown();
+            return false;
+        });
+
+
         schoolET = findViewById(R.id.school_Et);
 
         schoolET.setFocusable(false);//让EditText失去焦点，然后获取点击事件
@@ -280,4 +303,20 @@ public class CreateClassActivity extends AppCompatActivity {
         });
     }
 
+    private void showAttachView(View v) {
+        List<String> courseList = GlobalConfig.getCourseList();
+        String[] courseStrings = new String[courseList.size()];
+
+        for (int i = 0; i <= courseList.size() - 1; i++)
+            courseStrings[i] = courseList.get(i);
+
+        new XPopup.Builder(CreateClassActivity.this)
+                .hasShadowBg(false)
+                .atView(v)  // 依附于所点击的View，内部会自动判断在上方或者下方显示
+                .asAttachList(courseStrings,
+                        null,
+                        (position, text) -> classNameET.setText(text), 0, 0/*, Gravity.LEFT*/).show();
+
+
+    }
 }

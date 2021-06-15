@@ -1,8 +1,14 @@
 package com.fzu.daoyunmobile.Configs;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 
 /**
  * 存放一些用户信息等全局变量
@@ -92,6 +98,10 @@ public class GlobalConfig {
         }
     };
 
+    public static void setShcoolList(List<String> sList) {
+        shcoolList = sList;
+    }
+
     //获取学校测试样例
     public static List<String> getShcoolList() {
         return shcoolList;
@@ -109,7 +119,23 @@ public class GlobalConfig {
         }
     };
 
+
+    public static void setFacultyList(ArrayList<List<String>> fList) {
+        facultyList = fList;
+    }
+
     public static ArrayList<List<String>> getFacultyList() {
         return facultyList;
+    }
+
+    //课程信息List
+    private static List<String> courseList = new ArrayList<>();
+
+    public static List<String> getCourseList() {
+        return courseList;
+    }
+
+    public static void setCourseList(List<String> courseList) {
+        GlobalConfig.courseList = courseList;
     }
 }
