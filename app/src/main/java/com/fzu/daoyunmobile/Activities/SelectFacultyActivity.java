@@ -26,12 +26,10 @@ public class SelectFacultyActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_faculty);
         //获取树的内容
-
-
         backBtn = findViewById(R.id.toolbar_left_btn);
         backBtn.setOnClickListener(v -> finish());
 
-        treeRecycleView = (RecyclerView) findViewById(R.id.tree_recycle);
+        treeRecycleView = findViewById(R.id.tree_recycle);
         //设置层级管理
         treeRecycleView.setLayoutManager(new LinearLayoutManager(this));
         list = new ArrayList<>();

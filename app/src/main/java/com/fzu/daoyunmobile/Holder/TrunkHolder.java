@@ -25,10 +25,18 @@ public class TrunkHolder extends BaseTelecomHolder {
         view.setOnClickListener(view -> {
             if (listener != null) {
                 if (rdb.isExpand()) {
-                    listener.onHideChildren(rdb);
+                    try {
+                        listener.onHideChildren(rdb);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                     rdb.setExpand(false);
                 } else {
-                    listener.onExpandChildren(rdb);
+                    try {
+                        listener.onExpandChildren(rdb);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                     rdb.setExpand(true);
                 }
             }

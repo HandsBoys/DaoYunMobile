@@ -31,4 +31,11 @@ public class RequestCodeConfig {
     public static int getPermissionRequest() {
         return PERMISSION_REQUEST;
     }
+
+    //获取GPS请求代码
+    private static int GPS_REQUEST_CODE = 11005;
+
+    public static int getGpsRequestCode() {
+        return GPS_REQUEST_CODE;
+    }
 }

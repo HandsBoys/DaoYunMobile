@@ -8,12 +8,12 @@ public interface TreeItemClickListener {
      *
      * @param bean
      */
-    void onExpandChildren(TreeBean bean);
+    void onExpandChildren(TreeBean bean) throws InterruptedException;
 
     /**
      * 隐藏子Item
      *
      * @param bean
      */
-    void onHideChildren(TreeBean bean);
+    void onHideChildren(TreeBean bean) throws InterruptedException;
 }

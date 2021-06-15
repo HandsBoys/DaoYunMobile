@@ -9,6 +9,7 @@ import com.baidu.location.BDLocation;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 import com.fzu.daoyunmobile.R;
+import com.fzu.daoyunmobile.Utils.GPSUtil;
 
 public class OneClickSignInActivity extends AppCompatActivity {
 
@@ -30,7 +31,7 @@ public class OneClickSignInActivity extends AppCompatActivity {
         mLocationClient.start();
     }
 
-
+    
     private LocationClientOption getBdOp() {
         LocationClientOption option = new LocationClientOption();
 

@@ -17,8 +17,11 @@ import com.baidu.location.BDAbstractLocationListener;
 import com.baidu.location.BDLocation;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
+import com.fzu.daoyunmobile.Configs.RequestCodeConfig;
 import com.fzu.daoyunmobile.R;
 import com.fzu.daoyunmobile.Utils.AlertDialogUtil;
+import com.fzu.daoyunmobile.Utils.GPSUtil;
+import com.google.zxing.activity.CaptureActivity;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -56,6 +59,8 @@ public class OneClickSignInSettingActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_one_click_sign_in_setting);
+
+        checkGPS();
 
         experienceSettingTV = findViewById(R.id.signin_experience_Tv);
         final String[] experience = new String[]{"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"};
@@ -142,6 +147,16 @@ public class OneClickSignInSettingActivity extends AppCompatActivity {
         });
     }
 
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        // 获取扫描二维码的点击事件
+        if (requestCode == RequestCodeConfig.getGpsRequestCode()) {
+            checkGPS();
+        }
+    }
+
     public void getLongitudeLatitude() {
         progressDialog = new ProgressDialog(OneClickSignInSettingActivity.this);
         progressDialog.setMessage("获取定位信息中...");
@@ -160,19 +175,24 @@ public class OneClickSignInSettingActivity extends AppCompatActivity {
             latitude = location.getLatitude();    //获取纬度信息
             longitude = location.getLongitude();    //获取经度信息
 
-            int errorCode = location.getLocType();
-            //获取定位类型、定位错误返回码，具体信息可参照类参考中BDLocation类中的说明
-            System.out.println("FUCK U");
-            System.out.println(latitude);
-            System.out.println(longitude);
             longitudeTV.setText(String.valueOf(longitude));
             latitudeTV.setText(String.valueOf(latitude));
             progressDialog.dismiss();
 
-
         }
     }
 
+    //检查GPS是否启动
+    private void checkGPS() {
+        if (!GPSUtil.checkGPSIsOpen(this)) {
+            GPSUtil.openGPSSettings(this
+            );
+        } else {
+            System.out.println("GPS FUCK");
+        }
+    }
+
+    //获取经纬度
     private LocationClientOption getBdOp() {
         LocationClientOption option = new LocationClientOption();
 

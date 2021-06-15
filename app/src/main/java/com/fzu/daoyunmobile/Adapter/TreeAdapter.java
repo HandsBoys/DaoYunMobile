@@ -101,7 +101,7 @@ public class TreeAdapter extends RecyclerView.Adapter<BaseTelecomHolder> {
          * @param bean 展开菜单栏的事件
          */
         @Override
-        public void onExpandChildren(TreeBean bean) {
+        public void onExpandChildren(TreeBean bean) throws InterruptedException {
 
             //判断是否有已经展开的栏
             if (isExpand) {
@@ -121,9 +121,9 @@ public class TreeAdapter extends RecyclerView.Adapter<BaseTelecomHolder> {
             for (int i = rdblist.size() - 1; i > -1; i--) {
                 add(rdblist.get(i), position + 1);//在当前的item下方插入
             }
-            if (position == dataBeanList.size() - 2 && mOnScrollListener != null) { //如果点击的item为最后一个
-                mOnScrollListener.scrollTo(position + rdblist.size());//向下滚动，使子布局能够完全展示
-            }
+//            if (position == dataBeanList.size() - 2 && mOnScrollListener != null) { //如果点击的item为最后一个
+//                mOnScrollListener.scrollTo(position + rdblist.size());//向下滚动，使子布局能够完全展示
+//            }
             //更新展开栏
             isExpand = true;
             tempExpandTreeBean = bean;
@@ -133,7 +133,7 @@ public class TreeAdapter extends RecyclerView.Adapter<BaseTelecomHolder> {
          * @param bean 隐藏子菜单栏事件
          */
         @Override
-        public void onHideChildren(TreeBean bean) {
+        public void onHideChildren(TreeBean bean) throws InterruptedException {
             //说明当前的bean就是同一个 isExpan去除
             if (bean == tempExpandTreeBean) {
                 isExpand = false;
@@ -148,6 +148,7 @@ public class TreeAdapter extends RecyclerView.Adapter<BaseTelecomHolder> {
             for (int i = 1; i < children.size() + 1; i++) {
                 remove(position + 1);//删除
             }
+            // notifyDataSetChanged(dataBeanList);
             if (mOnScrollListener != null) {
                 mOnScrollListener.scrollTo(position);
             }
@@ -191,8 +192,17 @@ public class TreeAdapter extends RecyclerView.Adapter<BaseTelecomHolder> {
      */
     protected void remove(int position) {
         if (position < dataBeanList.size()) {
+            //notifyItemRemoved(position);
+
+            notifyItemRangeChanged(position, dataBeanList.size() - position);
+            try {
+
+                Thread.sleep(50);
+            } catch (Exception e) {
+
+            }
             dataBeanList.remove(position);
-            notifyItemRemoved(position);
+
         } else {
             System.out.println("remove 索引出错" + position);
         }

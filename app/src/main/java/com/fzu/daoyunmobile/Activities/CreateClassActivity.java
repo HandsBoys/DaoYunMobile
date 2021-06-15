@@ -13,6 +13,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.text.format.Time;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
@@ -21,6 +22,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.alibaba.fastjson.JSONObject;
 import com.fzu.daoyunmobile.Configs.RequestCodeConfig;
@@ -28,6 +30,9 @@ import com.fzu.daoyunmobile.Configs.UrlConfig;
 import com.fzu.daoyunmobile.R;
 import com.fzu.daoyunmobile.Utils.AlertDialogUtil;
 import com.fzu.daoyunmobile.Utils.HttpUtils.OkHttpUtil;
+import com.google.zxing.activity.CaptureActivity;
+import com.lxj.xpopup.XPopup;
+import com.lxj.xpopup.interfaces.OnSelectListener;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
@@ -71,8 +76,10 @@ public class CreateClassActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_class);
 
+
+        initTermSelect();
+
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
-        termTV = findViewById(R.id.term_Tv);
         classNameET = findViewById(R.id.class_name_Et);
         schoolET = findViewById(R.id.school_Et);
 
@@ -94,18 +101,6 @@ public class CreateClassActivity extends AppCompatActivity {
             startActivityForResult(intent, IMAGE_SELECT);
         });
 
-        final String[] term = new String[]{"2020-2021-1", "2020-2021-2",
-                "2021-2022-1", "2021-2022-2", "2022-2023-1", "2022-2023-2", "2023-2024-1", "2023-2024-2",
-                "2024-2025-1", "2024-2025-2", "2025-2026-1", "2025-2026-2", "2026-2027-1", "2026-2027-2",};
-        termLayout = findViewById(R.id.term_layout);
-        termLayout.setOnClickListener(v -> {
-            AlertDialog.Builder builder = new AlertDialog.Builder(CreateClassActivity.this)
-                    .setTitle("选择班课学期")
-                    .setSingleChoiceItems(term, 0, (dialog, which) -> selectedTerm = term[which]);
-            builder.setPositiveButton("确定", (dialog, which) -> termTV.setText(selectedTerm));
-            builder.setNegativeButton("取消", null);
-            builder.show();
-        });
 
         createClassBtn.setOnClickListener(v -> {
             if (classNameET.getText().toString().equals("")) {
@@ -227,4 +222,62 @@ public class CreateClassActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+
+    private void initTermSelect() {
+
+        Time t = new Time(); // or Time t=new Time("GMT+8"); 加上Time Zone资料。
+        t.setToNow(); // 取得系统时间。
+        int year = t.year;
+        int month = t.month + 1;
+//        int day = t.monthDay;
+//        int hour = t.hour; // 0-23
+//        int minute = t.minute;
+//        int second = t.second;
+//        System.out.println("Calendar获取当前日期" + year + "年" + month + "月" + day + "日" + hour + ":" + minute + ":" + second);
+//
+//        final String[] term = new String[]{"2020-2021-1", "2020-2021-2",
+//                "2021-2022-1", "2021-2022-2", "2022-2023-1", "2022-2023-2", "2023-2024-1", "2023-2024-2",
+//                "2024-2025-1", "2024-2025-2", "2025-2026-1", "2025-2026-2", "2026-2027-1", "2026-2027-2",};
+        int preYear, termID;
+        //        if (month < 8 && month > 2) {
+        if (month <= 6) {
+            preYear = year - 1;
+            termID = 2;
+        } else {
+            preYear = year;
+            termID = 1;
+        }
+        int sizeNum = termID == 2 ? 11 : 10;
+        final String[] terms = new String[sizeNum];
+        for (int i = 0; i < sizeNum; i++) {
+            String term = String.format("%d-%d-%d", preYear, preYear + 1, termID);
+            if (termID == 2) {
+                preYear++;
+                termID = 1;
+            } else {
+                termID++;
+            }
+            terms[i] = term;
+        }
+
+        termTV = findViewById(R.id.term_Tv);
+        termTV.setText(terms[0]);
+        termLayout = findViewById(R.id.term_layout);
+        termLayout.setOnClickListener(v -> {
+
+            new XPopup.Builder(CreateClassActivity.this)
+                    .isDarkTheme(false)
+                    .hasShadowBg(true)
+//                            .hasBlurBg(true)
+//                            .isDestroyOnDismiss(true) //对于只使用一次的弹窗，推荐设置这个
+                    .asBottomList("班课学期选择", terms,
+                            (position, text) -> {
+                                //TODO 这里接入转换接口
+                                Toast.makeText(CreateClassActivity.this, text, Toast.LENGTH_SHORT).show();
+                                termTV.setText(text);
+                            }).show();
+
+        });
+    }
+
 }

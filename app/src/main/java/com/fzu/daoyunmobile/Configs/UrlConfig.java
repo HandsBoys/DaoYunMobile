@@ -19,6 +19,10 @@ public class UrlConfig {
         GET_CREATED_COURSES, //获取创建的班课
         JOIN_COURSE,//加入班课
         CREATE_COURSE, //创建班课
+        GET_DEPT,//获取院校信息
+        GET_COURSE_INFO,//获取课程信息
+        SET_JOIN_COURSE,//设置班级是否可加入
+        SET_FINISH_COURSE,//设置班级是否结束
     }
 
     public static String getUrl(UrlType urlType) {
@@ -41,6 +45,14 @@ public class UrlConfig {
                 return ORIGION_URL + "client/course/new-course";
             case JOIN_COURSE:
                 return ORIGION_URL + "client/course/join-course";
+            case GET_DEPT:
+                return ORIGION_URL + "client/dept";
+            case GET_COURSE_INFO:
+                return ORIGION_URL + "client/course/query-course?id=";
+            case SET_JOIN_COURSE:
+                return ORIGION_URL + "client/course/set-join?";
+            case SET_FINISH_COURSE:
+                return ORIGION_URL + "client/course/set-finish?";
             case MESSAGE:
             default:
                 return ORIGION_URL + "message?phone=";

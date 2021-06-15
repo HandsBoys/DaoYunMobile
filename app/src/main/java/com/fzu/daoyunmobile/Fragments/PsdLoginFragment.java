@@ -158,9 +158,12 @@ public class PsdLoginFragment extends Fragment {
                     GlobalConfig.setUserToken(token);
                     getUserInfo();
 
+                } else if (responseBodyStr.contains("验证码输入错误")) {
+                    AlertDialogUtil.showConfirmClickAlertDialog("验证码错误", getActivity());
                 } else {
                     AlertDialogUtil.showConfirmClickAlertDialog("用户不存在或者密码错误", getActivity());
                 }
+
             }
         });
     }
