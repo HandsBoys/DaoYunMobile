@@ -85,7 +85,7 @@ public class OneClickSignInSettingActivity extends AppCompatActivity {
                     getLongitudeLatitude();
                 }
                 //TODO 需要签到接口
-                startActivity(new Intent(this, ResultSignInActivity.class));
+                startActivity(new Intent(this, FinishOneBtnSignInActivity.class));
 
 //                    new Thread(new Runnable() {
 //                        @Override

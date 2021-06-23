@@ -281,6 +281,7 @@ public class CodeLoginFragment extends Fragment {
         }
     }
 
+    //获取用户信息
     private void getUserInfo() {
         //获取用户信息
         OkHttpUtil.getInstance().GetWithToken(UrlConfig.getUrl(UrlConfig.UrlType.USER_INFO), new Callback() {

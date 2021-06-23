@@ -13,14 +13,20 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.fzu.daoyunmobile.Entity.Member;
+import com.fzu.daoyunmobile.Holder.SignIngViewHolder;
 import com.fzu.daoyunmobile.R;
 
 import java.util.List;
 
-public class MemberAdapter extends ArrayAdapter<Member> {
+
+/**
+ * 签到中的成员适配器
+ */
+public class SignIngMemberAdapter extends ArrayAdapter<Member> {
+    //课程ID
     private int resourceId;
 
-    public MemberAdapter(@NonNull Context context, int textViewResourceId, @NonNull List<Member> objects) {
+    public SignIngMemberAdapter(@NonNull Context context, int textViewResourceId, @NonNull List<Member> objects) {
         super(context, textViewResourceId, objects);
         resourceId = textViewResourceId;
     }
@@ -30,37 +36,23 @@ public class MemberAdapter extends ArrayAdapter<Member> {
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         Member member = getItem(position);
         final View view;
-        final ViewHolder viewHolder;
+        final SignIngViewHolder viewHolder;
         if (convertView == null) {
             view = LayoutInflater.from(getContext()).inflate(resourceId, parent, false);
-            viewHolder = new ViewHolder();
+            viewHolder = new SignIngViewHolder();
             viewHolder.ranking = view.findViewById(R.id.No_Tv);
-            viewHolder.memberIcon = view.findViewById(R.id.member_icon);
             viewHolder.memberName = view.findViewById(R.id.member_name_Tv);
             viewHolder.stuId = view.findViewById(R.id.member_number_Tv);
-            viewHolder.experienceScore = view.findViewById(R.id.experience_score_Tv);
+            viewHolder.signinDate = view.findViewById(R.id.signin_Datetime_Tv);
             view.setTag(viewHolder);
         } else {
             view = convertView;
-            viewHolder = (ViewHolder) view.getTag();
+            viewHolder = (SignIngViewHolder) view.getTag();
         }
         viewHolder.ranking.setText(member.getRanking());
-        if (member.getImageId() == -1) {
-            viewHolder.memberIcon.setImageBitmap(BitmapFactory.decodeFile(member.getIconFilePath()));
-        } else if (member.getIconFilePath().equals("")) {
-            viewHolder.memberIcon.setImageResource(member.getImageId());
-        }
         viewHolder.memberName.setText(member.getMemberName());
         viewHolder.stuId.setText(member.getStu_id());
-        viewHolder.experienceScore.setText(member.getExperience_score());
+        viewHolder.signinDate.setText(member.getSingnInDate());
         return view;
-    }
-
-    class ViewHolder {
-        TextView ranking;
-        ImageView memberIcon;
-        TextView memberName;
-        TextView stuId;
-        TextView experienceScore;
     }
 }

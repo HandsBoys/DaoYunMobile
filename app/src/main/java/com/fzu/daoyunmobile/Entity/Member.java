@@ -7,8 +7,9 @@ public class Member {
     private String memberName;
     private String stu_id;
     private String experience_score;
+    private String singnInDate = "";
 
-    public Member(String ranking, int imageId, String memberName, String stu_id, String experience_score){
+    public Member(String ranking, int imageId, String memberName, String stu_id, String experience_score) {
         this.ranking = ranking;
         this.imageId = imageId;
         this.memberName = memberName;
@@ -16,12 +17,21 @@ public class Member {
         this.experience_score = experience_score;
     }
 
-    public Member(String ranking, String iconFilePath, String memberName, String stu_id, String experience_score){
+    public Member(String ranking, String iconFilePath, String memberName, String stu_id, String experience_score) {
         this.ranking = ranking;
         this.iconFilePath = iconFilePath;
         this.memberName = memberName;
         this.stu_id = stu_id;
         this.experience_score = experience_score;
+    }
+
+    public Member(String ranking, String iconFilePath, String memberName, String stu_id, String experience_score, String singnInDate) {
+        this.ranking = ranking;
+        this.iconFilePath = iconFilePath;
+        this.memberName = memberName;
+        this.stu_id = stu_id;
+        this.experience_score = experience_score;
+        this.singnInDate = singnInDate;
     }
 
     public void setRanking(String ranking) {
@@ -36,7 +46,7 @@ public class Member {
         return ranking;
     }
 
-    public int getImageId(){
+    public int getImageId() {
         return imageId;
     }
 
@@ -50,5 +60,9 @@ public class Member {
 
     public String getExperience_score() {
         return experience_score;
+    }
+
+    public String getSingnInDate() {
+        return singnInDate;
     }
 }
