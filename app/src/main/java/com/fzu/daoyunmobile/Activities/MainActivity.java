@@ -21,6 +21,7 @@ import com.fzu.daoyunmobile.Configs.RequestCodeConfig;
 import com.fzu.daoyunmobile.Fragments.HpMainFragment;
 import com.fzu.daoyunmobile.Fragments.MyInfoFragment;
 import com.fzu.daoyunmobile.R;
+import com.fzu.daoyunmobile.Utils.ActivityUtil;
 import com.fzu.daoyunmobile.Utils.StatusBarUtil;
 import com.google.zxing.activity.CaptureActivity;
 
@@ -54,6 +55,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ActivityUtil.finishAll();
+        ActivityUtil.addActivity(this);
+
         initView();
         //将状态栏设置透明
         StatusBarUtil.transparencyBar(MainActivity.this);
@@ -166,11 +170,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+//    @Override
+//    public boolean onKeyDown(int keyCode, KeyEvent event) {
+//        if (keyCode == KeyEvent.KEYCODE_BACK) {
+//            return true;
+//        }
+//        return false;
+//    }
     @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            return true;
-        }
-        return false;
+    protected void onDestroy() {
+        super.onDestroy();
+        ActivityUtil.removeActivity(this);
     }
 }

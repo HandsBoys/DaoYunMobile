@@ -65,4 +65,6 @@ dependencies {
     implementation 'com.github.open-android:Zxing:v1.0.3'
     implementation 'com.alibaba:fastjson:1.2.15'
 
+    implementation  'com.github.addappcn:android-pickers:2.0.0'
+
 }

@@ -52,8 +52,11 @@ public class DetailFragment extends Fragment implements CompoundButton.OnChecked
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_detail, container, false);
-        backBtn = view.findViewById(R.id.exit_dismiss_btn);
-        exitDismissBtn = view.findViewById(R.id.exit_dismiss_btn);
+
+        //返回键设置
+        backBtn = view.findViewById(R.id.toolbar_left_btn);
+        backBtn.setOnClickListener(v -> getActivity().finish());
+
         classNameTV = view.findViewById(R.id.class_classname_Tv);
         courseNameTV = view.findViewById(R.id.class_coursename_Tv);
         //teacherNameTv = view.findViewById(R.id.more_teacher_Tv);
@@ -66,22 +69,22 @@ public class DetailFragment extends Fragment implements CompoundButton.OnChecked
         termTV.setText(ClassTabActivity.term);
         classNameTV.setText(ClassTabActivity.className);
 
+        //结束班课内容
+        exitDismissBtn = view.findViewById(R.id.exit_dismiss_btn);
+        exitDismissBtn.setOnClickListener(v -> finishclass(true));
 
         permitaddClassCB.setOnCheckedChangeListener(this);
 
-        backBtn.setOnClickListener(v -> finishclass(true));
         return view;
     }
 
 
     public void onCheckedChanged(CompoundButton checkBox, boolean checked) {
-        // TODO Auto-generated method stub
         switch (checkBox.getId()) {
             case R.id.cb_permit_addclass:
                 if (checked) {// 选中吃
                     AlertDialogUtil.showToastText("选中", getActivity());
                     setJoin(true);
-
 
                 } else {
                     setJoin(false);
@@ -94,6 +97,7 @@ public class DetailFragment extends Fragment implements CompoundButton.OnChecked
         }
     }
 
+    //设置加入班级
     private void setJoin(boolean tag) {
         String ej = tag ? "true" : "false";
         //获取用户信息
@@ -107,6 +111,7 @@ public class DetailFragment extends Fragment implements CompoundButton.OnChecked
             public void onResponse(@NotNull Call call, @NotNull Response response) {
                 try {
                     String responseBodyStr = response.body().string();
+                    AlertDialogUtil.showToastText(responseBodyStr, getActivity());
 
                 } catch (Exception e) {
                     //获取不到用户信息则取消登陆 需要重新登陆
