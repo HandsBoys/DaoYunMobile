@@ -149,6 +149,27 @@ public class OkHttpUtil {
 
     }
 
+
+    /**
+     * 对外提供的Post方法访问
+     *
+     * @param url
+     * @param json:    提交内容为json数据
+     * @param callBack
+     */
+    public void DeleteWithJsonToken(String url, JSONObject json, Callback callBack) {
+        /**
+         * 通过url和POST方式构建Request
+         */
+        Request request = bulidRequestForDeleteByJsonWithToken(url, String.valueOf(json));
+        /**
+         * 请求网络的逻辑
+         */
+        requestNetWork(request, callBack);
+
+    }
+
+
     /**
      * POST方式构建Request {json}
      *
@@ -256,6 +277,25 @@ public class OkHttpUtil {
                 .url(url)
                 .addHeader("Authorization", "Bearer " + GlobalConfig.getUserToken()) // 添加授权认证
                 .put(body)
+                .build();
+    }
+
+
+
+    /**
+     * POST方式构建Request {json} 带token
+     *
+     * @param url
+     * @param json
+     * @return
+     */
+    private Request bulidRequestForDeleteByJsonWithToken(String url, String json) {
+        RequestBody body = RequestBody.create(JSON, json);
+
+        return new Request.Builder()
+                .url(url)
+                .addHeader("Authorization", "Bearer " + GlobalConfig.getUserToken()) // 添加授权认证
+                .delete(body)
                 .build();
     }
 

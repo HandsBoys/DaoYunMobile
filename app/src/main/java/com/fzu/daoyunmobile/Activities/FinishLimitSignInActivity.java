@@ -10,19 +10,28 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.alibaba.fastjson.JSONObject;
 import com.fzu.daoyunmobile.Adapter.SignIngMemberAdapter;
+import com.fzu.daoyunmobile.Configs.UrlConfig;
 import com.fzu.daoyunmobile.Entity.Member;
 import com.fzu.daoyunmobile.R;
 import com.fzu.daoyunmobile.Utils.AlertDialogUtil;
+import com.fzu.daoyunmobile.Utils.HttpUtils.OkHttpUtil;
 
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
 
 public class FinishLimitSignInActivity extends AppCompatActivity {
 
@@ -50,26 +59,16 @@ public class FinishLimitSignInActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_finish_limit_time_sign_in);
 
-        //签到模式
-        //signinId = getIntent().getStringExtra("signinId");
-        signinId = "555";
 
         Intent intent = getIntent();
         String signMode = intent.getStringExtra("startMode");
+        //签到模式
+        signinId = getIntent().getStringExtra("signId");
         String startTime = "", endTime = "";
         //如果是创建的话有俩个参数
         if (signMode.equals("createSign")) {
-            int min = Integer.valueOf(intent.getStringExtra("limitTime"));
             startTime = intent.getStringExtra("startTime");
-            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
-            try {
-                Date e = df.parse(startTime);
-                //设置分钟1000ms*60 = 1min
-                e.setTime(e.getTime() + min * 1000 * 60);
-                endTime = df.format(e);
-            } catch (ParseException parseException) {
-                parseException.printStackTrace();
-            }
+            endTime = intent.getStringExtra("endTime");
         } else {
             //TODO 截字符串
             startTime = intent.getStringExtra("startTime");
@@ -122,8 +121,30 @@ public class FinishLimitSignInActivity extends AppCompatActivity {
 
         //TODO 签到接口待做
         finishSignInBtn = findViewById(R.id.finish_sign_in_btn);
-        finishSignInBtn.setOnClickListener(v ->
-                AlertDialogUtil.showConfirmClickAlertDialog("结束签到", FinishLimitSignInActivity.this));
+        finishSignInBtn.setOnClickListener(v -> {
+            //设置签到结束
+            OkHttpUtil.getInstance().PostWithJsonToken(UrlConfig.getUrl(UrlConfig.UrlType.STOP_SIGN_IN) + signinId, new JSONObject(), new Callback() {
+                @Override
+                public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                    System.out.println("FUCK CreateCourse" + e.getMessage());
+                    AlertDialogUtil.showConfirmClickAlertDialog("结束签到错误" + e.getMessage(), FinishLimitSignInActivity.this);
+                }
+
+                @Override
+                public void onResponse(@NotNull Call call, @NotNull Response response) {
+                    try {
+                        String responseBodyStr = response.body().string();
+                        AlertDialogUtil.showConfirmClickAlertDialog("限时签到结束成功", FinishLimitSignInActivity.this);
+                        finish();
+                    } catch (Exception e) {
+                        //获取不到用户信息则取消登陆 需要重新登陆
+                        AlertDialogUtil.showConfirmClickAlertDialog("结束签到错误" + e.getMessage(), FinishLimitSignInActivity.this);
+
+                    }
+                }
+            });
+            AlertDialogUtil.showConfirmClickAlertDialog("结束签到", FinishLimitSignInActivity.this);
+        });
     }
 
     //初始化成员

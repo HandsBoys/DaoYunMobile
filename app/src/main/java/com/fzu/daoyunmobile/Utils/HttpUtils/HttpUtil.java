@@ -20,6 +20,9 @@ public class HttpUtil {
     public static void sendMessage(String phone, Callback callback) {
         //OkHttpUtil.getInstance().Get(UrlConfig.getUrl(UrlConfig.UrlType.MESSAGE) + phone, callback);
         OkHttpUtil.getInstance().PostWithJson(UrlConfig.getUrl(UrlConfig.UrlType.MESSAGE) + phone, new JSONObject(),callback);
+    }
+
+    public static void startSignIn(JSONObject jsonObject,Callback callback){
 
     }
 }

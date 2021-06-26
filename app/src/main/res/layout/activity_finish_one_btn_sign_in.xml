@@ -9,7 +9,7 @@
     app:left_btn_visible="true"
     app:right_tv_text="刷新"
     app:right_tv_visible="true"
-    app:title_text="结束签到"
+    app:title_text="一键签到"
     app:title_visible="true"
     tools:context=".Activities.FinishOneBtnSignInActivity">
 

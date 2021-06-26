@@ -10,18 +10,27 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.alibaba.fastjson.JSONObject;
 import com.fzu.daoyunmobile.Adapter.SignIngMemberAdapter;
+import com.fzu.daoyunmobile.Configs.UrlConfig;
 import com.fzu.daoyunmobile.Entity.Member;
 import com.fzu.daoyunmobile.R;
 import com.fzu.daoyunmobile.Utils.AlertDialogUtil;
+import com.fzu.daoyunmobile.Utils.HttpUtils.OkHttpUtil;
 
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
 
 
 /**
@@ -48,11 +57,8 @@ public class FinishOneBtnSignInActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_finish_one_btn_sign_in);
-
-        //签到模式
-        final String signin_mode = "signin_mode";
-        //signinId = getIntent().getStringExtra("signinId");
-        signinId = "555";
+        signInNumTV = findViewById(R.id.signIn_num_Tv);
+        signinId = getIntent().getStringExtra("signId");
         initMember(0);
         signIngMemberAdapter = new SignIngMemberAdapter(FinishOneBtnSignInActivity.this, R.layout.item_member, memberList);
         listView = findViewById(R.id.signedIn_listview);
@@ -63,7 +69,6 @@ public class FinishOneBtnSignInActivity extends AppCompatActivity {
             Member member = memberList.get(position);
             Toast.makeText(FinishOneBtnSignInActivity.this, member.getMemberName(), Toast.LENGTH_SHORT).show();
         });
-
         refreshTV = findViewById(R.id.toolbar_right_tv);
         //刷新按钮
         refreshTV.setOnClickListener(v -> {
@@ -79,20 +84,58 @@ public class FinishOneBtnSignInActivity extends AppCompatActivity {
         backBtn = findViewById(R.id.toolbar_left_btn);
         //返回
         backBtn.setOnClickListener(v -> {
-            Intent intent = new Intent();
-            setResult(RESULT_OK, intent);
-            finish();
+            AlertDialogUtil.showConfirmClickAlertDialog("一键签到需要放弃或者结束才能退出", this);
         });
 
-        signInNumTV = findViewById(R.id.signIn_num_Tv);
 
         //TODO 签到接口待做
         giveupSignInBtn = findViewById(R.id.finish_give_up_btn);
-        giveupSignInBtn.setOnClickListener(v ->
-                AlertDialogUtil.showConfirmClickAlertDialog("放弃签到", FinishOneBtnSignInActivity.this));
+        giveupSignInBtn.setOnClickListener(v -> {
+
+            //设置签到结束 并且show pop
+            OkHttpUtil.getInstance().DeleteWithJsonToken(UrlConfig.getUrl(UrlConfig.UrlType.DELETE_SIGN_IN) + signinId, new JSONObject(), new Callback() {
+                @Override
+                public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                    System.out.println("FUCK CreateCourse" + e.getMessage());
+                }
+
+                @Override
+                public void onResponse(@NotNull Call call, @NotNull Response response) {
+                    try {
+                        String responseBodyStr = response.body().string();
+                        System.out.println("一键签到放弃成功" + responseBodyStr + signinId);
+                        finish();
+                    } catch (Exception e) {
+                        //获取不到用户信息则取消登陆 需要重新登陆
+                        System.out.println(e.getMessage());
+                    }
+                }
+            });
+        });
         finishSignInBtn = findViewById(R.id.finish_sign_in_btn);
-        finishSignInBtn.setOnClickListener(v ->
-                AlertDialogUtil.showConfirmClickAlertDialog("结束签到", FinishOneBtnSignInActivity.this));
+        finishSignInBtn.setOnClickListener(v -> {
+            //设置签到结束
+            OkHttpUtil.getInstance().PostWithJsonToken(UrlConfig.getUrl(UrlConfig.UrlType.STOP_SIGN_IN) + signinId, new JSONObject(), new Callback() {
+                @Override
+                public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                    System.out.println("FUCK CreateCourse" + e.getMessage());
+                    AlertDialogUtil.showConfirmClickAlertDialog("结束签到错误" + e.getMessage(), FinishOneBtnSignInActivity.this);
+                }
+
+                @Override
+                public void onResponse(@NotNull Call call, @NotNull Response response) {
+                    try {
+                        String responseBodyStr = response.body().string();
+                        AlertDialogUtil.showConfirmClickAlertDialog("一键签到结束成功", FinishOneBtnSignInActivity.this);
+                        finish();
+                    } catch (Exception e) {
+                        //获取不到用户信息则取消登陆 需要重新登陆
+                        AlertDialogUtil.showConfirmClickAlertDialog("结束签到错误" + e.getMessage(), FinishOneBtnSignInActivity.this);
+
+                    }
+                }
+            });
+        });
     }
 
     //初始化成员
@@ -133,8 +176,14 @@ public class FinishOneBtnSignInActivity extends AppCompatActivity {
             memberList.add(member);
 //                memberAdapter.notifyDataSetChanged();
         }
-
-
+        this.runOnUiThread(
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        signInNumTV.setText(memberList.size() + "人");
+                    }
+                }
+        );
     }
 
 
@@ -166,9 +215,11 @@ public class FinishOneBtnSignInActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        Intent intent = new Intent();
-        setResult(RESULT_OK, intent);
-        finish();
+
+
+        AlertDialogUtil.showToastText("一键签到需要放弃或者结束才能退出", FinishOneBtnSignInActivity.this);
+
+
     }
 
 }

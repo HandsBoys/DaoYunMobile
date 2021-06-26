@@ -23,6 +23,11 @@ public class UrlConfig {
         GET_COURSE_INFO,//获取课程信息
         SET_JOIN_COURSE,//设置班级是否可加入
         SET_FINISH_COURSE,//设置班级是否结束
+        START_SIGN_IN,//发起签到
+        GET_ALL_SIGN_IN,//获取所有签到
+        STOP_SIGN_IN,//结束签到任务
+        GET_DO_SIGN_IN,//获取进行中的签到任务
+        DELETE_SIGN_IN,//删除签到任务
     }
 
     public static String getUrl(UrlType urlType) {
@@ -53,6 +58,16 @@ public class UrlConfig {
                 return ORIGION_URL + "client/course/set-join?";
             case SET_FINISH_COURSE:
                 return ORIGION_URL + "client/course/set-finish?";
+            case START_SIGN_IN:
+                return ORIGION_URL + "client/checkin/start";
+            case GET_ALL_SIGN_IN:
+                return ORIGION_URL + "client/checkin/all-task?courseId=";//TODO注意添加签到信息
+            case STOP_SIGN_IN:
+                return ORIGION_URL + "client/checkin/end-task?checkinId=";
+            case GET_DO_SIGN_IN:
+                return ORIGION_URL + "client/checkin/active-task?courseId=";
+            case DELETE_SIGN_IN:
+                return ORIGION_URL + "client/checkin?checkinId=";
             case MESSAGE:
             default:
                 return ORIGION_URL + "message?phone=";
