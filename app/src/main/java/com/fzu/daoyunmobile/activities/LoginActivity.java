@@ -52,9 +52,8 @@ public class LoginActivity extends AppCompatActivity {
         ActivityUtil.addActivity(this);
 
         //onTimePicker(getWindow().getDecorView());
+        // startActivity(new Intent(this, OneClickSignInSettingActivity.class));
 
-
-        startActivity(new Intent(this, OneClickSignInSettingActivity.class));
         // 设置权限
         int checkStorePermission = ContextCompat.checkSelfPermission(this,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE);
@@ -138,6 +137,7 @@ public class LoginActivity extends AppCompatActivity {
 
         };
         LinkagePicker picker = new LinkagePicker(LoginActivity.this, provider);
+        picker.setTitleText("签到时长设置");
         picker.setCanLoop(false);
         picker.setGravity(Gravity.BOTTOM);
         picker.setLabel("<-时 分->", "");

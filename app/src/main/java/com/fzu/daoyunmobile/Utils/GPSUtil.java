@@ -8,11 +8,54 @@ import android.content.Intent;
 import android.location.LocationManager;
 import android.provider.Settings;
 
+import com.baidu.location.BDAbstractLocationListener;
+import com.baidu.location.BDLocation;
+import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
+import com.fzu.daoyunmobile.Activities.OneClickSignInSettingActivity;
+import com.fzu.daoyunmobile.Configs.GlobalConfig;
 import com.fzu.daoyunmobile.Configs.RequestCodeConfig;
 import com.fzu.daoyunmobile.R;
 
 public class GPSUtil {
+
+    //纬度
+    private static double latitude = 0;
+    //经度
+    private static double longitude = 0;
+
+    public static double getLatitude() {
+        return latitude;
+    }
+
+    public static void setLatitude(double latitude) {
+        GPSUtil.latitude = latitude;
+    }
+
+    public static double getLongitude() {
+        return longitude;
+    }
+
+    public static void setLongitude(double longitude) {
+        GPSUtil.longitude = longitude;
+    }
+
+    private static LocationClient mLocationClient = null;
+    private static boolean mLocationClinetStart = false;
+
+    public static void getTitude(Context context) {
+        if (mLocationClient == null) {
+            mLocationClient = new LocationClient(context);
+            //声明LocationClient类
+            mLocationClient.registerLocationListener(new BDLocationListener());
+            mLocationClient.setLocOption(GPSUtil.getBdOp());
+        }
+        if (!mLocationClinetStart) {
+            mLocationClient.start();
+            mLocationClinetStart = true;
+        }
+
+    }
 
     /**
      * 检测GPS是否打开
@@ -100,5 +143,19 @@ public class GPSUtil {
         option.setNeedNewVersionRgc(true);
 //可选，设置是否需要最新版本的地址信息。默认需要，即参数为true
         return option;
+    }
+
+    public static class BDLocationListener extends BDAbstractLocationListener {
+        @Override
+        public void onReceiveLocation(BDLocation location) {
+            //此处的BDLocation为定位结果信息类，通过它的各种get方法可获取定位相关的全部结果
+            //以下只列举部分获取经纬度相关（常用）的结果信息
+            //更多结果信息获取说明，请参照类参考中BDLocation类中的说明
+            mLocationClinetStart = false;
+            latitude = location.getLatitude();    //获取纬度信息
+            longitude = location.getLongitude();    //获取经度信息
+            //获取后取消
+            mLocationClient.stop();
+        }
     }
 }

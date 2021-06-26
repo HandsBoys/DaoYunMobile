@@ -129,7 +129,7 @@ public class PsdLoginFragment extends Fragment {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
                 Log.i("LoginInfo", e.getMessage());
-                Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), e.getMessage() + "FUCK", Toast.LENGTH_SHORT).show();
 
             }
 
@@ -209,12 +209,18 @@ public class PsdLoginFragment extends Fragment {
                 try {
                     String responseBodyStr = response.body().string();
                     //JSON字符串转换成JSON对象
-                    JSONObject messjsonObject = JSONObject.parseObject(responseBodyStr);
+                    JSONObject messjsonObject = JSONObject.parseObject(responseBodyStr).getJSONObject("user");
+                    System.out.println(messjsonObject);
                     GlobalConfig.setUserID(messjsonObject.get("id").toString());
                     GlobalConfig.setUserPhone(messjsonObject.get("phone").toString());
                     GlobalConfig.setNickName(messjsonObject.get("nickName").toString());
                     GlobalConfig.setUserName(messjsonObject.get("userName").toString());
                     GlobalConfig.setSEX(messjsonObject.get("sex").toString());
+                    //TODO 判断是否是老师
+                    if (responseBodyStr.contains("ROLE_teacher"))
+                        GlobalConfig.setIsTeacher(true);
+                    else
+                        GlobalConfig.setIsTeacher(false);
                     startActivity(new Intent(getActivity(), MainActivity.class));
                 } catch (Exception e) {
                     //获取不到用户信息则取消登陆 需要重新登陆

@@ -138,4 +138,16 @@ public class GlobalConfig {
     public static void setCourseList(List<String> courseList) {
         GlobalConfig.courseList = courseList;
     }
+
+    //判断是否是老师
+    private static boolean isTeacher;
+
+    public static boolean getIsTeacher() {
+        return isTeacher;
+    }
+
+    public static void setIsTeacher(boolean isTeacher) {
+        GlobalConfig.isTeacher = isTeacher;
+    }
+
 }

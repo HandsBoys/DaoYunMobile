@@ -130,6 +130,7 @@ public class CreateClassActivity extends AppCompatActivity {
                 AlertDialogUtil.showConfirmClickAlertDialog("请输入班课名！", CreateClassActivity.this);
             } else if (schoolET.getText().toString().equals("")) {
                 AlertDialogUtil.showConfirmClickAlertDialog("请输入学校院系！", CreateClassActivity.this);
+                schoolET.setText("福州大学数计学院");
             } else if (gradeClassET.getText().toString().equals("")) {
                 AlertDialogUtil.showConfirmClickAlertDialog("请输入班级！", CreateClassActivity.this);
             } else if (termTV.getText().toString().equals("班课学期未选择")) {
@@ -303,20 +304,4 @@ public class CreateClassActivity extends AppCompatActivity {
         });
     }
 
-    private void showAttachView(View v) {
-        List<String> courseList = GlobalConfig.getCourseList();
-        String[] courseStrings = new String[courseList.size()];
-
-        for (int i = 0; i <= courseList.size() - 1; i++)
-            courseStrings[i] = courseList.get(i);
-
-        new XPopup.Builder(CreateClassActivity.this)
-                .hasShadowBg(false)
-                .atView(v)  // 依附于所点击的View，内部会自动判断在上方或者下方显示
-                .asAttachList(courseStrings,
-                        null,
-                        (position, text) -> classNameET.setText(text), 0, 0/*, Gravity.LEFT*/).show();
-
-
-    }
 }

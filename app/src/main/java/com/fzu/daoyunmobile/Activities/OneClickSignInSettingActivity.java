@@ -6,6 +6,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Gravity;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -19,6 +21,13 @@ import com.fzu.daoyunmobile.R;
 import com.fzu.daoyunmobile.Utils.ActivityUtil;
 import com.fzu.daoyunmobile.Utils.AlertDialogUtil;
 import com.fzu.daoyunmobile.Utils.GPSUtil;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import cn.addapp.pickers.listeners.OnMoreItemPickListener;
+import cn.addapp.pickers.picker.LinkagePicker;
+import cn.addapp.pickers.util.DateUtils;
 
 public class OneClickSignInSettingActivity extends AppCompatActivity {
     private EditText distanceLimitET;
@@ -85,7 +94,8 @@ public class OneClickSignInSettingActivity extends AppCompatActivity {
                     getLongitudeLatitude();
                 }
                 //TODO 需要签到接口
-                startActivity(new Intent(this, FinishOneBtnSignInActivity.class));
+                // startActivity(new Intent(this, FinishOneBtnSignInActivity.class));
+                onTimePicker(getWindow().getDecorView());
 
 //                    new Thread(new Runnable() {
 //                        @Override
@@ -181,4 +191,70 @@ public class OneClickSignInSettingActivity extends AppCompatActivity {
             System.out.println("GPS FUCK");
         }
     }
+
+    //时间选择
+    public void onTimePicker(View view) {
+        LinkagePicker.DataProvider provider = new LinkagePicker.DataProvider() {
+
+            @Override
+            public boolean isOnlyTwo() {
+                return true;
+            }
+
+            @Override
+            public List<String> provideFirstData() {
+                ArrayList<String> firstList = new ArrayList<>();
+                for (int i = 0; i <= 23; i++) {
+                    String str = DateUtils.fillZero(i);
+//                    if (firstIndex == 0) {
+//                        str += "￥";
+//                    } else {
+//                        str += "$";
+//                    }
+                    firstList.add(str);
+                }
+                return firstList;
+            }
+
+            @Override
+            public List<String> provideSecondData(int firstIndex) {
+                ArrayList<String> secondList = new ArrayList<>();
+                for (int i = 0; i <= 59; i++) {
+                    String str = DateUtils.fillZero(i);
+//                    if (firstIndex == 0) {
+//                        str += "￥";
+//                    } else {
+//                        str += "$";
+//                    }
+
+                    secondList.add(str);
+                }
+                return secondList;
+            }
+
+            @Override
+            public List<String> provideThirdData(int firstIndex, int secondIndex) {
+                return null;
+            }
+
+        };
+        LinkagePicker picker = new LinkagePicker(OneClickSignInSettingActivity.this, provider);
+        picker.setCanLoop(false);
+        picker.setGravity(Gravity.BOTTOM);
+        picker.setLabel("<-时 分->", "");
+        picker.setLineVisible(true);
+        picker.setHeight(700);
+        picker.setSelectedIndex(0, 8);
+        // picker.setAnimationStyle(R.style.Animation_CustomPopup);
+        //picker.setSelectedItem("12", "9");
+        picker.setOnMoreItemPickListener(new OnMoreItemPickListener<String>() {
+
+            @Override
+            public void onItemPicked(String first, String second, String third) {
+                AlertDialogUtil.showConfirmClickAlertDialog(first + "-" + second + "-" + third, OneClickSignInSettingActivity.this);
+            }
+        });
+        picker.show();
+    }
+
 }

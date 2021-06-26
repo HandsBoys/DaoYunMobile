@@ -65,7 +65,6 @@ public class MyCreateCourseFragment extends Fragment {
         progressDialog.setCancelable(true);
         progressDialog.show();
         initCourses();
-
     }
 
     public void initCourses() {
@@ -82,7 +81,11 @@ public class MyCreateCourseFragment extends Fragment {
 
                 try {
                     String responseBodyStr = response.body().string();
-                    courseList = parseJsonWithJsonObject(responseBodyStr);
+                    if (responseBodyStr.contains("Forbidden")) {
+
+                    } else {
+                        courseList = parseJsonWithJsonObject(responseBodyStr);
+                    }
                     afterAction();
                 } catch (Exception e) {
                     //获取不到用户信息则取消登陆 需要重新登陆
@@ -104,7 +107,7 @@ public class MyCreateCourseFragment extends Fragment {
                 Intent intent = new Intent(getContext(), ClassTabActivity.class);
                 intent.putExtra("courseName", course.getCourseName());
                 intent.putExtra("classId", course.getClassId());
-                intent.putExtra("enterType", "create");
+                // intent.putExtra("enterType", "create");
                 intent.putExtra("teacherPhone", course.teacherPhone);
                 intent.putExtra("term", course.getCourseDate());
                 intent.putExtra("className", course.getClassName());

@@ -56,7 +56,6 @@ public class SelectFacultyActivity extends AppCompatActivity {
         OkHttpUtil.getInstance().GetWithToken(UrlConfig.getUrl(UrlConfig.UrlType.GET_DEPT), new Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                System.out.println("GET DeptCourse" + e.getMessage());
                 AlertDialogUtil.showToastText(e.getMessage(), SelectFacultyActivity.this);
             }
 

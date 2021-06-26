@@ -78,8 +78,11 @@ public class MyJoinCourseFragment extends Fragment {
 
                 try {
                     String responseBodyStr = response.body().string();
-                    System.out.println(responseBodyStr);
-                    courseList = parseJsonWithJsonObject(responseBodyStr);
+                    if (responseBodyStr.contains("Forbidden")) {
+
+                    } else {
+                        courseList = parseJsonWithJsonObject(responseBodyStr);
+                    }
                     afterAction();
                 } catch (Exception e) {
                     //获取不到用户信息则取消登陆 需要重新登陆

@@ -17,22 +17,21 @@ import com.fzu.daoyunmobile.Utils.AlertDialogUtil;
 
 import org.json.JSONException;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-
-/**
- * 结束一键签到页面
- */
-public class FinishOneBtnSignInActivity extends AppCompatActivity {
+public class FinishLimitSignInActivity extends AppCompatActivity {
 
     private Button finishSignInBtn;
-    private Button giveupSignInBtn;
 
     private TextView signInNumTV;
+    private TextView startTimeTV;
+    private TextView endTimeTV;
+
     private Button backBtn;
     private ListView listView;
     private List<Member> memberList = new ArrayList<>();
@@ -41,27 +40,59 @@ public class FinishOneBtnSignInActivity extends AppCompatActivity {
     private TextView refreshTV;
     private ProgressDialog progressDialog;
 
+
     private int seconds = 20;
     private int oriSeconds = 20;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_finish_one_btn_sign_in);
+        setContentView(R.layout.activity_finish_limit_time_sign_in);
 
         //签到模式
-        final String signin_mode = "signin_mode";
         //signinId = getIntent().getStringExtra("signinId");
         signinId = "555";
+
+        Intent intent = getIntent();
+        String signMode = intent.getStringExtra("startMode");
+        String startTime = "", endTime = "";
+        //如果是创建的话有俩个参数
+        if (signMode.equals("createSign")) {
+            int min = Integer.valueOf(intent.getStringExtra("limitTime"));
+            startTime = intent.getStringExtra("startTime");
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
+            try {
+                Date e = df.parse(startTime);
+                //设置分钟1000ms*60 = 1min
+                e.setTime(e.getTime() + min * 1000 * 60);
+                endTime = df.format(e);
+            } catch (ParseException parseException) {
+                parseException.printStackTrace();
+            }
+        } else {
+            //TODO 截字符串
+            startTime = intent.getStringExtra("startTime");
+            startTime = startTime.substring(0, startTime.length() - 10).replace('T', ' ');
+            endTime = intent.getStringExtra("endTime");
+            endTime = endTime.substring(0, endTime.length() - 10).replace('T', ' ');
+            //e = df.parse(str2);
+        }
+
+        startTimeTV = findViewById(R.id.signIn_start_time_Tv);
+        startTimeTV.setText(startTime);
+        endTimeTV = findViewById(R.id.signIn_end_time_Tv);
+        endTimeTV.setText(endTime);
+
         initMember(0);
-        signIngMemberAdapter = new SignIngMemberAdapter(FinishOneBtnSignInActivity.this, R.layout.item_member, memberList);
+        signIngMemberAdapter = new SignIngMemberAdapter(FinishLimitSignInActivity.this, R.layout.item_member, memberList);
         listView = findViewById(R.id.signedIn_listview);
         listView.setAdapter(signIngMemberAdapter);
 
         //成员信息点击
         listView.setOnItemClickListener((parent, view, position, id) -> {
             Member member = memberList.get(position);
-            Toast.makeText(FinishOneBtnSignInActivity.this, member.getMemberName(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(FinishLimitSignInActivity.this, member.getMemberName(), Toast.LENGTH_SHORT).show();
         });
 
         refreshTV = findViewById(R.id.toolbar_right_tv);
@@ -69,36 +100,36 @@ public class FinishOneBtnSignInActivity extends AppCompatActivity {
         refreshTV.setOnClickListener(v -> {
             memberList.clear();
             //设置刷新作用
-            AlertDialogUtil.showConfirmClickAlertDialog("刷新FUCK", FinishOneBtnSignInActivity.this);
+            AlertDialogUtil.showConfirmClickAlertDialog("刷新FUCK", FinishLimitSignInActivity.this);
             initMember(1);
             seconds = oriSeconds;//复位
 
         });
         startBtnDownTime(20);
 
+        //设置签到人数
+        signInNumTV = findViewById(R.id.signIn_num_Tv);
+
         backBtn = findViewById(R.id.toolbar_left_btn);
         //返回
         backBtn.setOnClickListener(v -> {
-            Intent intent = new Intent();
-            setResult(RESULT_OK, intent);
+            Intent intent2 = new Intent();
+            setResult(RESULT_OK, intent2);
             finish();
         });
 
         signInNumTV = findViewById(R.id.signIn_num_Tv);
 
         //TODO 签到接口待做
-        giveupSignInBtn = findViewById(R.id.finish_give_up_btn);
-        giveupSignInBtn.setOnClickListener(v ->
-                AlertDialogUtil.showConfirmClickAlertDialog("放弃签到", FinishOneBtnSignInActivity.this));
         finishSignInBtn = findViewById(R.id.finish_sign_in_btn);
         finishSignInBtn.setOnClickListener(v ->
-                AlertDialogUtil.showConfirmClickAlertDialog("结束签到", FinishOneBtnSignInActivity.this));
+                AlertDialogUtil.showConfirmClickAlertDialog("结束签到", FinishLimitSignInActivity.this));
     }
 
     //初始化成员
     public void initMember(final int i) {
         if (i == 1) {
-            progressDialog = new ProgressDialog(FinishOneBtnSignInActivity.this);
+            progressDialog = new ProgressDialog(FinishLimitSignInActivity.this);
             progressDialog.setMessage("刷新中...");
             progressDialog.setCancelable(false);
             progressDialog.show();
@@ -170,5 +201,4 @@ public class FinishOneBtnSignInActivity extends AppCompatActivity {
         setResult(RESULT_OK, intent);
         finish();
     }
-
 }

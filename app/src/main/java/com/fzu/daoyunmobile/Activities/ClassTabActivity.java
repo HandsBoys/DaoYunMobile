@@ -5,6 +5,7 @@ import androidx.core.content.ContextCompat;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
@@ -38,10 +39,12 @@ public class ClassTabActivity extends AppCompatActivity implements View.OnClickL
         Intent intent = getIntent();
         courseName = intent.getStringExtra("courseName");
         classId = intent.getStringExtra("classId");
-        enterType = intent.getStringExtra("enterType");
+        //输出班课ID
+        Log.i("classTabID", classId);
+        // enterType = intent.getStringExtra("enterType");
         teacherPhone = intent.getStringExtra("teacherPhone");
-        className=intent.getStringExtra("className");
-        term=intent.getStringExtra("term");
+        className = intent.getStringExtra("className");
+        term = intent.getStringExtra("term");
         initView();
         this.getSupportFragmentManager()
                 .beginTransaction()
@@ -63,7 +66,6 @@ public class ClassTabActivity extends AppCompatActivity implements View.OnClickL
 
         mMenuMember.setOnClickListener(this);
         mMenuMore.setOnClickListener(this);
-
         memberImageView.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.nav_member_pressed));
     }
 
