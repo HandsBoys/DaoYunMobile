@@ -10,7 +10,7 @@
     app:title_visible="true"
     tools:context=".Activities.StartSignInActivity">
 
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+    <LinearLayout
         android:id="@+id/swipe_refresh_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -100,9 +100,9 @@
                     android:background="#D8DDE1" />
 
                 <ListView
-                    android:id="@+id/member_list_view"
+                    android:id="@+id/his_list_view"
                     android:layout_width="match_parent"
-                    android:layout_height="400dp" />
+                    android:layout_height="500dp" />
 
                 <View
                     android:layout_width="match_parent"
@@ -114,6 +114,6 @@
 
         </ScrollView>
 
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+    </LinearLayout>
 
 </com.fzu.daoyunmobile.CustomUI.CustomToolBar>

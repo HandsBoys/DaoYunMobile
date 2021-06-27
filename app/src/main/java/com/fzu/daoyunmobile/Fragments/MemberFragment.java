@@ -20,6 +20,7 @@ import android.widget.Toast;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.fzu.daoyunmobile.Activities.ClassTabActivity;
+import com.fzu.daoyunmobile.Activities.StartSignInActivity;
 import com.fzu.daoyunmobile.Adapter.ClassMemberAdapter;
 import com.fzu.daoyunmobile.Configs.GlobalConfig;
 import com.fzu.daoyunmobile.Configs.UrlConfig;
@@ -105,9 +106,10 @@ public class MemberFragment extends Fragment {
                 //获取经纬度
                 GPSUtil.getTitude(getActivity());
                 if (modeCheck()) {
-                    SignInUtil.checkTeaSignIn(getActivity(), ClassTabActivity.classId);
+                    //SignInUtil.checkTeaSignIn(getActivity(), ClassTabActivity.classId);
+                    getActivity().startActivity(new Intent(getActivity(), StartSignInActivity.class));
                 } else {
-                    SignInUtil.checkStuSignIn(getActivity(),ClassTabActivity.classId);
+                    SignInUtil.checkStuSignIn(getActivity(), ClassTabActivity.classId);
                 }
             } else {
                 GPSUtil.openGPSSettings(getActivity());
