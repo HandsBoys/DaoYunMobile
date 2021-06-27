@@ -246,6 +246,7 @@ public class SignInUtil {
                                 AlertDialogUtil.showToastText(e.getMessage(), act);
                             }
 
+
                             @Override
                             public void onResponse(@NotNull Call call, @NotNull Response response) {
                                 try {
@@ -357,7 +358,6 @@ public class SignInUtil {
         OkHttpUtil.getInstance().PostWithJsonToken(UrlConfig.getUrl(UrlConfig.UrlType.STUDENT_FINISH_SIGN_IN), signInObj, new Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                System.out.println("FUCK CreateCourse" + e.getMessage());
             }
 
             @Override
@@ -447,10 +447,6 @@ public class SignInUtil {
             }
         }
         return false;
-    }
-
-    public static void getSignInAllStudentInfo(String signId) {
-
     }
 
 }

@@ -3,13 +3,13 @@ package com.fzu.daoyunmobile.Activities;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.fzu.daoyunmobile.Adapter.SignIngMemberAdapter;
 import com.fzu.daoyunmobile.Configs.UrlConfig;
@@ -19,7 +19,6 @@ import com.fzu.daoyunmobile.Utils.AlertDialogUtil;
 import com.fzu.daoyunmobile.Utils.HttpUtils.OkHttpUtil;
 
 import org.jetbrains.annotations.NotNull;
-import org.json.JSONException;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -46,7 +45,7 @@ public class FinishOneBtnSignInActivity extends AppCompatActivity {
     private ListView listView;
     private List<Member> memberList = new ArrayList<>();
     private SignIngMemberAdapter signIngMemberAdapter;
-    private String signinId;
+    private String signId;
     private TextView refreshTV;
     private ProgressDialog progressDialog;
 
@@ -58,11 +57,11 @@ public class FinishOneBtnSignInActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_finish_one_btn_sign_in);
         signInNumTV = findViewById(R.id.signIn_num_Tv);
-        signinId = getIntent().getStringExtra("signId");
-        initMember(0);
-        signIngMemberAdapter = new SignIngMemberAdapter(FinishOneBtnSignInActivity.this, R.layout.item_member, memberList);
+        signId = getIntent().getStringExtra("signId");
         listView = findViewById(R.id.signedIn_listview);
-        listView.setAdapter(signIngMemberAdapter);
+
+        initMember(false);
+
 
         //成员信息点击
         listView.setOnItemClickListener((parent, view, position, id) -> {
@@ -75,7 +74,7 @@ public class FinishOneBtnSignInActivity extends AppCompatActivity {
             memberList.clear();
             //设置刷新作用
             AlertDialogUtil.showConfirmClickAlertDialog("刷新FUCK", FinishOneBtnSignInActivity.this);
-            initMember(1);
+            initMember(true);
             seconds = oriSeconds;//复位
 
         });
@@ -93,7 +92,7 @@ public class FinishOneBtnSignInActivity extends AppCompatActivity {
         giveupSignInBtn.setOnClickListener(v -> {
 
             //设置签到结束 并且show pop
-            OkHttpUtil.getInstance().DeleteWithJsonToken(UrlConfig.getUrl(UrlConfig.UrlType.DELETE_SIGN_IN) + signinId, new JSONObject(), new Callback() {
+            OkHttpUtil.getInstance().DeleteWithJsonToken(UrlConfig.getUrl(UrlConfig.UrlType.DELETE_SIGN_IN) + signId, new JSONObject(), new Callback() {
                 @Override
                 public void onFailure(@NotNull Call call, @NotNull IOException e) {
                     System.out.println("FUCK CreateCourse" + e.getMessage());
@@ -103,7 +102,7 @@ public class FinishOneBtnSignInActivity extends AppCompatActivity {
                 public void onResponse(@NotNull Call call, @NotNull Response response) {
                     try {
                         String responseBodyStr = response.body().string();
-                        System.out.println("一键签到放弃成功" + responseBodyStr + signinId);
+                        System.out.println("一键签到放弃成功" + responseBodyStr + signId);
                         finish();
                     } catch (Exception e) {
                         //获取不到用户信息则取消登陆 需要重新登陆
@@ -115,7 +114,7 @@ public class FinishOneBtnSignInActivity extends AppCompatActivity {
         finishSignInBtn = findViewById(R.id.finish_sign_in_btn);
         finishSignInBtn.setOnClickListener(v -> {
             //设置签到结束
-            OkHttpUtil.getInstance().PostWithJsonToken(UrlConfig.getUrl(UrlConfig.UrlType.STOP_SIGN_IN) + signinId, new JSONObject(), new Callback() {
+            OkHttpUtil.getInstance().PostWithJsonToken(UrlConfig.getUrl(UrlConfig.UrlType.STOP_SIGN_IN) + signId, new JSONObject(), new Callback() {
                 @Override
                 public void onFailure(@NotNull Call call, @NotNull IOException e) {
                     System.out.println("FUCK CreateCourse" + e.getMessage());
@@ -139,51 +138,70 @@ public class FinishOneBtnSignInActivity extends AppCompatActivity {
     }
 
     //初始化成员
-    public void initMember(final int i) {
-        if (i == 1) {
+    public void initMember(final boolean isRe) {
+        if (isRe) {
             progressDialog = new ProgressDialog(FinishOneBtnSignInActivity.this);
             progressDialog.setMessage("刷新中...");
             progressDialog.setCancelable(false);
             progressDialog.show();
             progressDialog.dismiss();
         }
-        try {
-            parseJoinedList("str", 100);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
+        OkHttpUtil.getInstance().GetWithToken(UrlConfig.getUrl(UrlConfig.UrlType.GET_SIGNIN_ALL_STUDENT_INFO) + signId, new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                AlertDialogUtil.showToastText(e.getMessage(), FinishOneBtnSignInActivity.this);
+            }
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) {
+                try {
+                    String responseBodyStr = response.body().string();
+                    parseJoinedList(responseBodyStr);
+                    runOnUiThread(
+                            () -> {
+                                signIngMemberAdapter = new SignIngMemberAdapter(FinishOneBtnSignInActivity.this, R.layout.item_member, memberList);
+                                listView.setAdapter(signIngMemberAdapter);
+                                signInNumTV.setText(memberList.size() + "人");
+                            }
+                    );
+
+                } catch (Exception e) {
+                    AlertDialogUtil.showToastText(e.getMessage(), FinishOneBtnSignInActivity.this);
+                }
+            }
+        });
     }
 
 
-    public void parseJoinedList(String JsonArrayData, final int m) throws JSONException {
-        // JSONArray jsonArray = new JSONArray(JsonArrayData);
-        int rank = 0;
-        for (int i = 0; i < 5; i++) {
-            rank++;
-            // JSONObject jsonObject = jsonArray.getJSONObject(i);
-            final String phoneNumber = "18373371896";
-            final String name = "池老二";
-            final String IDNumber = "200327006";
-            final String experienceScore = "2";
-            SimpleDateFormat sdf = new SimpleDateFormat();// 格式化时间
-            sdf.applyPattern("yyyy-MM-dd HH:mm:ss");// a为am/pm的标记
-            Date date = new Date();// 获取当前时间
-            final String dateT = sdf.format(date);
-
-            Member member;
-            member = new Member(String.valueOf(rank), "", name, IDNumber, experienceScore + "经验值", dateT);
-
-            memberList.add(member);
-//                memberAdapter.notifyDataSetChanged();
+    public void parseJoinedList(String JsonArrayData) {
+        JSONArray jsonArray = JSONObject.parseObject(JsonArrayData).getJSONArray("data");
+        if (jsonArray.size() == 0) {
+            AlertDialogUtil.showToastText("暂时没有人签到", FinishOneBtnSignInActivity.this);
         }
-        this.runOnUiThread(
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        signInNumTV.setText(memberList.size() + "人");
-                    }
+        memberList.clear();
+        int num = 1;
+        for (int i = 0; i < jsonArray.size(); i++) {
+            //TODO 发起签到之前先检查下是否签到
+            JSONObject jsonObject = jsonArray.getJSONObject(i);
+            boolean isFinish = Boolean.valueOf(jsonObject.getString("isFinish"));
+            if (isFinish) {
+                final String studentID = jsonObject.getString("studentId");
+                final String name = jsonObject.getString("nickName");
+                final String experienceScore = "2";
+                String checkTime = jsonObject.getString("checkinTime");
+                if (checkTime.length() > 10)
+                    checkTime = checkTime.substring(0, checkTime.length() - 10).replace('T', ' ');
+                else {
+                    SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
+                    Date d = new Date();
+                    checkTime = df.format(d);
                 }
-        );
+                //TODO 设置能不能签到在历史签到设置
+                Member member;
+                member = new Member(String.valueOf(num++), "", name, studentID, experienceScore, checkTime);
+                memberList.add(member);
+            }
+        }
     }
 
 
@@ -215,11 +233,7 @@ public class FinishOneBtnSignInActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-
-
         AlertDialogUtil.showToastText("一键签到需要放弃或者结束才能退出", FinishOneBtnSignInActivity.this);
-
-
     }
 
 }

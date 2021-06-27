@@ -26,7 +26,6 @@ public class Member implements Comparable {
         this.experience_score = experience_score;
         this.singnInDate = singnInDate;
         this.score = Integer.valueOf(experience_score);
-
     }
 
     public void setRanking(String ranking) {
