@@ -27,10 +27,11 @@ public class ClassTabActivity extends AppCompatActivity implements View.OnClickL
 
     public static String courseName = "";
     public static String classId = "";
-    public static String enterType = "";
     public static String teacherPhone = "";
     public static String className = "";
     public static String term = "";
+    public static String studentID = "";
+    public static String enterType = "Create";//Join
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

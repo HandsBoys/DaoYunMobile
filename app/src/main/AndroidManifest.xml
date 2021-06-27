@@ -61,7 +61,6 @@
             android:enabled="true"
             android:process=":remote" />
 
-        <activity android:name=".Activities.LimitTimeSignInActivity" />
         <activity android:name=".Activities.OneClickSignInActivity" />
         <activity android:name=".Activities.ThirdLoginActivity" />
         <activity android:name=".Activities.QRCodeTestActivity" />

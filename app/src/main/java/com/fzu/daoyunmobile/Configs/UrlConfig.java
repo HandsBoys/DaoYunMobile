@@ -28,6 +28,7 @@ public class UrlConfig {
         STOP_SIGN_IN,//结束签到任务
         GET_DO_SIGN_IN,//获取进行中的签到任务
         DELETE_SIGN_IN,//删除签到任务
+        GET_COURSE_ALL_STUDENT,//获取课程信息中的所有学生
     }
 
     public static String getUrl(UrlType urlType) {
@@ -68,6 +69,8 @@ public class UrlConfig {
                 return ORIGION_URL + "client/checkin/active-task?courseId=";
             case DELETE_SIGN_IN:
                 return ORIGION_URL + "client/checkin?checkinId=";
+            case GET_COURSE_ALL_STUDENT:
+                return ORIGION_URL + "client/management?courseId=";
             case MESSAGE:
             default:
                 return ORIGION_URL + "message?phone=";

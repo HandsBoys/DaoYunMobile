@@ -81,11 +81,11 @@ public class MyCreateCourseFragment extends Fragment {
 
                 try {
                     String responseBodyStr = response.body().string();
-                    if (responseBodyStr.contains("Forbidden")) {
-
-                    } else {
+                    if (GlobalConfig.getIsTeacher()) {
                         courseList = parseJsonWithJsonObject(responseBodyStr);
+
                     }
+                    //  if (responseBodyStr.contains("Forbidden")) {}
                     afterAction();
                 } catch (Exception e) {
                     //获取不到用户信息则取消登陆 需要重新登陆

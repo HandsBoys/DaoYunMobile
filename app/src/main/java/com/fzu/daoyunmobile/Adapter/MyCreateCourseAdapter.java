@@ -82,7 +82,6 @@ public class MyCreateCourseAdapter extends ArrayAdapter<Course> {
         if (convertView == null) {
             view = LayoutInflater.from(getContext()).inflate(resourceId, parent, false);
             myCreateCourseViewHolder = new MyCreateCourseViewHolder();
-            myCreateCourseViewHolder.courseImage = view.findViewById(R.id.course_image);
             myCreateCourseViewHolder.courseName = view.findViewById(R.id.course_name);
             myCreateCourseViewHolder.courseId = view.findViewById(R.id.course_id);
             myCreateCourseViewHolder.className = view.findViewById(R.id.class_name);
@@ -106,7 +105,7 @@ public class MyCreateCourseAdapter extends ArrayAdapter<Course> {
 
         //设置内容 暂时不用上传图片文件
         if (course.getImgFilePath().equals("")) {
-            myCreateCourseViewHolder.courseImage.setImageResource(course.getImageId());
+            // myCreateCourseViewHolder.courseImage.setImageResource(course.getImageId());
             myCreateCourseViewHolder.courseName.setText(course.getCourseName());
             myCreateCourseViewHolder.courseId.setText(course.getClassId());
             myCreateCourseViewHolder.className.setText(course.getClassName());
@@ -114,7 +113,7 @@ public class MyCreateCourseAdapter extends ArrayAdapter<Course> {
             // viewHolder.className.setText(course.getClassName());
 //            viewHolder.courseDate.setText(course.getCourseDate());
         } else if (course.getImageId() == -1) {
-            myCreateCourseViewHolder.courseImage.setImageBitmap(BitmapFactory.decodeFile(course.getImgFilePath()));
+            //  myCreateCourseViewHolder.courseImage.setImageBitmap(BitmapFactory.decodeFile(course.getImgFilePath()));
 //            viewHolder.courseName.setText(course.getCourseName());
 //            viewHolder.teacherName.setText(course.getTeacherName());
 //            viewHolder.className.setText(course.getClassName());

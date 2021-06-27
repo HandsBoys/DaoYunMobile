@@ -47,7 +47,7 @@ public class ClassMemberAdapter extends ArrayAdapter<Member> {
         viewHolder.ranking.setText(member.getRanking());
         viewHolder.memberName.setText(member.getMemberName());
         viewHolder.stuId.setText(member.getStu_id());
-        viewHolder.experienceScore.setText(member.getExperience_score());
+        viewHolder.experienceScore.setText(member.getExperience_score() + "经验值");
         return view;
     }
 }

@@ -129,8 +129,7 @@ public class PsdLoginFragment extends Fragment {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
                 Log.i("LoginInfo", e.getMessage());
-                Toast.makeText(getActivity(), e.getMessage() + "FUCK", Toast.LENGTH_SHORT).show();
-
+                AlertDialogUtil.showToastText(e.getMessage(),getActivity());
             }
 
             @Override

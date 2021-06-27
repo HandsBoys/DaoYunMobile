@@ -79,9 +79,9 @@ public class FinishLimitSignInActivity extends AppCompatActivity {
         }
 
         startTimeTV = findViewById(R.id.signIn_start_time_Tv);
-        startTimeTV.setText(startTime);
+        startTimeTV.setText("开始时间:" + startTime);
         endTimeTV = findViewById(R.id.signIn_end_time_Tv);
-        endTimeTV.setText(endTime);
+        endTimeTV.setText("结束时间:" + endTime);
 
         initMember(0);
         signIngMemberAdapter = new SignIngMemberAdapter(FinishLimitSignInActivity.this, R.layout.item_member, memberList);

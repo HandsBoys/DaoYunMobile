@@ -7,7 +7,7 @@
     android:orientation="vertical"
     app:left_btn_src="@mipmap/icon_back"
     app:left_btn_visible="true"
-    app:title_text="班级成员"
+    app:title_text="班课成员"
     app:title_visible="true"
     tools:context=".Activities.ClassTabActivity">
 

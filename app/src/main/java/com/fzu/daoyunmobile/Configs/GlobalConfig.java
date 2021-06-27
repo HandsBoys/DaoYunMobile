@@ -139,6 +139,7 @@ public class GlobalConfig {
         GlobalConfig.courseList = courseList;
     }
 
+    //TODO 如果老师和学生可以修改的话 那么说明进入页面的判断模式 比如Create进入或者Join进入 再看
     //判断是否是老师
     private static boolean isTeacher;
 
