@@ -151,4 +151,13 @@ public class GlobalConfig {
         GlobalConfig.isTeacher = isTeacher;
     }
 
+    private static String createTime;
+
+    public static String getCreateTime() {
+        return createTime;
+    }
+
+    public static void setCreateTime(String createTime) {
+        GlobalConfig.createTime = createTime;
+    }
 }

@@ -29,6 +29,7 @@ import com.fzu.daoyunmobile.R;
 import com.fzu.daoyunmobile.Activities.RegisterActivity;
 import com.fzu.daoyunmobile.Utils.AlertDialogUtil;
 import com.fzu.daoyunmobile.Utils.HttpUtils.OkHttpUtil;
+import com.fzu.daoyunmobile.Utils.TimeUtil;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -129,7 +130,7 @@ public class PsdLoginFragment extends Fragment {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
                 Log.i("LoginInfo", e.getMessage());
-                AlertDialogUtil.showToastText(e.getMessage(),getActivity());
+                AlertDialogUtil.showToastText(e.getMessage(), getActivity());
             }
 
             @Override
@@ -215,6 +216,7 @@ public class PsdLoginFragment extends Fragment {
                     GlobalConfig.setNickName(messjsonObject.get("nickName").toString());
                     GlobalConfig.setUserName(messjsonObject.get("userName").toString());
                     GlobalConfig.setSEX(messjsonObject.get("sex").toString());
+                    GlobalConfig.setCreateTime(TimeUtil.covertJsonFormatTime(messjsonObject.getString("createTime")));
                     //TODO 判断是否是老师
                     if (responseBodyStr.contains("ROLE_teacher"))
                         GlobalConfig.setIsTeacher(true);

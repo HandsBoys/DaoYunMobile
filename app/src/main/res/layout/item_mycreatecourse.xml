@@ -8,20 +8,17 @@
     android:orientation="horizontal">
 
 
-    <TextView
-        android:id="@+id/course_num"
-        android:layout_width="50dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
-
-        android:text="1"
-        android:textSize="25sp"
-        android:textStyle="bold" />
+    <ImageView
+        android:id="@+id/course_image"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_margin="15dp"
+        app:srcCompat="@drawable/course_img_4" />
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginLeft="15dp">
+        android:layout_marginLeft="10dp">
 
         <TextView
             android:id="@+id/course_name"

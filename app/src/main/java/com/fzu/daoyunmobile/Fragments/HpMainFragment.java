@@ -178,7 +178,11 @@ public class HpMainFragment extends Fragment {
                             Toast.makeText(getContext(), text, Toast.LENGTH_SHORT).show();
                             switch (position) {
                                 case 0:
-                                    getActivity().startActivityForResult(new Intent(getContext(), CreateClassActivity.class), RequestCodeConfig.getCreateCourse());
+                                    if (GlobalConfig.getIsTeacher())
+                                        getActivity().startActivityForResult(new Intent(getContext(), CreateClassActivity.class), RequestCodeConfig.getCreateCourse());
+                                    else {
+                                        AlertDialogUtil.showConfirmClickAlertDialog("只有老师才能创建班课", getActivity());
+                                    }
                                     break;
                                 case 1:
                                     final EditText editText = new EditText(getContext());

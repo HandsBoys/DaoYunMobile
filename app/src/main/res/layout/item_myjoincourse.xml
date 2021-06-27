@@ -11,7 +11,7 @@
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_margin="10dp"
-        app:srcCompat="@drawable/course_img_1" />
+        app:srcCompat="@drawable/course_img_3" />
 
     <RelativeLayout
         android:layout_width="match_parent"

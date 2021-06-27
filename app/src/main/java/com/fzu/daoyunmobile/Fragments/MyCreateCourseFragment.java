@@ -40,7 +40,6 @@ import okhttp3.Response;
 public class MyCreateCourseFragment extends Fragment {
 
     public static List<Course> courseList = new ArrayList<>();
-    private int myJoinNum = 0;
     public MyCreateCourseAdapter adapter;
     public ListView listView;
     public ProgressDialog progressDialog;

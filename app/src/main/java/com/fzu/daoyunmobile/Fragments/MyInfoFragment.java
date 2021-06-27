@@ -16,10 +16,13 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.fzu.daoyunmobile.Activities.LoginActivity;
 import com.fzu.daoyunmobile.Activities.MainActivity;
+import com.fzu.daoyunmobile.Configs.GlobalConfig;
 import com.fzu.daoyunmobile.R;
+import com.fzu.daoyunmobile.Utils.AlertDialogUtil;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -36,9 +39,15 @@ public class MyInfoFragment extends Fragment {
     protected LinearLayout userInfoLayout;
     protected LinearLayout privacyLayout;
     protected Button logoutBtn;
-    public static ImageView userIconIV;
+    protected Button userSetBtn;
     public static File iconFile = null;
     private String path;
+
+    public TextView userNameTV;
+    public TextView userTelTV;
+    public TextView userRoleTV;
+    public TextView userDateTV;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -50,46 +59,32 @@ public class MyInfoFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1 && resultCode == getActivity().RESULT_OK) {
-            if (iconFile != null) {
-                Bitmap bitmap = BitmapFactory.decodeFile(iconFile.getAbsolutePath());
-                userIconIV.setImageBitmap(bitmap);
-            }
-        }
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-//        mBtnLogin= (Button) getView().findViewById(R.id.btn_login);
-//        mBtnLogin.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                //登录
-//                Intent  login=new Intent(getActivity(),LoginActivity.class);
-//                startActivity(login);
-//            }
-//        });
-        Log.i("MeFragmentInfo", "onActivityCreated");
-        path = Environment.getExternalStorageDirectory() + File.separator + "daoyun";
-        File file = new File(path);
-        if (!file.exists()) {
-            file.mkdirs();
-        }
-        userIconIV = getActivity().findViewById(R.id.user_icon);
-        initUi();
 
-        userIconIV.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // startActivity(new Intent(getContext(), ShowIconActivity.class));
-            }
-        });
+
+        userDateTV = getActivity().findViewById(R.id.user_date_set);
+        userDateTV.setText(GlobalConfig.getCreateTime());
+
+        userNameTV = getActivity().findViewById(R.id.user_name_set);
+        userNameTV.setText(GlobalConfig.getNickName());
+
+        userRoleTV = getActivity().findViewById(R.id.user_role_set);
+        userRoleTV.setText(GlobalConfig.getIsTeacher() ? "教师" : "学生");
+
+        userTelTV = getActivity().findViewById(R.id.user_tel_set);
+        userTelTV.setText(GlobalConfig.getUserPhone());
+
 
         userInfoLayout = getActivity().findViewById(R.id.layout_me_header);
         userInfoLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                AlertDialogUtil.showToastText("FUCKUUU",getActivity());
+
 //                Intent intent = new Intent(getContext(), UserInfoActivity.class);
 //                startActivityForResult(intent, 1);
             }
@@ -105,78 +100,16 @@ public class MyInfoFragment extends Fragment {
         });
 
         privacyLayout = getActivity().findViewById(R.id.prvacy_layout);
-        privacyLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //startActivity(new Intent(getContext(), PrivacyPolicyActivity.class));
-            }
+        privacyLayout.setOnClickListener(v -> {
+            //startActivity(new Intent(getContext(), PrivacyPolicyActivity.class));
         });
 
-        logoutBtn = getActivity().findViewById(R.id.logout_btn);
-        logoutBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MainActivity.userName = null;
-                startActivity(new Intent(getContext(), LoginActivity.class));
-            }
+        logoutBtn = getActivity().findViewById(R.id.user_logout_btn);
+        logoutBtn.setOnClickListener(v -> {
+            MainActivity.userName = null;
+            startActivity(new Intent(getContext(), LoginActivity.class));
         });
 
-    }
-
-    public void initUi() {
-//        if (!MainActivity.icon.equals("")) {
-//            iconFile = new File(path, MainActivity.icon);
-//            if (iconFile.exists()) {
-//                Bitmap bitmap = BitmapFactory.decodeFile(iconFile.getAbsolutePath());
-//                userIconIV.setImageBitmap(bitmap);
-//            } else {
-//                iconFile = null;
-//                new Thread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        OkHttpClient okHttpClient = new OkHttpClient();
-//                        RequestBody requestBody = new FormBody.Builder()
-//                                .add("icon", MainActivity.icon)
-//                                .add("type", "usericon")
-//                                .build();
-//                        Request request = new Request.Builder()
-//                                .url("http://47.98.236.0:8080/downloadicon")
-//                                .post(requestBody)
-//                                .build();
-//                        okHttpClient.newCall(request).enqueue(new Callback() {
-//                            @Override
-//                            public void onFailure(@NotNull Call call, @NotNull IOException e) {
-//
-//                            }
-//
-//                            @Override
-//                            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-//                                iconFile = new File(path, MainActivity.icon);
-//                                if (iconFile.exists()) {
-//                                    iconFile.delete();
-//                                }
-//                                iconFile.createNewFile();
-//                                FileOutputStream os = new FileOutputStream(iconFile);
-//                                byte[] BytesArray = response.body().bytes();
-//                                os.write(BytesArray);
-//                                os.flush();
-//                                os.close();
-//                                final Bitmap bitmap = BitmapFactory.decodeFile(iconFile.getAbsolutePath());
-//                                getActivity().runOnUiThread(new Runnable() {
-//                                    @Override
-//                                    public void run() {
-//                                        userIconIV.setImageBitmap(bitmap);
-//                                    }
-//                                });
-//
-//                            }
-//                        });
-//                    }
-//                }).start();
-//            }
-//        } else {
-//            userIconIV.setImageResource(R.drawable.course_img_1);
-//        }
     }
 
 }
