@@ -46,6 +46,7 @@ public class ClassTabActivity extends AppCompatActivity implements View.OnClickL
         teacherPhone = intent.getStringExtra("teacherPhone");
         className = intent.getStringExtra("className");
         term = intent.getStringExtra("term");
+        enterType = intent.getStringExtra("enterType");
         initView();
         this.getSupportFragmentManager()
                 .beginTransaction()

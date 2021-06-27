@@ -69,7 +69,6 @@ public class MyJoinCourseFragment extends Fragment {
         OkHttpUtil.getInstance().GetWithToken(UrlConfig.getUrl(UrlConfig.UrlType.GET_JOINED_COURSES), new Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                System.out.println("GET JOINEDCOURSE" + e.getMessage());
                 AlertDialogUtil.showToastText(e.getMessage(), getActivity());
             }
 
@@ -98,19 +97,21 @@ public class MyJoinCourseFragment extends Fragment {
             adapter = new MyJoinCourseAdapter(getContext(), R.layout.item_myjoincourse, courseList);
             listView = getActivity().findViewById(R.id.myjoincourselist_view);
             listView.setAdapter(adapter);
-            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                //Item Click 传入需要的参数
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    Course course = courseList.get(position);
+            //Item Click 传入需要的参数
+            listView.setOnItemClickListener((parent, view, position, id) -> {
+                Course course = courseList.get(position);
 //                Toast.makeText(getContext(), course.getCourseName(), Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(getContext(), ClassTabActivity.class);
-                    intent.putExtra("courseName", course.getCourseName());
-                    intent.putExtra("classId", course.getClassId());
-                    intent.putExtra("enterType", "join");
-                    intent.putExtra("teacherPhone", course.getTeacherPhone());
-                    startActivity(intent);
-                }
+                Intent intent = new Intent(getContext(), ClassTabActivity.class);
+
+                intent.putExtra("courseName", course.getCourseName());
+                intent.putExtra("classId", course.getClassId());
+                // intent.putExtra("enterType", "create");
+                intent.putExtra("term", course.getCourseDate());
+                intent.putExtra("className", course.getClassName());
+
+                intent.putExtra("enterType", "Join");
+                intent.putExtra("teacherPhone", course.getTeacherPhone());
+                startActivity(intent);
             });
             progressDialog.dismiss();
         });

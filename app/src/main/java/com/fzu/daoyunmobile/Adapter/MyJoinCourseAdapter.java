@@ -1,5 +1,6 @@
 package com.fzu.daoyunmobile.Adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
@@ -16,6 +17,8 @@ import androidx.annotation.Nullable;
 import com.fzu.daoyunmobile.Entity.Course;
 import com.fzu.daoyunmobile.Holder.MyJoinCourseViewHolder;
 import com.fzu.daoyunmobile.R;
+import com.fzu.daoyunmobile.Utils.GPSUtil;
+import com.fzu.daoyunmobile.Utils.SignInUtil;
 
 import java.util.List;
 
@@ -50,8 +53,6 @@ public class MyJoinCourseAdapter extends ArrayAdapter<Course> {
             // viewHolder.className = view.findViewById(R.id.class_name);
             myJoinCourseViewHolder.signInImg = view.findViewById(R.id.signIn_Iv);
             myJoinCourseViewHolder.signInTv = view.findViewById(R.id.signIn_Tv);
-//            if(flag != 1){
-            //viewHolder.courseImage.setImageBitmap(BitmapFactory.decodeFile(course.getImgFilePath()));
             myJoinCourseViewHolder.signInImg.setVisibility(View.VISIBLE);
             myJoinCourseViewHolder.signInTv.setVisibility(View.VISIBLE);
 //            }
@@ -74,54 +75,34 @@ public class MyJoinCourseAdapter extends ArrayAdapter<Course> {
 //            viewHolder.teacherName.setText(course.getTeacherName());
 //            viewHolder.className.setText(course.getClassName());
         }
+        Activity act = (Activity) view.getContext();
 
-        if (flag == 1) {
-            myJoinCourseViewHolder.signInImg.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Toast.makeText(getContext(), "FUCK U", Toast.LENGTH_SHORT).show();
+        myJoinCourseViewHolder.signInImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
 
-//                    Toast.makeText(getContext(), "viewHolder.courseName.getText()", Toast.LENGTH_SHORT).show();
-//                    Intent intent = new Intent(v.getContext(), GestureSettingActivity.class);
-//                    v.getContext().startActivity(intent);
-
-//                    SharedPreferences preferences = getSharedPreferences("sigin", Context.MODE_PRIVATE);
-//                    GraphicLockView.mPassword = preferences.getString("gestureSignIn", null);
-//                    OneBtnSignInSettingActivity.startOrNot = preferences.getBoolean("oneBtnSignIn", false);
-//                    OneBtnSignInSettingActivity.distanceLimit = preferences.getInt("distanceLimit", -1);
-//                    if(MainActivity.userName.equals("teacher")){
-//
-//                        if(GraphicLockView.mPassword != null){
-//                            startActivity(new Intent(getContext(), FinishSignInActivity.class)
-//                                    .putExtra("signin_mode","gesture_signin_mode"));
-//                        }else if(OneBtnSignInSettingActivity.startOrNot == true){
-//                            startActivity(new Intent(getContext(), FinishSignInActivity.class)
-//                                    .putExtra("signin_mode","one_btn_mode"));
-//                        }else{
-//                            Intent intent = new Intent(getContext(), SignInTypeActivity.class);
-//                            startActivity(intent);
-//                        }
-//                    }else if(GraphicLockView.mPassword != null){
-//                        Intent intent = new Intent(getContext(), GestureUnlockActivity.class);
-//                        startActivity(intent);
-//                    }else if(OneBtnSignInSettingActivity.startOrNot == true){
-//                        Intent intent = new Intent(getContext(), OneBtnSignInActivity.class);
-//                        startActivity(intent);
-//                    }else{
-//                        Log.i("memberInfo", PropertiesUtill.getProperties(getContext(), "gesturePassword"));
-//                        Toast.makeText(getContext(), "教师尚未发起签到或签到已结束", Toast.LENGTH_SHORT).show();
-//                    }
+                if (GPSUtil.checkGPSIsOpen(act)) {
+                    //获取经纬度
+                    GPSUtil.getTitude(act);
+                    SignInUtil.checkStuSignIn((Activity) v.getContext(), course.getClassId());
+                } else {
+                    GPSUtil.openGPSSettings(act);
                 }
-            });
-            myJoinCourseViewHolder.signInTv.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Toast.makeText(getContext(), "FUCK U", Toast.LENGTH_SHORT).show();
+            }
+        });
+        myJoinCourseViewHolder.signInTv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (GPSUtil.checkGPSIsOpen(act)) {
+                    //获取经纬度
+                    GPSUtil.getTitude(act);
+                    SignInUtil.checkStuSignIn((Activity) v.getContext(), course.getClassId());
+                } else {
+                    GPSUtil.openGPSSettings(act);
                 }
-            });
-        }
-
+            }
+        });
         return view;
     }
 }

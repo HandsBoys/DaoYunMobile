@@ -107,7 +107,7 @@ public class MyCreateCourseFragment extends Fragment {
                 Intent intent = new Intent(getContext(), ClassTabActivity.class);
                 intent.putExtra("courseName", course.getCourseName());
                 intent.putExtra("classId", course.getClassId());
-                // intent.putExtra("enterType", "create");
+                intent.putExtra("enterType", "Create");
                 intent.putExtra("teacherPhone", course.teacherPhone);
                 intent.putExtra("term", course.getCourseDate());
                 intent.putExtra("className", course.getClassName());
@@ -141,5 +141,6 @@ public class MyCreateCourseFragment extends Fragment {
         GlobalConfig.setCourseList(courseList);
         return cList;
     }
+    
 
 }

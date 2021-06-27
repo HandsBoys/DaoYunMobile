@@ -101,16 +101,16 @@ public class MemberFragment extends Fragment {
 
         linearLayout = getActivity().findViewById(R.id.signin_layout);
         linearLayout.setOnClickListener(v -> {
-            if (GlobalConfig.getIsTeacher()) {
-                if (GPSUtil.checkGPSIsOpen(getActivity())) {
-                    //获取经纬度
-                    GPSUtil.getTitude(getActivity());
-                    SignInUtil.checkSignIn(getActivity(), ClassTabActivity.classId);
+            if (GPSUtil.checkGPSIsOpen(getActivity())) {
+                //获取经纬度
+                GPSUtil.getTitude(getActivity());
+                if (modeCheck()) {
+                    SignInUtil.checkTeaSignIn(getActivity(), ClassTabActivity.classId);
                 } else {
-                    GPSUtil.openGPSSettings(getActivity());
+                    SignInUtil.checkStuSignIn(getActivity(),ClassTabActivity.classId);
                 }
             } else {
-                AlertDialogUtil.showToastText("我是学生", getActivity());
+                GPSUtil.openGPSSettings(getActivity());
             }
 
         });
@@ -152,7 +152,8 @@ public class MemberFragment extends Fragment {
 
                 try {
                     String responseBodyStr = response.body().string();
-                    parseStudentList(responseBodyStr);
+                    if (!responseBodyStr.contains("Forbidden"))
+                        parseStudentList(responseBodyStr);
                     afterAction();
 
                 } catch (Exception e) {
@@ -167,7 +168,10 @@ public class MemberFragment extends Fragment {
 
     public void parseStudentList(String JsonArrayData) throws JSONException {
         memberList = new ArrayList<>();
+
+
         JSONArray jsonArray = com.alibaba.fastjson.JSONObject.parseObject(JsonArrayData).getJSONArray("data");
+
         for (int i = 0; i < jsonArray.size(); i++) {
             JSONObject jsonObject = jsonArray.getJSONObject(i);
             String studentID = jsonObject.getString("studentId");
@@ -193,7 +197,7 @@ public class MemberFragment extends Fragment {
         }
         for (int i = 0; i < memberList.size(); i++) {
             memberList.get(i).setRanking(rankDict.get(memberList.get(i).getExperience_score()));
-            if (!modeCheck() && ClassTabActivity.studentID.equals(memberList.get(i).getStu_id())) {
+            if (!modeCheck() && GlobalConfig.getUserID().equals(memberList.get(i).getStu_id())) {
                 rankTV.setText("第" + memberList.get(i).getRanking() + "名");
                 experTV.setText("获得" + memberList.get(i).getExperience_score() + "经验值");
             }
