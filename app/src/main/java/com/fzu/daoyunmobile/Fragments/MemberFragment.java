@@ -168,10 +168,8 @@ public class MemberFragment extends Fragment {
     }
 
 
-    public void parseStudentList(String JsonArrayData) throws JSONException {
+    public void parseStudentList(String JsonArrayData) {
         memberList = new ArrayList<>();
-
-
         JSONArray jsonArray = com.alibaba.fastjson.JSONObject.parseObject(JsonArrayData).getJSONArray("data");
 
         for (int i = 0; i < jsonArray.size(); i++) {
@@ -184,12 +182,6 @@ public class MemberFragment extends Fragment {
             memberList.add(member);
         }
         Collections.sort(memberList);
-        // Collections.reverse(memberList);
-        List<Integer> i1 = new ArrayList();
-        i1.add(5);
-        i1.add(2);
-        Collections.sort(i1);
-
         //排序下成员
         HashMap<String, String> rankDict = new HashMap<>();
         int nowRank = 1;
@@ -212,7 +204,6 @@ public class MemberFragment extends Fragment {
             ListView listView = getActivity().findViewById(R.id.member_list_view);
             listView.setAdapter(memberAdapter);
             listView.setOnItemClickListener((parent, view, position, id) -> {
-                //TODO 设置
                 Member member = memberList.get(position);
                 Toast.makeText(getContext(), member.getMemberName(), Toast.LENGTH_SHORT).show();
             });

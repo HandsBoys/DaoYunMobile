@@ -2,6 +2,7 @@ package com.fzu.daoyunmobile.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -94,9 +95,8 @@ public class StartSignInActivity extends AppCompatActivity {
     }
 
 
-    public void parseHisList(String JsonArrayData) throws ParseException {
+    public void parseHisList(String JsonArrayData) {
         hisList = new ArrayList<>();
- System.out.println(JsonArrayData);
         JSONArray jsonArray = com.alibaba.fastjson.JSONObject.parseObject(JsonArrayData).getJSONArray("data");
         try {
             for (int i = 0; i < jsonArray.size(); i++) {
@@ -115,10 +115,10 @@ public class StartSignInActivity extends AppCompatActivity {
 
                 if (type.equals("1")) {
                     signInHistory.setDateType(d + "\t一键签到");
-                    signInHistory.setConDate(startTime.substring(startTime.length() - 7,startTime.length()-3));
+                    signInHistory.setConDate(startTime.substring(startTime.length() - 7, startTime.length() - 3));
                 } else {
                     signInHistory.setDateType(d + "\t限时签到");
-                    signInHistory.setConDate(startTime.substring(startTime.length() - 7,startTime.length()-3) + "-" + endTime.substring(endTime.length() - 7,endTime.length()-3) + " 持续" +
+                    signInHistory.setConDate(startTime.substring(startTime.length() - 7, startTime.length() - 3) + "-" + endTime.substring(endTime.length() - 7, endTime.length() - 3) + " 持续" +
                             TimeUtil.figMinute(TimeUtil.strConvertDate(startTime), TimeUtil.strConvertDate(endTime)) + " 分钟");
                 }
                 hisList.add(signInHistory);
@@ -128,9 +128,6 @@ public class StartSignInActivity extends AppCompatActivity {
         }
 
         Collections.reverse(hisList);
-        // Collections.reverse(memberList);
-
-
     }
 
     public void afterAction() {
@@ -142,6 +139,11 @@ public class StartSignInActivity extends AppCompatActivity {
                 //TODO 设置
                 SignInHistory s = hisList.get(position);
                 AlertDialogUtil.showToastText(s.getSignID(), StartSignInActivity.this);
+
+                Intent intent = new Intent(StartSignInActivity.this, SignMemberSetActivity.class).
+                        putExtra("signID"
+                                , s.getSignID());
+                startActivity(intent);
             });
 
         });
@@ -151,6 +153,15 @@ public class StartSignInActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();  // Always call the superclass method first
+    }
+
+    @Override
+
+    public void onPause() {
+
+        super.onPause();
+        finish();
+
     }
 
     @Override

@@ -127,8 +127,9 @@ public class FinishLimitSignInActivity extends AppCompatActivity {
                 public void onResponse(@NotNull Call call, @NotNull Response response) {
                     try {
                         String responseBodyStr = response.body().string();
-                        AlertDialogUtil.showConfirmClickAlertDialog("限时签到结束成功", FinishLimitSignInActivity.this);
-                        finish();
+                        AlertDialogUtil.showConfirmClickAlertDialogWithLister("一限时签到结束成功", FinishLimitSignInActivity.this, (dialog, i) -> {
+                            finish();
+                        });
                     } catch (Exception e) {
                         //获取不到用户信息则取消登陆 需要重新登陆
                         AlertDialogUtil.showConfirmClickAlertDialog("结束签到错误" + e.getMessage(), FinishLimitSignInActivity.this);
@@ -184,7 +185,6 @@ public class FinishLimitSignInActivity extends AppCompatActivity {
         memberList.clear();
         int num = 1;
         for (int i = 0; i < jsonArray.size(); i++) {
-            //TODO 发起签到之前先检查下是否签到
             JSONObject jsonObject = jsonArray.getJSONObject(i);
             boolean isFinish = Boolean.valueOf(jsonObject.getString("isFinish"));
             if (isFinish) {
@@ -199,8 +199,6 @@ public class FinishLimitSignInActivity extends AppCompatActivity {
                     Date d = new Date();
                     checkTime = df.format(d);
                 }
-
-                //TODO 设置能不能签到在历史签到设置
                 Member member;
                 member = new Member(String.valueOf(num++), "", name, studentID, experienceScore, checkTime);
                 memberList.add(member);

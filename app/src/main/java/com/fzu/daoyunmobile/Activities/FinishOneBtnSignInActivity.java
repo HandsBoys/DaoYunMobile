@@ -125,8 +125,9 @@ public class FinishOneBtnSignInActivity extends AppCompatActivity {
                 public void onResponse(@NotNull Call call, @NotNull Response response) {
                     try {
                         String responseBodyStr = response.body().string();
-                        AlertDialogUtil.showConfirmClickAlertDialog("一键签到结束成功", FinishOneBtnSignInActivity.this);
-                        finish();
+                        AlertDialogUtil.showConfirmClickAlertDialogWithLister("一键签到结束成功", FinishOneBtnSignInActivity.this, (dialog, i) -> {
+                            finish();
+                        });
                     } catch (Exception e) {
                         //获取不到用户信息则取消登陆 需要重新登陆
                         AlertDialogUtil.showConfirmClickAlertDialog("结束签到错误" + e.getMessage(), FinishOneBtnSignInActivity.this);
