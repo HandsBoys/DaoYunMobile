@@ -47,8 +47,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activities.SignMemberSetActivity"></activity>
-        <activity android:name=".Activities.StartSignInActivity"></activity>
+        <activity android:name=".Activities.UserInfoSetActivity"></activity>
+        <activity android:name=".Activities.SignMemberSetActivity" />
+        <activity android:name=".Activities.StartSignInActivity" />
         <activity android:name=".Activities.FinishLimitSignInActivity" />
         <activity android:name=".Activities.SelectFacultyActivity" />
         <activity android:name=".Activities.FinishOneBtnSignInActivity" />

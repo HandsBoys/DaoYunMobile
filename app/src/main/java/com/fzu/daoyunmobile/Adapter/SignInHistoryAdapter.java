@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.fzu.daoyunmobile.Activities.ClassTabActivity;
 import com.fzu.daoyunmobile.Entity.Member;
 import com.fzu.daoyunmobile.Entity.SignInHistory;
 import com.fzu.daoyunmobile.Holder.SignInHistoryViewHolder;
@@ -37,7 +38,7 @@ public class SignInHistoryAdapter extends ArrayAdapter<SignInHistory> {
             viewHolder = new SignInHistoryViewHolder();
             viewHolder.consistTv = view.findViewById(R.id.his_consist_Tv);
             viewHolder.datetypeTv = view.findViewById(R.id.his_datetype_Tv);
-
+            viewHolder.isFinishTv = view.findViewById(R.id.his_isFinish_Tv);
             view.setTag(viewHolder);
         } else {
             view = convertView;
@@ -45,7 +46,13 @@ public class SignInHistoryAdapter extends ArrayAdapter<SignInHistory> {
         }
         viewHolder.consistTv.setText(his.getConDate());
         viewHolder.datetypeTv.setText(his.getDateType());
-
+        //学生历史签到记录需要添加缺勤之类
+        if (ClassTabActivity.enterType.equals("Create")) {
+            viewHolder.isFinishTv.setVisibility(View.GONE);
+        } else {
+            String f = his.getIsFinish() ? "已签到" : "缺勤";
+            viewHolder.isFinishTv.setText(f);
+        }
         return view;
     }
 }

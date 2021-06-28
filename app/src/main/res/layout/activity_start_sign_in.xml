@@ -57,7 +57,7 @@
                                 android:src="@mipmap/list_my_menu" />
 
                             <TextView
-                                android:id="@+id/signin_Tv"
+                                android:id="@+id/start_sign_Tv"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_horizontal"
@@ -90,6 +90,15 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1.0"
                         android:text="历史签到记录" />
+                    <TextView
+                        android:id="@+id/start_sign_rate_Tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.0"
+                        android:gravity="right"
+                        android:layout_marginRight="15dp"
+
+                        android:text="10%" />
 
                 </LinearLayout>
 

@@ -82,18 +82,18 @@ public class CodeLoginFragment extends Fragment {
         loginBtn.setOnClickListener(v -> login());
 
         //获取腾讯第三方登录
-        mTencent = Tencent.createInstance(APP_ID, getActivity().getApplicationContext());
+        //mTencent = Tencent.createInstance(APP_ID, getActivity().getApplicationContext());
 
         //绑定手机号框
         input_mobilenum = new InputFrameItem(getActivity().getWindow().getDecorView(), R.id.input_mobilenum, R.id.input_frameitem_editText, R.id.input_frameitem_img, R.drawable.ic_login_username, "手机号");
         //输入框
         input_vericode = new InputVCodeFrameItem(getActivity().getWindow().getDecorView(), R.id.input_vericode, R.drawable.ic_login_password);
 
-        qqLogin = getActivity().findViewById(R.id.qq_login_btn);
-        qqLogin.setOnClickListener(v -> {
-            //startActivity(new Intent(getActivity(), ThirdLoginActivity.class));
-            qqThirdLogin();
-        });
+//        qqLogin = getActivity().findViewById(R.id.qq_login_btn);
+//        qqLogin.setOnClickListener(v -> {
+//            //startActivity(new Intent(getActivity(), ThirdLoginActivity.class));
+//            qqThirdLogin();
+//        });
 
         input_vericode.getSubBtn().setOnClickListener(v -> {
             //startActivity(new Intent(getActivity(), ThirdLoginActivity.class));

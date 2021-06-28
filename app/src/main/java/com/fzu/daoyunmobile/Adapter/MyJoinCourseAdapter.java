@@ -46,7 +46,6 @@ public class MyJoinCourseAdapter extends ArrayAdapter<Course> {
         if (convertView == null) {
             view = LayoutInflater.from(getContext()).inflate(resourceId, parent, false);
             myJoinCourseViewHolder = new MyJoinCourseViewHolder();
-            myJoinCourseViewHolder.courseImage = view.findViewById(R.id.course_image);
             myJoinCourseViewHolder.courseName = view.findViewById(R.id.course_name);
             myJoinCourseViewHolder.teacherName = view.findViewById(R.id.teacher_name);
             myJoinCourseViewHolder.courseDate = view.findViewById(R.id.course_date);
@@ -64,13 +63,11 @@ public class MyJoinCourseAdapter extends ArrayAdapter<Course> {
 
 
         if (course.getImgFilePath().equals("")) {
-            myJoinCourseViewHolder.courseImage.setImageResource(course.getImageId());
             myJoinCourseViewHolder.courseName.setText(course.getCourseName());
             myJoinCourseViewHolder.teacherName.setText(course.getTeacherName());
             // viewHolder.className.setText(course.getClassName());
             myJoinCourseViewHolder.courseDate.setText(course.getCourseDate());
         } else if (course.getImageId() == -1) {
-            myJoinCourseViewHolder.courseImage.setImageBitmap(BitmapFactory.decodeFile(course.getImgFilePath()));
 //            viewHolder.courseName.setText(course.getCourseName());
 //            viewHolder.teacherName.setText(course.getTeacherName());
 //            viewHolder.className.setText(course.getClassName());

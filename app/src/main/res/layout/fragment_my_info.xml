@@ -168,6 +168,35 @@
                     android:textSize="18dp" />
 
             </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="10dp"
+                android:background="#D8DDE1" />
+
+            <LinearLayout
+                android:id="@+id/psd_set_line"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_marginLeft="10dp"
+                    android:src="@drawable/user_psd" />
+
+                <TextView
+                    android:id="@+id/user_psd_set"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="10dp"
+                    android:text="密码修改"
+                    android:textSize="18dp" />
+
+            </LinearLayout>
 
             <View
                 android:layout_width="match_parent"

@@ -94,12 +94,8 @@ public class HpMainFragment extends Fragment {
 
         addTV.setEnabled(true);
         addTV.setOnClickListener(v -> {
-            Log.i("MainFragmentInfo", "add textview");
-//                Toast.makeText(getContext(), "添加被按下", Toast.LENGTH_SHORT).show();
-
             showPopupMenu(addTV);
         });
-
 
         myJoinTV.setOnClickListener(v -> {
             myJoinTV.setTextColor(Color.parseColor("#ff00bfff"));

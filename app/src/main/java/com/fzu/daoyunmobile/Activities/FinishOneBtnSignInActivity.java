@@ -176,7 +176,7 @@ public class FinishOneBtnSignInActivity extends AppCompatActivity {
 
     public void parseJoinedList(String JsonArrayData) {
         JSONArray jsonArray = JSONObject.parseObject(JsonArrayData).getJSONArray("data");
-        if (jsonArray.size() == 0) {
+        if (jsonArray == null || jsonArray.size() == 0) {
             AlertDialogUtil.showToastText("暂时没有人签到", FinishOneBtnSignInActivity.this);
         }
         memberList.clear();

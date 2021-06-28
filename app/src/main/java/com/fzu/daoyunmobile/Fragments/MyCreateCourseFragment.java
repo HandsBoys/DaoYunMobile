@@ -63,6 +63,7 @@ public class MyCreateCourseFragment extends Fragment {
         progressDialog.setMessage("加载中...");
         progressDialog.setCancelable(true);
         progressDialog.show();
+        AlertDialogUtil.showToastText("FUCK CREATE", getActivity());
         initCourses();
     }
 
@@ -82,9 +83,8 @@ public class MyCreateCourseFragment extends Fragment {
                     String responseBodyStr = response.body().string();
                     if (GlobalConfig.getIsTeacher()) {
                         courseList = parseJsonWithJsonObject(responseBodyStr);
-
                     }
-                    //  if (responseBodyStr.contains("Forbidden")) {}
+
                     afterAction();
                 } catch (Exception e) {
                     //获取不到用户信息则取消登陆 需要重新登陆
@@ -116,10 +116,14 @@ public class MyCreateCourseFragment extends Fragment {
         });
     }
 
-    private List<Course> parseJsonWithJsonObject(String jsonData) throws IOException {
+    private List<Course> parseJsonWithJsonObject(String jsonData) {
         JSONArray jsonArray = JSONObject.parseObject(jsonData).getJSONArray("data");
         List<Course> cList = new ArrayList<>();
+
+        if (jsonArray == null)
+            return cList;
         List<String> courseList = GlobalConfig.getCourseList();
+
         for (int i = 0; i < jsonArray.size(); i++) {
             JSONObject jsonObject = jsonArray.getJSONObject(i);
             final String classId = jsonObject.getString("id");
@@ -140,6 +144,6 @@ public class MyCreateCourseFragment extends Fragment {
         GlobalConfig.setCourseList(courseList);
         return cList;
     }
-    
+
 
 }

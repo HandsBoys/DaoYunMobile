@@ -121,6 +121,8 @@ public class MyJoinCourseFragment extends Fragment {
 
         JSONArray jsonArray = JSONObject.parseObject(jsonData).getJSONArray("data");
         List<Course> cList = new ArrayList<>();
+        if (jsonArray == null)
+            return cList;
         for (int i = 0; i < jsonArray.size(); i++) {
             JSONObject jsonObject = jsonArray.getJSONObject(i);
             final String classId = jsonObject.getString("id");

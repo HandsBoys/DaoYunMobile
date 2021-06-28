@@ -1,34 +1,28 @@
 package com.fzu.daoyunmobile.Fragments;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
-import android.os.Environment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.fzu.daoyunmobile.Activities.LoginActivity;
 import com.fzu.daoyunmobile.Activities.MainActivity;
+import com.fzu.daoyunmobile.Activities.UserInfoSetActivity;
 import com.fzu.daoyunmobile.Configs.GlobalConfig;
 import com.fzu.daoyunmobile.R;
 import com.fzu.daoyunmobile.Utils.AlertDialogUtil;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 
 /**
  *
@@ -80,34 +74,32 @@ public class MyInfoFragment extends Fragment {
 
 
         userInfoLayout = getActivity().findViewById(R.id.layout_me_header);
-        userInfoLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AlertDialogUtil.showToastText("FUCKUUU",getActivity());
-
-//                Intent intent = new Intent(getContext(), UserInfoActivity.class);
-//                startActivityForResult(intent, 1);
-            }
+        userInfoLayout.setOnClickListener(v -> {
+            startActivity(new Intent(getActivity(), UserInfoSetActivity.class));
         });
 
-        LinearLayout linearLayout = getActivity().findViewById(R.id.user_protocol_layout);
-        linearLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                Intent intent = new Intent(getContext(), UserProtocolActivity.class);
+        LinearLayout linearLayout = getActivity().findViewById(R.id.psd_set_line);
+        linearLayout.setOnClickListener(v -> {
+            final EditText editText = new EditText(getContext());
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
+                    .setTitle("输入更改的密码!")
+                    .setView(editText);
+            builder.setPositiveButton("确定", (dialog, which) -> {
+                String psd = editText.getText().toString();
+                //TODO 密码修改接口
+                AlertDialogUtil.showToastText("密码修改成功!", getActivity());
+            });
+            builder.setNegativeButton("取消", null);
+            builder.show();//                Intent intent = new Intent(getContext(), UserProtocolActivity.class);
 //                startActivity(intent);
-            }
         });
 
-        privacyLayout = getActivity().findViewById(R.id.prvacy_layout);
-        privacyLayout.setOnClickListener(v -> {
-            //startActivity(new Intent(getContext(), PrivacyPolicyActivity.class));
-        });
 
         logoutBtn = getActivity().findViewById(R.id.user_logout_btn);
         logoutBtn.setOnClickListener(v -> {
-            MainActivity.userName = null;
-            startActivity(new Intent(getContext(), LoginActivity.class));
+            Intent intent = new Intent(getActivity(), LoginActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
         });
 
     }

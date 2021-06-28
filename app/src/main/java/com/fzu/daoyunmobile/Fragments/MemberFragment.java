@@ -57,13 +57,9 @@ public class MemberFragment extends Fragment {
     private TextView signInTV;
     private TextView memberSumTV;
     private Button backBtn;
-    private ListView listView;
     public ClassMemberAdapter memberAdapter;
     private List<Integer> experienceList = new ArrayList<>();
     private List<Integer> indexList = new ArrayList<>();
-    private int userMark;
-    private Dialog bottomDialog;
-    private String userExperienceScore;
     private TextView rankTV;
     public TextView experTV;
     private SwipeRefreshLayout swipeRefreshLayout;
@@ -121,7 +117,6 @@ public class MemberFragment extends Fragment {
         affectionCardLayout.setOnClickListener(v -> AlertDialogUtil.showConfirmClickAlertDialog("暂不支持\"心意卡片\"功能", getActivity()));
         groupPlanLayout = getActivity().findViewById(R.id.group_plan_layout);
         groupPlanLayout.setOnClickListener(v -> AlertDialogUtil.showConfirmClickAlertDialog("暂不支持\"小组方案\"功能", getActivity()));
-
     }
 
     //TODO 刷新作用
@@ -168,6 +163,7 @@ public class MemberFragment extends Fragment {
     }
 
 
+    //转换学生列表
     public void parseStudentList(String JsonArrayData) {
         memberList = new ArrayList<>();
         JSONArray jsonArray = com.alibaba.fastjson.JSONObject.parseObject(JsonArrayData).getJSONArray("data");
@@ -208,7 +204,7 @@ public class MemberFragment extends Fragment {
                 Toast.makeText(getContext(), member.getMemberName(), Toast.LENGTH_SHORT).show();
             });
             //设置人数
-            memberSumTV.setText(String.valueOf(memberList.size()) + "人");
+            memberSumTV.setText(memberList.size() + "人");
         });
     }
 

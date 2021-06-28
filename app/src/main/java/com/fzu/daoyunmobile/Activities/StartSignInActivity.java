@@ -4,9 +4,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -21,10 +23,8 @@ import com.fzu.daoyunmobile.Utils.SignInUtil;
 import com.fzu.daoyunmobile.Utils.TimeUtil;
 
 import org.jetbrains.annotations.NotNull;
-import org.json.JSONException;
 
 import java.io.IOException;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -41,7 +41,11 @@ public class StartSignInActivity extends AppCompatActivity {
     private LinearLayout linearLayout;
     private Button backBtn;
     private ListView listView;
+    private TextView signInTV;
     public SignInHistoryAdapter signAdapter;
+    public TextView signRateTv;
+
+    private boolean isCreate = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +54,19 @@ public class StartSignInActivity extends AppCompatActivity {
 
         backBtn = findViewById(R.id.toolbar_left_btn);
         backBtn.setOnClickListener(v -> finish());
+        isCreate = ClassTabActivity.enterType.equals("Create");
+        signInTV = findViewById(R.id.start_sign_Tv);
 
+        signRateTv = findViewById(R.id.start_sign_rate_Tv);
+
+
+        if (!isCreate) {
+            signInTV.setText("参与签到");
+        } else {
+            //非老师的设置缺勤率
+            signRateTv.setVisibility(View.GONE);
+
+        }
         linearLayout = findViewById(R.id.signin_layout);
         linearLayout.setOnClickListener(v -> {
             if (GPSUtil.checkGPSIsOpen(StartSignInActivity.this)) {
@@ -60,16 +76,23 @@ public class StartSignInActivity extends AppCompatActivity {
             } else {
                 GPSUtil.openGPSSettings(StartSignInActivity.this);
             }
-
         });
+        iniHis();
+    }
 
-        initHis();
+    private void iniHis() {
+        if (isCreate)
+            iniTeaHis();
+        else
+            iniStuHis();
+    }
+
+    private void iniStuHis() {
 
     }
 
-
     //初始化成员
-    private void initHis() {
+    private void iniTeaHis() {
 
         OkHttpUtil.getInstance().GetWithToken(UrlConfig.getUrl(UrlConfig.UrlType.GET_ALL_SIGN_IN) + ClassTabActivity.classId, new Callback() {
             @Override
@@ -78,12 +101,12 @@ public class StartSignInActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+            public void onResponse(@NotNull Call call, @NotNull Response response) {
 
                 try {
                     String responseBodyStr = response.body().string();
-                    parseHisList(responseBodyStr);
-                    afterAction();
+                    parseTeaHisList(responseBodyStr);
+                    afterTeaAction();
 
                 } catch (Exception e) {
                     //获取不到用户信息则取消登陆 需要重新登陆
@@ -91,11 +114,9 @@ public class StartSignInActivity extends AppCompatActivity {
                 }
             }
         });
-
     }
 
-
-    public void parseHisList(String JsonArrayData) {
+    public void parseTeaHisList(String JsonArrayData) {
         hisList = new ArrayList<>();
         JSONArray jsonArray = com.alibaba.fastjson.JSONObject.parseObject(JsonArrayData).getJSONArray("data");
         try {
@@ -130,7 +151,7 @@ public class StartSignInActivity extends AppCompatActivity {
         Collections.reverse(hisList);
     }
 
-    public void afterAction() {
+    public void afterTeaAction() {
         runOnUiThread(() -> {
             signAdapter = new SignInHistoryAdapter(StartSignInActivity.this, R.layout.item_signinhistory, hisList);
             ListView listView = findViewById(R.id.his_list_view);
@@ -168,4 +189,6 @@ public class StartSignInActivity extends AppCompatActivity {
     public void onBackPressed() {
         finish();
     }
+
+
 }

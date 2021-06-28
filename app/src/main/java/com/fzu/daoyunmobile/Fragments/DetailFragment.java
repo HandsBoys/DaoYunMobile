@@ -104,7 +104,6 @@ public class DetailFragment extends Fragment implements CompoundButton.OnChecked
         OkHttpUtil.getInstance().PostWithJsonToken(UrlConfig.getUrl(UrlConfig.UrlType.SET_JOIN_COURSE) + "id=" + ClassTabActivity.classId + "&enableJoin=" + ej, new JSONObject(), new Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                System.out.println("FUCK CreateCourse" + e.getMessage());
             }
 
             @Override
@@ -112,7 +111,6 @@ public class DetailFragment extends Fragment implements CompoundButton.OnChecked
                 try {
                     String responseBodyStr = response.body().string();
                     AlertDialogUtil.showToastText(responseBodyStr, getActivity());
-
                 } catch (Exception e) {
                     //获取不到用户信息则取消登陆 需要重新登陆
                     AlertDialogUtil.showToastText(e.getMessage(), getActivity());

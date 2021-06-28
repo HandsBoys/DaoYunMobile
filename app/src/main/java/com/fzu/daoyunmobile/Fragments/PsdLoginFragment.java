@@ -153,14 +153,12 @@ public class PsdLoginFragment extends Fragment {
 
                     //JSON字符串转换成JSON对象
                     JSONObject messjsonObject = JSONObject.parseObject(responseBodyStr);
-
                     String token = messjsonObject.getJSONObject("data").getString("token");
                     //设置全局token
                     GlobalConfig.setUserToken(token);
                     getUserInfo();
-
                 } else if (responseBodyStr.contains("验证码输入错误")) {
-                    AlertDialogUtil.showConfirmClickAlertDialog("验证码错误", getActivity());
+                    AlertDialogUtil.showConfirmClickAlertDialog("验证码错误或者图片超时,请点击图片切换验证码", getActivity());
                 } else {
                     AlertDialogUtil.showConfirmClickAlertDialog("用户不存在或者密码错误", getActivity());
                 }

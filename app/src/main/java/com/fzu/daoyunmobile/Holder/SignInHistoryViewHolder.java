@@ -8,4 +8,6 @@ public class SignInHistoryViewHolder {
 
     public TextView consistTv;
 
+    public TextView isFinishTv;
+
 }
