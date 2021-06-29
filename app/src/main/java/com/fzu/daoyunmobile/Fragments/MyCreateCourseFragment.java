@@ -96,7 +96,7 @@ public class MyCreateCourseFragment extends Fragment {
 
     private void afterAction() {
         getActivity().runOnUiThread(() -> {
-            adapter = new MyCreateCourseAdapter(getContext(), R.layout.item_mycreatecourse, courseList, 2);
+            adapter = new MyCreateCourseAdapter(getContext(), R.layout.item_mycreatecourse, courseList);
             listView = getActivity().findViewById(R.id.mycreatecourselist_view);
             listView.setAdapter(adapter);
             // listview点击事件
@@ -132,7 +132,7 @@ public class MyCreateCourseFragment extends Fragment {
             final String className = jsonObject.getJSONObject("classDto").getString("className");
             final String term = jsonObject.getString("term");
             courseList.add(courseName);
-            Course course = new Course(R.drawable.course_img_1, courseName, teacherName, className, classId, term);
+            Course course = new Course(courseName, teacherName, className, classId, term);
             course.teacherPhone = "1066666655";
             cList.add(course);
         }

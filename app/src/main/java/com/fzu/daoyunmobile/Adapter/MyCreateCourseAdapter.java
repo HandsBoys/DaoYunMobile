@@ -22,7 +22,6 @@ import java.util.List;
 
 public class MyCreateCourseAdapter extends ArrayAdapter<Course> {
     private int resourceId;
-    private int flag = 1;
     private Context mContext;
     private MyCreateCourseViewHolder myCreateCourseViewHolder;
 
@@ -33,13 +32,6 @@ public class MyCreateCourseAdapter extends ArrayAdapter<Course> {
         mContext = context;
     }
 
-    public MyCreateCourseAdapter(@NonNull Context context, int textViewResourceId, @NonNull List<Course> objects, int flag) {
-        super(context, textViewResourceId, objects);
-        resourceId = textViewResourceId;
-        this.flag = flag;
-        mContext = context;
-
-    }
 
     @NonNull
     @Override
@@ -70,42 +62,40 @@ public class MyCreateCourseAdapter extends ArrayAdapter<Course> {
             myCreateCourseViewHolder = (MyCreateCourseViewHolder) view.getTag();
         }
 
-            // myCreateCourseViewHolder.courseImage.setImageResource(course.getImageId());
-            myCreateCourseViewHolder.courseName.setText(course.getCourseName());
-            myCreateCourseViewHolder.courseId.setText(course.getClassId());
-            myCreateCourseViewHolder.className.setText(course.getClassName());
+        // myCreateCourseViewHolder.courseImage.setImageResource(course.getImageId());
+        myCreateCourseViewHolder.courseName.setText(course.getCourseName());
+        myCreateCourseViewHolder.courseId.setText(course.getClassId());
+        myCreateCourseViewHolder.className.setText(course.getClassName());
 
+        Activity nowAct = (Activity) view.getContext();
+        myCreateCourseViewHolder.signInTv.setOnClickListener(v -> {
+            if (GPSUtil.checkGPSIsOpen(nowAct)) {
+                //获取经纬度
+                GPSUtil.getTitude(view.getContext());
+                SignInUtil.checkTeaSignIn((Activity) v.getContext(), course.getClassId());
+            } else {
+                GPSUtil.openGPSSettings(nowAct);
+            }
+        });
+        myCreateCourseViewHolder.signInImg.setOnClickListener(v -> {
+            if (GPSUtil.checkGPSIsOpen(nowAct)) {
+                //获取经纬度
+                GPSUtil.getTitude(view.getContext());
+                SignInUtil.checkTeaSignIn((Activity) v.getContext(), course.getClassId());
+            } else {
+                GPSUtil.openGPSSettings(nowAct);
+            }
+        });
 
-        if (flag == 2) {
-            Activity nowAct = (Activity) view.getContext();
-            myCreateCourseViewHolder.signInTv.setOnClickListener(v -> {
-                if (GPSUtil.checkGPSIsOpen(nowAct)) {
-                    //获取经纬度
-                    GPSUtil.getTitude(view.getContext());
-                    SignInUtil.checkTeaSignIn((Activity) v.getContext(), course.getClassId());
-                } else {
-                    GPSUtil.openGPSSettings(nowAct);
+        myCreateCourseViewHolder.codeTv.setOnClickListener(v -> {
+                    AlertDialogUtil.alertQRCode(myCreateCourseViewHolder.courseId.getText().toString(), (Activity) v.getContext());
                 }
-            });
-            myCreateCourseViewHolder.signInImg.setOnClickListener(v -> {
-                if (GPSUtil.checkGPSIsOpen(nowAct)) {
-                    //获取经纬度
-                    GPSUtil.getTitude(view.getContext());
-                    SignInUtil.checkTeaSignIn((Activity) v.getContext(), course.getClassId());
-                } else {
-                    GPSUtil.openGPSSettings(nowAct);
+        );
+        myCreateCourseViewHolder.codeImg.setOnClickListener(v -> {
+                    AlertDialogUtil.alertQRCode(myCreateCourseViewHolder.courseId.getText().toString(), (Activity) v.getContext());
                 }
-            });
+        );
 
-            myCreateCourseViewHolder.codeTv.setOnClickListener(v -> {
-                        AlertDialogUtil.alertQRCode(myCreateCourseViewHolder.courseId.getText().toString(), (Activity) v.getContext());
-                    }
-            );
-            myCreateCourseViewHolder.codeImg.setOnClickListener(v -> {
-                        AlertDialogUtil.alertQRCode(myCreateCourseViewHolder.courseId.getText().toString(), (Activity) v.getContext());
-                    }
-            );
-        }
         return view;
     }
 

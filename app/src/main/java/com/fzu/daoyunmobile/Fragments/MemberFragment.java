@@ -165,7 +165,8 @@ public class MemberFragment extends Fragment {
     public void parseStudentList(String JsonArrayData) {
         memberList = new ArrayList<>();
         JSONArray jsonArray = com.alibaba.fastjson.JSONObject.parseObject(JsonArrayData).getJSONArray("data");
-
+        if (jsonArray == null)
+            return;
         for (int i = 0; i < jsonArray.size(); i++) {
             JSONObject jsonObject = jsonArray.getJSONObject(i);
             String studentID = jsonObject.getString("studentId");

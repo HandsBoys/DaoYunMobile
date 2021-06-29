@@ -151,7 +151,6 @@ public class CreateClassActivity extends AppCompatActivity {
                             }
                         } catch (Exception e) {
                             //获取不到用户信息则取消登陆 需要重新登陆
-                            AlertDialogUtil.showToastText(e.getMessage(), CreateClassActivity.this);
                             AlertDialogUtil.showConfirmClickAlertDialog("创建班课失败请重试", CreateClassActivity.this);
                         }
                     }

@@ -63,9 +63,7 @@ public class HpMainFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_hp_main, null);
-
         //添加按钮
         addTV = view.findViewById(R.id.toolbar_right_tv);
         return view;
@@ -133,10 +131,8 @@ public class HpMainFragment extends Fragment {
 //                    MainActivity.name, data.getStringExtra("gradeClass"));
 //            MyCreateFragment.courseList.add(course);
             String classId = data.getStringExtra("classId");
-            String classIcon = data.getStringExtra("classIcon");
             String className = data.getStringExtra("className");
             String gradeClass = data.getStringExtra("gradeClass");
-            Log.i("MainFragInfo", classIcon + " " + className + " " + gradeClass);
             myCreateTV.setTextColor(Color.parseColor("#ff00bfff"));
             myJoinTV.setTextColor(Color.parseColor("#80000000"));
             myCreateView.setVisibility(View.VISIBLE);
@@ -146,16 +142,12 @@ public class HpMainFragment extends Fragment {
                     .show(myCreateFragment)
                     .hide(myJoinFragment)
                     .commit();
-            if (classIcon.equals("")) {
-                myCreateFragment.courseList.add(new Course(R.drawable.course_img_1, className, GlobalConfig.getNickName(), gradeClass, classId));
-//                myCreateFragment.adapter.notifyDataSetChanged();
-            } else {
-                myCreateFragment.courseList.add(new Course(classIcon, className,GlobalConfig.getNickName(), gradeClass, classId));
-//                myCreateFragment.adapter.notifyDataSetChanged();
-            }
+                myCreateFragment.courseList.add(new Course(className, GlobalConfig.getNickName(), gradeClass, classId));
+//                myCreateFrment.adapter.notifyDataSetChanged();
+
             myCreateFragment.adapter.notifyDataSetChanged();
             myCreateFragment.adapter = new MyCreateCourseAdapter(getContext(), R.layout.item_mycreatecourse
-                    , myCreateFragment.courseList, 2);
+                    , myCreateFragment.courseList);
             myCreateFragment.listView.setAdapter(myCreateFragment.adapter);
         }
     }
@@ -200,7 +192,6 @@ public class HpMainFragment extends Fragment {
                         }).show();
     }
 
-
     //加入班课之前搜索班级
     private void searchClass(final String classStr) {
         //获取用户信息
@@ -215,7 +206,7 @@ public class HpMainFragment extends Fragment {
             public void onResponse(@NotNull Call call, @NotNull Response response) {
                 try {
                     String responseBodyStr = response.body().string();
-                    if (responseBodyStr.length()<5||responseBodyStr.contains("班课获取失败")||responseBodyStr.contains("班课不存在")) {
+                    if (responseBodyStr.length() < 5 || responseBodyStr.contains("班课获取失败") || responseBodyStr.contains("班课不存在")) {
                         AlertDialogUtil.showConfirmClickAlertDialog("班课不存在", getActivity());
                     } else {
                         JSONObject jsonObject = JSONObject.parseObject(responseBodyStr).getJSONObject("data");
@@ -231,7 +222,6 @@ public class HpMainFragment extends Fragment {
                                 if (enableJoin.equals("false")) {
                                     AlertDialogUtil.showConfirmClickAlertDialog("班课不允许加入", getActivity());
                                 } else {
-
                                     final String className = jsonObject.getJSONObject("classDto").getString("className");
                                     final String courseName = jsonObject.getString("courseName");
                                     AlertDialogUtil.showConfirmClickAlertDialogTwoButtonWithLister("确定加入" + courseName + className, getActivity(), (dialog, i) -> {
@@ -243,7 +233,6 @@ public class HpMainFragment extends Fragment {
                     }
                 } catch (Exception e) {
                     //获取不到用户信息则取消登陆 需要重新登陆
-                    AlertDialogUtil.showToastText(e.getMessage(), getActivity());
                     AlertDialogUtil.showConfirmClickAlertDialog("加入班课失败请重试", getActivity());
                     System.out.println(e.getMessage());
                 }
@@ -276,7 +265,6 @@ public class HpMainFragment extends Fragment {
                     }
                 } catch (Exception e) {
                     //获取不到用户信息则取消登陆 需要重新登陆
-                    AlertDialogUtil.showToastText(e.getMessage(), getActivity());
                     AlertDialogUtil.showConfirmClickAlertDialog("加入班课失败请重试", getActivity());
                     System.out.println(e.getMessage());
                 }

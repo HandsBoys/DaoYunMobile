@@ -2,8 +2,6 @@ package com.fzu.daoyunmobile.Entity;
 
 public class Member implements Comparable {
     private String ranking;
-    private String iconFilePath = "";
-    private int imageId = -1;
     private String memberName;
     private String stu_id;
     private String experience_score;
@@ -18,13 +16,11 @@ public class Member implements Comparable {
         this.score = Integer.valueOf(experience_score);
     }
 
-    public Member(String ranking, String iconFilePath, String memberName, String stu_id, String experience_score, String singnInDate) {
+    public Member(String ranking, String memberName, String stu_id, String experience_score, String signInDate) {
         this.ranking = ranking;
-        this.iconFilePath = iconFilePath;
         this.memberName = memberName;
         this.stu_id = stu_id;
         this.experience_score = experience_score;
-        this.singnInDate = singnInDate;
         this.score = Integer.valueOf(experience_score);
     }
 
@@ -32,16 +28,8 @@ public class Member implements Comparable {
         this.ranking = ranking;
     }
 
-    public String getIconFilePath() {
-        return iconFilePath;
-    }
-
     public String getRanking() {
         return ranking;
-    }
-
-    public int getImageId() {
-        return imageId;
     }
 
     public String getMemberName() {

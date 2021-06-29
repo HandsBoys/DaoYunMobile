@@ -157,11 +157,8 @@ public class SignInResultActivity extends AppCompatActivity {
             signRateTv.setText(100 * sN / tN + " %");
 
             listView.setOnItemClickListener((parent, view, position, id) -> {
-                //TODO 设置
                 SignInHistory s = hisList.get(position);
-
             });
-
         });
     }
 

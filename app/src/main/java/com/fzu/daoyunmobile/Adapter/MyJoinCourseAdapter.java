@@ -54,43 +54,29 @@ public class MyJoinCourseAdapter extends ArrayAdapter<Course> {
             myJoinCourseViewHolder = (MyJoinCourseViewHolder) view.getTag();
         }
 
+        myJoinCourseViewHolder.courseName.setText(course.getCourseName());
+        myJoinCourseViewHolder.teacherName.setText(course.getTeacherName());
+        myJoinCourseViewHolder.courseDate.setText(course.getCourseDate());
 
-        if (course.getImgFilePath().equals("")) {
-            myJoinCourseViewHolder.courseName.setText(course.getCourseName());
-            myJoinCourseViewHolder.teacherName.setText(course.getTeacherName());
-            // viewHolder.className.setText(course.getClassName());
-            myJoinCourseViewHolder.courseDate.setText(course.getCourseDate());
-        } else if (course.getImageId() == -1) {
-//            viewHolder.courseName.setText(course.getCourseName());
-//            viewHolder.teacherName.setText(course.getTeacherName());
-//            viewHolder.className.setText(course.getClassName());
-        }
         Activity act = (Activity) view.getContext();
 
-        myJoinCourseViewHolder.signInImg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-
-                if (GPSUtil.checkGPSIsOpen(act)) {
-                    //获取经纬度
-                    GPSUtil.getTitude(act);
-                    SignInUtil.checkStuSignIn((Activity) v.getContext(), course.getClassId());
-                } else {
-                    GPSUtil.openGPSSettings(act);
-                }
+        //设置签到功能
+        myJoinCourseViewHolder.signInImg.setOnClickListener(v -> {
+            if (GPSUtil.checkGPSIsOpen(act)) {
+                //获取经纬度
+                GPSUtil.getTitude(act);
+                SignInUtil.checkStuSignIn((Activity) v.getContext(), course.getClassId());
+            } else {
+                GPSUtil.openGPSSettings(act);
             }
         });
-        myJoinCourseViewHolder.signInTv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (GPSUtil.checkGPSIsOpen(act)) {
-                    //获取经纬度
-                    GPSUtil.getTitude(act);
-                    SignInUtil.checkStuSignIn((Activity) v.getContext(), course.getClassId());
-                } else {
-                    GPSUtil.openGPSSettings(act);
-                }
+        myJoinCourseViewHolder.signInTv.setOnClickListener(v -> {
+            if (GPSUtil.checkGPSIsOpen(act)) {
+                //获取经纬度
+                GPSUtil.getTitude(act);
+                SignInUtil.checkStuSignIn((Activity) v.getContext(), course.getClassId());
+            } else {
+                GPSUtil.openGPSSettings(act);
             }
         });
         return view;

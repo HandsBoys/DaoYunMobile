@@ -68,10 +68,7 @@ public class SignInMemberResultActivity extends AppCompatActivity {
                 try {
                     String responseBodyStr = response.body().string();
                     praseJsonToList(responseBodyStr);
-
                     afterAction();
-
-
                 } catch (Exception e) {
                     AlertDialogUtil.showToastText(e.getMessage(), SignInMemberResultActivity.this);
                 }
@@ -101,10 +98,10 @@ public class SignInMemberResultActivity extends AppCompatActivity {
                 checkTime = "";
             Member member;
             if (isFinish) {
-                member = new Member(String.valueOf(sNum++), "", name, studentID, experienceScore, checkTime);
+                member = new Member(String.valueOf(sNum++), name, studentID, experienceScore, checkTime);
                 sMemberList.add(member);
             } else {
-                member = new Member(String.valueOf(usNum++), "", name, studentID, experienceScore, checkTime);
+                member = new Member(String.valueOf(usNum++), name, studentID, experienceScore, checkTime);
                 usMemberList.add(member);
             }
         }
@@ -135,7 +132,7 @@ public class SignInMemberResultActivity extends AppCompatActivity {
         );
     }
 
-    private void showPopUp(){
+    private void showPopUp() {
 
     }
 }

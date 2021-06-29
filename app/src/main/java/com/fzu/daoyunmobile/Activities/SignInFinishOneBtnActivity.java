@@ -198,7 +198,7 @@ public class SignInFinishOneBtnActivity extends AppCompatActivity {
                 }
                 //TODO 设置能不能签到在历史签到设置
                 Member member;
-                member = new Member(String.valueOf(num++), "", name, studentID, experienceScore, checkTime);
+                member = new Member(String.valueOf(num++),  name, studentID, experienceScore, checkTime);
                 memberList.add(member);
             }
         }

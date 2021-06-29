@@ -200,7 +200,7 @@ public class SignInFinishLimitActivity extends AppCompatActivity {
                     checkTime = df.format(d);
                 }
                 Member member;
-                member = new Member(String.valueOf(num++), "", name, studentID, experienceScore, checkTime);
+                member = new Member(String.valueOf(num++), name, studentID, experienceScore, checkTime);
                 memberList.add(member);
             }
         }

@@ -1,8 +1,6 @@
 package com.fzu.daoyunmobile.Entity;
 
 public class Course {
-    private int imageId = -1;
-    private String imgFilePath = "";
     //班课号
     private String classId;
     //课程名
@@ -13,30 +11,19 @@ public class Course {
     private String className;
     //班级上课时间
     private String courseDate = "";
-    public String teacherPhone;
+    public String teacherPhone = "";
 
 
-    public Course(int imageId, String courseName, String teacherName, String className, String classId, String courseDate) {
+    public Course(String courseName, String teacherName, String className, String classId, String courseDate) {
         this.classId = classId;
-        this.imageId = imageId;
         this.courseName = courseName;
         this.teacherName = teacherName;
         this.className = className;
         this.courseDate = courseDate;
     }
 
-    public Course(int imageId, String courseName, String teacherName, String className, String classId) {
+    public Course(String courseName, String teacherName, String className, String classId) {
         this.classId = classId;
-        this.imageId = imageId;
-        this.courseName = courseName;
-        this.teacherName = teacherName;
-        this.className = className;
-    }
-
-
-    public Course(String imgFilePath, String courseName, String teacherName, String className, String classId) {
-        this.classId = classId;
-        this.imgFilePath = imgFilePath;
         this.courseName = courseName;
         this.teacherName = teacherName;
         this.className = className;
@@ -50,16 +37,8 @@ public class Course {
         return classId;
     }
 
-    public String getImgFilePath() {
-        return imgFilePath;
-    }
-
     public String getCourseDate() {
         return courseDate;
-    }
-
-    public int getImageId() {
-        return imageId;
     }
 
     public String getCourseName() {

@@ -73,7 +73,7 @@ public class DetailFragment extends Fragment implements CompoundButton.OnChecked
             exitDismissBtn.setText("退出班课");
             view.findViewById(R.id.all_join_lineout).setVisibility(View.GONE);
         }
-        exitDismissBtn.setOnClickListener(v -> finishclass(true));
+        exitDismissBtn.setOnClickListener(v -> finishClass(true));
 
         permitaddClassCB.setOnCheckedChangeListener(this);
 
@@ -113,7 +113,6 @@ public class DetailFragment extends Fragment implements CompoundButton.OnChecked
                     AlertDialogUtil.showToastText(responseBodyStr, getActivity());
                 } catch (Exception e) {
                     //获取不到用户信息则取消登陆 需要重新登陆
-                    AlertDialogUtil.showToastText(e.getMessage(), getActivity());
                     System.out.println(e.getMessage());
                 }
             }
@@ -121,7 +120,7 @@ public class DetailFragment extends Fragment implements CompoundButton.OnChecked
     }
 
 
-    private void finishclass(boolean tag) {
+    private void finishClass(boolean tag) {
         String ej = tag ? "true" : "false";
         //获取用户信息
         OkHttpUtil.getInstance().PostWithJsonToken(UrlConfig.getUrl(UrlConfig.UrlType.SET_FINISH_COURSE) + "id=" + ClassTabActivity.classId + "&finish=" + ej, new JSONObject(), new Callback() {
@@ -138,7 +137,6 @@ public class DetailFragment extends Fragment implements CompoundButton.OnChecked
 
                 } catch (Exception e) {
                     //获取不到用户信息则取消登陆 需要重新登陆
-                    AlertDialogUtil.showToastText(e.getMessage(), getActivity());
                     System.out.println(e.getMessage());
                 }
             }

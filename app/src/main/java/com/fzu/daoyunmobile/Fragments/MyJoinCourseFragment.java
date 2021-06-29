@@ -130,7 +130,7 @@ public class MyJoinCourseFragment extends Fragment {
             final String teacherName = jsonObject.getString("teacherName");
             final String className = jsonObject.getJSONObject("classDto").getString("className");
             final String term = jsonObject.getString("term");
-            Course course = new Course(R.drawable.course_img_1, courseName, teacherName, className, classId, term);
+            Course course = new Course(courseName, teacherName, className, classId, term);
             course.teacherPhone = "1066666655";
             cList.add(course);
         }
