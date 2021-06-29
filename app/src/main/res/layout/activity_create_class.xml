@@ -22,16 +22,48 @@
 
             <ImageView
                 android:id="@+id/class_icon_Iv"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
                 android:layout_gravity="center"
-                android:layout_marginTop="30dp"
-                android:layout_marginBottom="30dp"
-                android:src="@drawable/course_img_1" />
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                android:src="@mipmap/addimg" />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="20dp"
+                android:background="#D8DDE1" />
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:text="班级"
+                    android:textColor="@android:color/black"
+                    android:textSize="18dp" />
+
+                <EditText
+                    android:id="@+id/grade_class_Et"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="15dp"
+                    android:background="@null"
+                    android:gravity="right|center_vertical"
+                    android:hint="未设置" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
                 android:background="#D8DDE1" />
 
             <LinearLayout
@@ -43,11 +75,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
-                    android:text="班课名"
+                    android:text="课程"
                     android:textColor="@android:color/black"
                     android:textSize="18dp" />
 
-                <EditText
+                <AutoCompleteTextView
                     android:id="@+id/class_name_Et"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -55,8 +87,21 @@
                     android:layout_marginTop="10dp"
                     android:layout_marginRight="15dp"
                     android:background="@null"
+                    android:completionThreshold="0"
                     android:gravity="right|center_vertical"
                     android:hint="未设置" />
+
+                <!--                <EditText-->
+                <!--                    android:id="@+id/class_name_Et"-->
+                <!--                    android:layout_width="match_parent"-->
+                <!--                    android:layout_height="wrap_content"-->
+                <!--                    android:layout_marginLeft="10dp"-->
+                <!--                    android:layout_marginTop="10dp"-->
+                <!--                    android:layout_marginRight="15dp"-->
+                <!--                    android:background="@null"-->
+                <!--                    android:gravity="right|center_vertical"-->
+                <!--                    android:hint="未设置"-->
+                <!--                    android:windowSoftInputMode="stateVisible" />-->
 
             </LinearLayout>
 
@@ -91,36 +136,6 @@
 
             </LinearLayout>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#D8DDE1" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    android:text="班级"
-                    android:textColor="@android:color/black"
-                    android:textSize="18dp" />
-
-                <EditText
-                    android:id="@+id/grade_class_Et"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginRight="15dp"
-                    android:background="@null"
-                    android:gravity="right|center_vertical"
-                    android:hint="未设置" />
-
-            </LinearLayout>
 
             <View
                 android:layout_width="match_parent"
@@ -176,37 +191,12 @@
 
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#D8DDE1"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    android:text="班课简介"
-                    android:textSize="15dp" />
-
-            </LinearLayout>
-
-            <EditText
-                android:id="@+id/class_introduction_Et"
-                android:layout_width="match_parent"
-                android:layout_height="130dp"
-                android:layout_marginBottom="10dp"
-                android:gravity="start"
-                android:hint="请输入班课简介"
-                android:lineSpacingExtra="5dp"
-                android:scrollbars="vertical" />
-
             <Button
                 android:id="@+id/create_class_btn"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_margin="20dp"
-                android:background="#32A082"
+                android:background="@color/colorPrimary2"
                 android:text="创 建 班 课"
                 android:textColor="@android:color/white"
                 android:textSize="18dp" />

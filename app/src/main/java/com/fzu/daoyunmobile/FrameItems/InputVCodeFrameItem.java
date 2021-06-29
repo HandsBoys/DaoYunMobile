@@ -9,6 +9,8 @@ import android.widget.ImageView;
 
 import com.fzu.daoyunmobile.R;
 
+import java.util.Locale;
+
 public class InputVCodeFrameItem {
     private View priView;
     //当前act的view
@@ -16,13 +18,15 @@ public class InputVCodeFrameItem {
     private EditText editText;
     private ImageView icoImg;
     private Button submitBtn;
+    private int seconds = 60;
+    private int oriSeconds = 60;
 
     public InputVCodeFrameItem(View view, int priViewId, int editTextId, int btnId, int icoId, int imgID) {
         actView = view;
-        SetPriView(priViewId);
-        SetEditText(editTextId);
-        SetIcoImg(icoId, imgID);
-        SetSubBtn(btnId);
+        setPriView(priViewId);
+        setEditText(editTextId);
+        setIcoImg(icoId, imgID);
+        setSubBtn(btnId);
     }
 
     /**
@@ -32,35 +36,26 @@ public class InputVCodeFrameItem {
      */
     public InputVCodeFrameItem(View view, int priViewId, int imgID) {
         actView = view;
-        SetPriView(priViewId);
-        SetEditText(R.id.input_vericode_text);
-        SetIcoImg(R.id.input_vericode_icon, imgID);
-        SetSubBtn(R.id.inputbt_vericode_submit);
+        setPriView(priViewId);
+        setEditText(R.id.input_vericode_text);
+        setIcoImg(R.id.input_vericode_icon, imgID);
+        setSubBtn(R.id.inputbt_vericode_submit);
     }
 
 
-    public void SetPriView(int id) {
+    public void setPriView(int id) {
         priView = actView.findViewById(id);
     }
 
-    public void SetEditText(int id) {
+    public void setEditText(int id) {
         editText = priView.findViewById(id);
     }
 
-    public void SetSubBtn(int id) {
-        System.out.println("INITFUCK");
+    public void setSubBtn(int id) {
         submitBtn = priView.findViewById(id);
-        submitBtn.setOnClickListener(v -> {
-            System.out.println("FUCK");
-        });
-
     }
 
-    public void SetClickListener(View.OnClickListener clickListener) {
-        submitBtn.setOnClickListener(clickListener);
-    }
-
-    public Button GetSubBtn() {
+    public Button getSubBtn() {
         return submitBtn;
     }
 
@@ -68,7 +63,7 @@ public class InputVCodeFrameItem {
     /**
      * @return 获取输入框内容
      */
-    public String GetEditText() {
+    public String getEditText() {
         return editText.getText().toString();
     }
 
@@ -76,13 +71,38 @@ public class InputVCodeFrameItem {
     /**
      * @param name 设值输入框的名称
      */
-    public void SetEditTextHint(String name) {
+    public void setEditTextHint(String name) {
         editText.setHint(name);
     }
 
-    public void SetIcoImg(int id, int imgId) {
+    public void setIcoImg(int id, int imgId) {
         icoImg = priView.findViewById(id);
         Bitmap bm = BitmapFactory.decodeResource(actView.getResources(), imgId);
         icoImg.setImageBitmap(bm);
     }
+
+    //倒计时
+    public void startBtnDownTime(int seconds) {
+        this.seconds = seconds;
+        this.oriSeconds = seconds;
+        submitBtn.post(downTimrRunnable);
+    }
+
+
+    /**
+     * 倒计时线程
+     */
+    private Runnable downTimrRunnable = new Runnable() {
+        @Override
+        public void run() {
+            submitBtn.setText(seconds <= 0 ? "重新获取" : String.format(Locale.CHINA, "%ds", seconds));
+            submitBtn.setEnabled(seconds <= 0);
+            seconds--;
+            if (seconds >= 0) {
+                submitBtn.postDelayed(this, 1000);//递归执行
+            } else {
+                seconds = oriSeconds;//复位
+            }
+        }
+    };
 }

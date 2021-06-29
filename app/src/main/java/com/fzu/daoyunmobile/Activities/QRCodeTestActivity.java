@@ -96,8 +96,6 @@ public class QRCodeTestActivity extends AppCompatActivity implements View.OnClic
                 mImageCallback.setImageBitmap(bitmap);//现实扫码图片
             }
         }
-
-
     }
 
     private void showToast(String msg) {

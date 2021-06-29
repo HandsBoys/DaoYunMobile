@@ -5,6 +5,8 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     android:orientation="vertical"
+    android:descendantFocusability="afterDescendants"
+
     tools:context=".Activities.MainActivity">
     <!--内容-->
     <RelativeLayout

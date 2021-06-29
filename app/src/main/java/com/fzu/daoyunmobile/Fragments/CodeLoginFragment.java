@@ -3,7 +3,6 @@ package com.fzu.daoyunmobile.Fragments;
 import android.content.Intent;
 import android.os.Bundle;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
@@ -11,29 +10,37 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.alibaba.fastjson.JSONObject;
 import com.fzu.daoyunmobile.Activities.MainActivity;
 import com.fzu.daoyunmobile.Activities.ThirdLoginActivity;
+import com.fzu.daoyunmobile.Configs.GlobalConfig;
+import com.fzu.daoyunmobile.Configs.UrlConfig;
 import com.fzu.daoyunmobile.FrameItems.InputFrameItem;
 import com.fzu.daoyunmobile.FrameItems.InputVCodeFrameItem;
 import com.fzu.daoyunmobile.R;
+import com.fzu.daoyunmobile.Utils.AlertDialogUtil;
+import com.fzu.daoyunmobile.Utils.HttpUtils.HttpUtil;
+import com.fzu.daoyunmobile.Utils.HttpUtils.OkHttpUtil;
+import com.fzu.daoyunmobile.Utils.VerifyUtil;
+import com.tencent.connect.UserInfo;
+import com.tencent.connect.auth.QQToken;
+import com.tencent.connect.common.Constants;
+import com.tencent.tauth.IUiListener;
+import com.tencent.tauth.Tencent;
+import com.tencent.tauth.UiError;
 
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.regex.Pattern;
 
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Headers;
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
 import okhttp3.Response;
 
 /**
@@ -47,10 +54,16 @@ public class CodeLoginFragment extends Fragment {
     private InputVCodeFrameItem input_vericode;
     //登录按钮
     private Button loginBtn;
-    //生成的验证码
-    private int verificationCode;
 
-    private String session;
+    private TextView qqLogin;
+
+
+    private static final String TAG = "ThirdLogin";
+    private static final String APP_ID = "101950452";//官方获取的APPID
+    private Tencent mTencent;
+    private BaseUiListener mIUiListener;
+    private UserInfo mUserInfo;
+
 
     public CodeLoginFragment() {
 
@@ -61,27 +74,29 @@ public class CodeLoginFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        // startActivity(new Intent(getActivity(), MainActivity.class));
         // 登录按钮设置
         loginBtn = getActivity().findViewById(R.id.bt_login_submit);
-        loginBtn.setOnClickListener(v -> Login());
+        loginBtn.setOnClickListener(v -> login());
 
 
-        input_mobilenum = new InputFrameItem(getActivity().getWindow().getDecorView(), R.id.input_mobilenum, R.id.input_frameitem_editText, R.id.input_frameitem_img, R.drawable.ic_login_username, "手机号/邮箱");
+        //绑定手机号框
+        input_mobilenum = new InputFrameItem(getActivity().getWindow().getDecorView(), R.id.input_mobilenum, R.id.input_frameitem_editText, R.id.input_frameitem_img, R.drawable.ic_login_username, "手机号");
+        //输入框
         input_vericode = new InputVCodeFrameItem(getActivity().getWindow().getDecorView(), R.id.input_vericode, R.drawable.ic_login_password);
-        input_vericode.GetSubBtn().setOnClickListener(v -> {
-            // startActivity(new Intent(getActivity(), ThirdLoginActivity.class));
+        //获取腾讯第三方登录
+        //mTencent = Tencent.createInstance(APP_ID, getActivity().getApplicationContext());
+//        qqLogin = getActivity().findViewById(R.id.qq_login_btn);
+//        qqLogin.setOnClickListener(v -> {
+//            //startActivity(new Intent(getActivity(), ThirdLoginActivity.class));
+//            qqThirdLogin();
+//        });
 
-             sendMessage();
-//            Random r = new Random();
-//            verificationCode = r.nextInt(899999) + 100000;
-//            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
-//                    .setTitle("验证码")
-//                    .setMessage("验证码为：" + verificationCode)
-//                    .setPositiveButton("确定", null);
-//            builder.show();
-
+        input_vericode.getSubBtn().setOnClickListener(v -> {
+            sendMessage();
         });
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -90,134 +105,182 @@ public class CodeLoginFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_code_login, container, false);
     }
 
+    //发送短信消息
     private void sendMessage() {
-        String phone = input_mobilenum.GetEditTextStr();
-        Log.i("phoneInfo", input_mobilenum.GetEditTextStr());
-        Pattern pattern = Pattern.compile("^[1]\\d{10}$");
-        if (pattern.matcher(phone).matches()) {
-            input_vericode.GetSubBtn().setText("已发送");
-            input_vericode.GetSubBtn().setEnabled(false);
-            new Thread(new Runnable() {
+        String phone = input_mobilenum.getEditTextStr();
+        if (VerifyUtil.isChinaPhoneLegal(phone)) {
+            //倒计时开启
+            input_vericode.startBtnDownTime(60);
+            HttpUtil.sendMessage(phone, new Callback() {
                 @Override
-                public void run() {
-                    OkHttpClient okHttpClient = new OkHttpClient();
-                    // MediaType mediaType = MediaType.parse("text/plain; charset=utf-8");
-                    String url = "http://1.15.31.156:8081/message?phone=" + phone;
-                    Request request = new Request.Builder()
-                            .url(url)
-                            //.get(RequestBody.create(mediaType, requestBody))
-                            .build();
-                    okHttpClient.newCall(request).enqueue(new Callback() {
-                        @Override
-                        public void onFailure(@NotNull Call call, @NotNull IOException e) {
-//                                    Toast.makeText(RegisterActivity.this, "Connection failed!", Toast.LENGTH_SHORT).show();
-                        }
-
-                        @Override
-                        public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                            String responseBodyStr = response.body().string();
-                            Headers headers = response.headers();
-                            session = response.headers().get("Set-Cookie");
-                            Log.i("LoginInfoPre", session);
-
-                            session = session.substring(0, session.indexOf(";")).substring(11);
-                            Log.i("LoginInfoLast", session);
-                            Log.i("LoginInfo", responseBodyStr);
-                            //JSON字符串转换成JSON对象
-//                        JSONObject messjsonObject = JSONObject.parseObject(responseBodyStr);
-//
-//                        System.out.println( messjsonObject.getJSONObject("data").getString("captcha"));
-//                        // sendCodeAndPnone(messjsonObject.getJSONObject("data").getString("captcha"));
-                            //sendCodeBtn.setText("已发送");
-                            //sendCodeBtn.setEnabled(false);
-                        }
-                    });
+                public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                    Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
-            }).start();
+
+                @Override
+                public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                    String responseBodyStr = response.body().string();
+                    Log.i("LoginInfo", responseBodyStr);
+                }
+            });
+
         } else {
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
-                    .setMessage("请输入正确的手机号")
-                    .setPositiveButton("确定", null);
-            builder.show();
+            AlertDialogUtil.showConfirmClickAlertDialog("请输入正确的手机号", getActivity());
         }
 
     }
 
-    //TODO 登录接口待做登录
-    private void Login() {
-        String phone = input_mobilenum.GetEditTextStr();
-        String vcode = input_vericode.GetEditText();
-        Pattern pattern = Pattern.compile("^[1]\\d{10}$");
-        if (pattern.matcher(phone).matches()) {
-            new Thread(new Runnable() {
+    //登录
+    private void login() {
+        String phone = input_mobilenum.getEditTextStr();
+        String vcode = input_vericode.getEditText();
+
+        if (VerifyUtil.isChinaPhoneLegal(phone)) {
+            // 创建传输Model
+            JSONObject json = new JSONObject();
+            json.put("phone", phone);
+            json.put("code", vcode);
+            json.put("password", "1234");
+            json.put("userName", "1234");
+
+            OkHttpUtil.getInstance().PostWithJson(UrlConfig.getUrl(UrlConfig.UrlType.CODE_LOGIN), json, new Callback() {
                 @Override
-                public void run() {
-                    OkHttpClient okHttpClient = new OkHttpClient();
-                    MediaType JSON = MediaType.parse("application/json;charset=utf-8");
-                    org.json.JSONObject json = new JSONObject();
-                    try {
-                        json.put("phone", phone);
-                        json.put("code", vcode);
-                        json.put("password", "1234");
-                        json.put("userName", "1234");
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    RequestBody requestBody = RequestBody.create(JSON, String.valueOf(json));
-                    Log.i("LoginInfo", session);
-                    Request request = new Request.Builder()
-                            .header("Content-Type", "application/json")
-                            .addHeader("cookie", session)
-                            .url("http://1.15.31.156:8081/login2")
-                            .post(requestBody)
-                            .build();
-                    okHttpClient.newCall(request).enqueue(new Callback() {
-                        @Override
-                        public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                            Log.i("LoginInfo", e.getMessage());
-                            System.out.println(e.getMessage());
-//                            Toast.makeText(LoginActivity.this, "Connection failed!", Toast.LENGTH_SHORT).show();
-                        }
-
-                        @Override
-                        public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                            String responseBodyStr = response.body().string();
-                            Log.i("LoginInfo", responseBodyStr);
-                            Headers headers = response.headers();
-                            session = response.headers().get("Set-Cookie");
-                            Log.i("LoginInfoAfter", session);
-
-                            if (responseBodyStr.contains("登录成功")) {
-                                startActivity(new Intent(getActivity(), MainActivity.class));
-                            } else {
-                                //showAlertDialog("用户不存在或者密码错误");
-                                System.out.println("验证码错误");
-                            }
-                        }
-                    });
-
+                public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                    Log.i("LoginInfo", e.getMessage());
+                    Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
 
-            }).start();
+                @Override
+                public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                    String responseBodyStr = response.body().string();
+                    Log.i("CodeLoginInfo", responseBodyStr);
+
+                    if (responseBodyStr.contains("登陆成功") || responseBodyStr.contains("登录成功") || responseBodyStr.contains("token")) {
+                        JSONObject messjsonObject = JSONObject.parseObject(responseBodyStr);
+                        String token = messjsonObject.getJSONObject("data").getString("token");
+                        //设置全局token
+                        GlobalConfig.setUserToken(token);
+                        getUserInfo();
+                    } else {
+                        AlertDialogUtil.showConfirmClickAlertDialog("验证码错误", getActivity());
+                    }
+                }
+            });
+
         } else {
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
-                    .setMessage("请输入正确的手机号")
-                    .setPositiveButton("确定", null);
-            builder.show();
+            AlertDialogUtil.showConfirmClickAlertDialog("请输入正确的手机号", getActivity());
+        }
+    }
+
+    //QQ第三方登陆
+    private void qqThirdLogin() {
+        mIUiListener = new BaseUiListener();
+        //all表示获取所有权限
+        //new Thread(() -> mTencent.login(getActivity(), "all", mIUiListener)).start();
+        mTencent.login(getActivity(), "all", mIUiListener);
+    }
+
+
+    /**
+     * 由上层Activity调用，获取第三方QQ登录的内容 由于Fragement无法读取
+     *
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
+    public void onTencentCallBack(int requestCode, int resultCode, Intent data) {
+        Tencent.onActivityResultData(requestCode, resultCode, data, mIUiListener);
+    }
+
+
+    /**
+     * 自定义监听器实现IUiListener接口后，需要实现的3个方法
+     * onComplete完成 onError错误 onCancel取消
+     */
+    private class BaseUiListener implements IUiListener {
+
+        @Override
+        public void onComplete(Object response) {
+            Toast.makeText(getActivity(), "授权成功", Toast.LENGTH_SHORT).show();
+            Log.e(TAG, "response:" + response);
+            org.json.JSONObject obj = (org.json.JSONObject) response;
+            try {
+                String openID = obj.getString("openid");
+                String accessToken = obj.getString("access_token");
+                String expires = obj.getString("expires_in");
+                mTencent.setOpenId(openID);
+                mTencent.setAccessToken(accessToken, expires);
+                QQToken qqToken = mTencent.getQQToken();
+                mUserInfo = new UserInfo(getContext(), qqToken);
+                mUserInfo.getUserInfo(new IUiListener() {
+                    @Override
+                    public void onComplete(Object response) {
+                        Log.e(TAG, "登录成功" + response.toString());
+                    }
+
+                    @Override
+                    public void onError(UiError uiError) {
+                        Log.e(TAG, "登录失败" + uiError.toString());
+                    }
+
+                    @Override
+                    public void onCancel() {
+                        Log.e(TAG, "登录取消");
+                    }
+
+                    @Override
+                    public void onWarning(int i) {
+
+                    }
+                });
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
 
-//        String studentString ="{\"message\": \"Ok\",\"code\":200,\"data\":{\"captcha\":\"328551\"}}";
-//
-//        //JSON字符串转换成JSON对象
-//        JSONObject messjsonObject = JSONObject.parseObject(studentString);
-//
-//        System.out.println(messjsonObject.get("data"));
-//
-//        System.out.println( messjsonObject.getJSONObject("data").getString("captcha"));
+        @Override
+        public void onError(UiError uiError) {
+            Toast.makeText(getActivity(), "授权失败", Toast.LENGTH_SHORT).show();
+        }
 
-        //System.out.println("Login ");
-        //startActivity(new Intent(getActivity(), QRCodeTestActivity.class));
-        //startActivity(new Intent(getActivity(), MainActivity.class));
+        @Override
+        public void onCancel() {
+            Toast.makeText(getActivity(), "授权取消", Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onWarning(int i) {
+        }
+    }
+
+    //获取用户信息
+    private void getUserInfo() {
+        //获取用户信息
+        OkHttpUtil.getInstance().GetWithToken(UrlConfig.getUrl(UrlConfig.UrlType.USER_INFO), new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                System.out.println("FUCK GETUSERINFO Error" + e.getMessage());
+                AlertDialogUtil.showToastText(e.getMessage(), getActivity());
+            }
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) {
+                try {
+                    String responseBodyStr = response.body().string();
+                    //JSON字符串转换成JSON对象
+                    JSONObject messjsonObject = JSONObject.parseObject(responseBodyStr);
+                    GlobalConfig.setUserID(messjsonObject.get("id").toString());
+                    GlobalConfig.setUserPhone(messjsonObject.get("phone").toString());
+                    GlobalConfig.setNickName(messjsonObject.get("nickName").toString());
+                    GlobalConfig.setUserName(messjsonObject.get("userName").toString());
+                    GlobalConfig.setSEX(messjsonObject.get("sex").toString());
+                    startActivity(new Intent(getActivity(), MainActivity.class));
+                } catch (Exception e) {
+                    //获取不到用户信息则取消登陆 需要重新登陆
+                    AlertDialogUtil.showToastText(e.getMessage(), getActivity());
+                    AlertDialogUtil.showConfirmClickAlertDialog("网络超时请重新登陆", getActivity());
+                }
+            }
+        });
     }
 }
