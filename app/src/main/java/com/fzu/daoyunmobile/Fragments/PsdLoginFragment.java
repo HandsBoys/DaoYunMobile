@@ -49,7 +49,6 @@ import static android.content.Context.MODE_PRIVATE;
  */
 public class PsdLoginFragment extends Fragment {
 
-
     //注册按钮
     private Button registerBtn;
     //登录按钮
@@ -68,7 +67,6 @@ public class PsdLoginFragment extends Fragment {
     protected TextView forgetPasswordTV;
 
     public PsdLoginFragment() {
-        // Required empty public constructor
     }
 
     @Override

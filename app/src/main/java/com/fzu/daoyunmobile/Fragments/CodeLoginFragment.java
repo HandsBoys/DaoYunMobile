@@ -54,8 +54,6 @@ public class CodeLoginFragment extends Fragment {
     private InputVCodeFrameItem input_vericode;
     //登录按钮
     private Button loginBtn;
-    //生成的验证码
-    private int verificationCode;
 
     private TextView qqLogin;
 
@@ -81,14 +79,13 @@ public class CodeLoginFragment extends Fragment {
         loginBtn = getActivity().findViewById(R.id.bt_login_submit);
         loginBtn.setOnClickListener(v -> login());
 
-        //获取腾讯第三方登录
-        //mTencent = Tencent.createInstance(APP_ID, getActivity().getApplicationContext());
 
         //绑定手机号框
         input_mobilenum = new InputFrameItem(getActivity().getWindow().getDecorView(), R.id.input_mobilenum, R.id.input_frameitem_editText, R.id.input_frameitem_img, R.drawable.ic_login_username, "手机号");
         //输入框
         input_vericode = new InputVCodeFrameItem(getActivity().getWindow().getDecorView(), R.id.input_vericode, R.drawable.ic_login_password);
-
+        //获取腾讯第三方登录
+        //mTencent = Tencent.createInstance(APP_ID, getActivity().getApplicationContext());
 //        qqLogin = getActivity().findViewById(R.id.qq_login_btn);
 //        qqLogin.setOnClickListener(v -> {
 //            //startActivity(new Intent(getActivity(), ThirdLoginActivity.class));
@@ -96,7 +93,6 @@ public class CodeLoginFragment extends Fragment {
 //        });
 
         input_vericode.getSubBtn().setOnClickListener(v -> {
-            //startActivity(new Intent(getActivity(), ThirdLoginActivity.class));
             sendMessage();
         });
     }
@@ -112,11 +108,9 @@ public class CodeLoginFragment extends Fragment {
     //发送短信消息
     private void sendMessage() {
         String phone = input_mobilenum.getEditTextStr();
-        Log.i("phoneInfo", input_mobilenum.getEditTextStr());
         if (VerifyUtil.isChinaPhoneLegal(phone)) {
             //倒计时开启
             input_vericode.startBtnDownTime(60);
-
             HttpUtil.sendMessage(phone, new Callback() {
                 @Override
                 public void onFailure(@NotNull Call call, @NotNull IOException e) {
@@ -126,11 +120,6 @@ public class CodeLoginFragment extends Fragment {
                 @Override
                 public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                     String responseBodyStr = response.body().string();
-//                    Headers headers = response.headers();
-//                    session = response.headers().get("Set-Cookie");
-//                    Log.i("LoginInfoPre", session);
-//                    session = session.substring(0, session.indexOf(";")).substring(11);
-//                    Log.i("LoginInfoLast", session);
                     Log.i("LoginInfo", responseBodyStr);
                 }
             });
@@ -168,17 +157,12 @@ public class CodeLoginFragment extends Fragment {
 
                     if (responseBodyStr.contains("登陆成功") || responseBodyStr.contains("登录成功") || responseBodyStr.contains("token")) {
                         JSONObject messjsonObject = JSONObject.parseObject(responseBodyStr);
-//
-//        System.out.println(messjsonObject.get("data"));
-//
                         String token = messjsonObject.getJSONObject("data").getString("token");
                         //设置全局token
                         GlobalConfig.setUserToken(token);
                         getUserInfo();
                     } else {
                         AlertDialogUtil.showConfirmClickAlertDialog("验证码错误", getActivity());
-                        //showAlertDialog("用户不存在或者密码错误");
-                        //System.out.println("验证码错误");
                     }
                 }
             });
@@ -186,18 +170,6 @@ public class CodeLoginFragment extends Fragment {
         } else {
             AlertDialogUtil.showConfirmClickAlertDialog("请输入正确的手机号", getActivity());
         }
-
-//        String studentString ="{\"message\": \"Ok\",\"code\":200,\"data\":{\"captcha\":\"328551\"}}";
-//
-//        //JSON字符串转换成JSON对象
-//        JSONObject messjsonObject = JSONObject.parseObject(studentString);
-//
-//        System.out.println(messjsonObject.get("data"));
-//
-//        System.out.println( messjsonObject.getJSONObject("data").getString("captcha"));
-
-        //startActivity(new Intent(getActivity(), QRCodeTestActivity.class));
-
     }
 
     //QQ第三方登陆
@@ -292,8 +264,7 @@ public class CodeLoginFragment extends Fragment {
             }
 
             @Override
-            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-
+            public void onResponse(@NotNull Call call, @NotNull Response response) {
                 try {
                     String responseBodyStr = response.body().string();
                     //JSON字符串转换成JSON对象
@@ -303,8 +274,6 @@ public class CodeLoginFragment extends Fragment {
                     GlobalConfig.setNickName(messjsonObject.get("nickName").toString());
                     GlobalConfig.setUserName(messjsonObject.get("userName").toString());
                     GlobalConfig.setSEX(messjsonObject.get("sex").toString());
-
-                    AlertDialogUtil.showToastText(responseBodyStr, getActivity());
                     startActivity(new Intent(getActivity(), MainActivity.class));
                 } catch (Exception e) {
                     //获取不到用户信息则取消登陆 需要重新登陆
@@ -314,5 +283,4 @@ public class CodeLoginFragment extends Fragment {
             }
         });
     }
-
 }

@@ -29,14 +29,8 @@ import java.io.File;
  */
 public class MyInfoFragment extends Fragment {
 
-    protected Button mBtnLogin;
     protected LinearLayout userInfoLayout;
-    protected LinearLayout privacyLayout;
     protected Button logoutBtn;
-    protected Button userSetBtn;
-    public static File iconFile = null;
-    private String path;
-
     public TextView userNameTV;
     public TextView userTelTV;
     public TextView userRoleTV;
@@ -90,8 +84,7 @@ public class MyInfoFragment extends Fragment {
                 AlertDialogUtil.showToastText("密码修改成功!", getActivity());
             });
             builder.setNegativeButton("取消", null);
-            builder.show();//                Intent intent = new Intent(getContext(), UserProtocolActivity.class);
-//                startActivity(intent);
+            builder.show();
         });
 
 

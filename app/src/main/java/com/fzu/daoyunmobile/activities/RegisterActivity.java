@@ -37,7 +37,6 @@ public class RegisterActivity extends AppCompatActivity {
     private Button backBtn;
     //生成的验证码
     private int verificationCode;
-
     private InputFrameItem input_mobilenum;
     private InputFrameItem intput_psd;
     private InputFrameItem intput_confpsd;
