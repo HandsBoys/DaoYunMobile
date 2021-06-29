@@ -33,7 +33,7 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
-public class StartSignInActivity extends AppCompatActivity {
+public class SignInResultActivity extends AppCompatActivity {
 
 
     public List<SignInHistory> hisList = new ArrayList<>();
@@ -51,7 +51,7 @@ public class StartSignInActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_start_sign_in);
+        setContentView(R.layout.activity_sign_in_result);
 
         backBtn = findViewById(R.id.toolbar_left_btn);
         backBtn.setOnClickListener(v -> finish());
@@ -70,17 +70,17 @@ public class StartSignInActivity extends AppCompatActivity {
         }
         linearLayout = findViewById(R.id.signin_layout);
         linearLayout.setOnClickListener(v -> {
-            if (GPSUtil.checkGPSIsOpen(StartSignInActivity.this)) {
+            if (GPSUtil.checkGPSIsOpen(SignInResultActivity.this)) {
                 //获取经纬度
-                GPSUtil.getTitude(StartSignInActivity.this);
+                GPSUtil.getTitude(SignInResultActivity.this);
                 if (isCreate)
-                    SignInUtil.checkTeaSignIn(StartSignInActivity.this, ClassTabActivity.classId);
+                    SignInUtil.checkTeaSignIn(SignInResultActivity.this, ClassTabActivity.classId);
                 else {
-                    SignInUtil.checkStuSignIn(StartSignInActivity.this, ClassTabActivity.classId);
+                    SignInUtil.checkStuSignIn(SignInResultActivity.this, ClassTabActivity.classId);
                     iniHis();
                 }
             } else {
-                GPSUtil.openGPSSettings(StartSignInActivity.this);
+                GPSUtil.openGPSSettings(SignInResultActivity.this);
             }
         });
         iniHis();
@@ -97,7 +97,7 @@ public class StartSignInActivity extends AppCompatActivity {
         OkHttpUtil.getInstance().GetWithToken(UrlConfig.getUrl(UrlConfig.UrlType.GET_STUDENT_ALL_SIGN) + ClassTabActivity.classId, new Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                AlertDialogUtil.showToastText(e.getMessage(), StartSignInActivity.this);
+                AlertDialogUtil.showToastText(e.getMessage(), SignInResultActivity.this);
             }
 
             @Override
@@ -110,7 +110,7 @@ public class StartSignInActivity extends AppCompatActivity {
 
                 } catch (Exception e) {
                     //获取不到用户信息则取消登陆 需要重新登陆
-                    AlertDialogUtil.showToastText(e.getMessage(), StartSignInActivity.this);
+                    AlertDialogUtil.showToastText(e.getMessage(), SignInResultActivity.this);
                 }
             }
         });
@@ -143,14 +143,14 @@ public class StartSignInActivity extends AppCompatActivity {
                 hisList.add(signInHistory);
             }
         } catch (Exception e) {
-            AlertDialogUtil.showToastText(e.getMessage(), StartSignInActivity.this);
+            AlertDialogUtil.showToastText(e.getMessage(), SignInResultActivity.this);
         }
         Collections.reverse(hisList);
     }
 
     public void afterStuAction() {
         runOnUiThread(() -> {
-            signAdapter = new SignInHistoryAdapter(StartSignInActivity.this, R.layout.item_signinhistory, hisList);
+            signAdapter = new SignInHistoryAdapter(SignInResultActivity.this, R.layout.item_signinhistory, hisList);
             ListView listView = findViewById(R.id.his_list_view);
             listView.setAdapter(signAdapter);
 
@@ -159,7 +159,6 @@ public class StartSignInActivity extends AppCompatActivity {
             listView.setOnItemClickListener((parent, view, position, id) -> {
                 //TODO 设置
                 SignInHistory s = hisList.get(position);
-                AlertDialogUtil.showToastText(s.getSignID(), StartSignInActivity.this);
 
             });
 
@@ -172,7 +171,7 @@ public class StartSignInActivity extends AppCompatActivity {
         OkHttpUtil.getInstance().GetWithToken(UrlConfig.getUrl(UrlConfig.UrlType.GET_ALL_SIGN_IN) + ClassTabActivity.classId, new Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                AlertDialogUtil.showToastText(e.getMessage(), StartSignInActivity.this);
+                AlertDialogUtil.showToastText(e.getMessage(), SignInResultActivity.this);
             }
 
             @Override
@@ -185,7 +184,7 @@ public class StartSignInActivity extends AppCompatActivity {
 
                 } catch (Exception e) {
                     //获取不到用户信息则取消登陆 需要重新登陆
-                    AlertDialogUtil.showToastText(e.getMessage(), StartSignInActivity.this);
+                    AlertDialogUtil.showToastText(e.getMessage(), SignInResultActivity.this);
                 }
             }
         });
@@ -220,7 +219,7 @@ public class StartSignInActivity extends AppCompatActivity {
                 hisList.add(signInHistory);
             }
         } catch (Exception e) {
-            AlertDialogUtil.showToastText(e.getMessage(), StartSignInActivity.this);
+            AlertDialogUtil.showToastText(e.getMessage(), SignInResultActivity.this);
         }
 
         Collections.reverse(hisList);
@@ -228,15 +227,13 @@ public class StartSignInActivity extends AppCompatActivity {
 
     public void afterTeaAction() {
         runOnUiThread(() -> {
-            signAdapter = new SignInHistoryAdapter(StartSignInActivity.this, R.layout.item_signinhistory, hisList);
+            signAdapter = new SignInHistoryAdapter(SignInResultActivity.this, R.layout.item_signinhistory, hisList);
             ListView listView = findViewById(R.id.his_list_view);
             listView.setAdapter(signAdapter);
             listView.setOnItemClickListener((parent, view, position, id) -> {
                 //TODO 设置
                 SignInHistory s = hisList.get(position);
-                AlertDialogUtil.showToastText(s.getSignID(), StartSignInActivity.this);
-
-                Intent intent = new Intent(StartSignInActivity.this, SignMemberSetActivity.class).
+                Intent intent = new Intent(SignInResultActivity.this, SignInMemberResultActivity.class).
                         putExtra("signID"
                                 , s.getSignID());
                 startActivity(intent);

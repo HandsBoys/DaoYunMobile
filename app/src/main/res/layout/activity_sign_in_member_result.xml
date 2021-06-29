@@ -8,10 +8,10 @@
     app:left_btn_src="@mipmap/icon_back"
     app:left_btn_visible="true"
     app:right_tv_text="刷新"
-    app:right_tv_visible="true"
-    app:title_text="一键签到"
+    app:right_tv_visible="false"
+    app:title_text="签到结果"
     app:title_visible="true"
-    tools:context=".Activities.FinishOneBtnSignInActivity">
+    tools:context=".Activities.SignInMemberResultActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -22,24 +22,48 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="15dp"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="10dp"
             android:layout_marginRight="15dp"
-            android:layout_marginBottom="20dp"
+            android:layout_marginBottom="10dp"
             android:orientation="horizontal">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1.0"
-                android:text="签到人数" />
+                android:text="未签到" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#D8DDE1" />
+
+        <ListView
+            android:id="@+id/unsignedIn_listview"
+            android:layout_width="match_parent"
+            android:layout_height="250dp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#D8DDE1" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginBottom="10dp"
+            android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/signIn_num_Tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1.0"
-                android:gravity="right"
-                android:text="0人" />
+                android:text="已签到" />
 
         </LinearLayout>
 
@@ -51,43 +75,8 @@
         <ListView
             android:id="@+id/signedIn_listview"
             android:layout_width="match_parent"
-            android:layout_height="500dp" />
+            android:layout_height="250dp" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#D8DDE1" />
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/finish_give_up_btn"
-                android:layout_width="150dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginRight="20dp"
-                android:background="@color/colorPrimary2"
-                android:text="放弃签到"
-                android:textColor="@android:color/white"
-                android:textSize="16dp" />
-
-            <Button
-                android:id="@+id/finish_sign_in_btn"
-                android:layout_width="149dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginRight="20dp"
-                android:background="@color/colorPrimary2"
-                android:text="结束签到"
-                android:textColor="@android:color/white"
-                android:textSize="16dp" />
-        </LinearLayout>
 
     </LinearLayout>
 

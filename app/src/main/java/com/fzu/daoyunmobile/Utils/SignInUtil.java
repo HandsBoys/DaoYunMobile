@@ -1,20 +1,15 @@
 package com.fzu.daoyunmobile.Utils;
 
 import android.app.Activity;
-import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.view.Gravity;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.fzu.daoyunmobile.Activities.FinishLimitSignInActivity;
-import com.fzu.daoyunmobile.Activities.FinishOneBtnSignInActivity;
-import com.fzu.daoyunmobile.Activities.SelectFacultyActivity;
-import com.fzu.daoyunmobile.Adapter.TreeAdapter;
-import com.fzu.daoyunmobile.Bean.TreeBean;
+import com.fzu.daoyunmobile.Activities.SignInFinishLimitActivity;
+import com.fzu.daoyunmobile.Activities.SignInFinishOneBtnActivity;
 import com.fzu.daoyunmobile.Configs.GlobalConfig;
 import com.fzu.daoyunmobile.Configs.UrlConfig;
-import com.fzu.daoyunmobile.Entity.Course;
 import com.fzu.daoyunmobile.Utils.HttpUtils.OkHttpUtil;
 import com.lxj.xpopup.XPopup;
 
@@ -69,12 +64,12 @@ public class SignInUtil {
                         //signinId
                         Intent intent = null;
                         if (type.equals("1")) {
-                            intent = new Intent(act, FinishOneBtnSignInActivity.class);
+                            intent = new Intent(act, SignInFinishOneBtnActivity.class);
                             intent.putExtra("signId", signId);
                         }
                         //限时签到
                         else {
-                            intent = new Intent(act, FinishLimitSignInActivity.class);
+                            intent = new Intent(act, SignInFinishLimitActivity.class);
 
                             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
                             Date d = new Date();
@@ -165,7 +160,7 @@ public class SignInUtil {
                             Date e = df.parse(endTime);
                             if (e.getTime() > d.getTime()) {
                                 AlertDialogUtil.showToastText("签到未结束", act);
-                                Intent intent = new Intent(act, FinishLimitSignInActivity.class);
+                                Intent intent = new Intent(act, SignInFinishLimitActivity.class);
                                 intent.putExtra("startTime", startTime);
                                 intent.putExtra("endTime", endTime);
                                 intent.putExtra("startMode", "createSign");

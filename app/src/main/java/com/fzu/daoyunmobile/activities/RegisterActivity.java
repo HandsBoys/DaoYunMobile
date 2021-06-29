@@ -7,7 +7,6 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.widget.Button;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.alibaba.fastjson.JSONObject;
@@ -22,17 +21,11 @@ import com.fzu.daoyunmobile.Utils.StatusBarUtil;
 import com.fzu.daoyunmobile.Utils.VerifyUtil;
 
 import org.jetbrains.annotations.NotNull;
-import org.json.JSONException;
 
 import java.io.IOException;
-import java.util.regex.Pattern;
 
 import okhttp3.Call;
 import okhttp3.Callback;
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class RegisterActivity extends AppCompatActivity {
@@ -59,7 +52,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         registerBtn = findViewById(R.id.bt_register_submit);
         registerBtn.setOnClickListener(v -> {
-            regiseter();
+            register();
         });
 
 
@@ -118,7 +111,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     //注册
-    private void regiseter() {
+    private void register() {
         //判断密码是否一致
         if (!intput_psd.getEditTextStr().equals(intput_confpsd.getEditTextStr())) {
             AlertDialogUtil.showConfirmClickAlertDialog("俩次密码不一致", this);

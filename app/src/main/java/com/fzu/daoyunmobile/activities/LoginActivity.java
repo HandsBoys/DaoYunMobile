@@ -51,9 +51,6 @@ public class LoginActivity extends AppCompatActivity {
         ActivityUtil.finishAll();
         ActivityUtil.addActivity(this);
 
-        //onTimePicker(getWindow().getDecorView());
-        // startActivity(new Intent(this, OneClickSignInSettingActivity.class));
-
         // 设置权限
         int checkStorePermission = ContextCompat.checkSelfPermission(this,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE);
@@ -90,72 +87,6 @@ public class LoginActivity extends AppCompatActivity {
 //        getWindow().setStatusBarColor(Color.TRANSPARENT);
 //        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
     }
-
-    public void onTimePicker(View view) {
-        LinkagePicker.DataProvider provider = new LinkagePicker.DataProvider() {
-
-            @Override
-            public boolean isOnlyTwo() {
-                return true;
-            }
-
-            @Override
-            public List<String> provideFirstData() {
-                ArrayList<String> firstList = new ArrayList<>();
-                for (int i = 0; i <= 23; i++) {
-                    String str = DateUtils.fillZero(i);
-//                    if (firstIndex == 0) {
-//                        str += "￥";
-//                    } else {
-//                        str += "$";
-//                    }
-                    firstList.add(str);
-                }
-                return firstList;
-            }
-
-            @Override
-            public List<String> provideSecondData(int firstIndex) {
-                ArrayList<String> secondList = new ArrayList<>();
-                for (int i = 0; i <= 59; i++) {
-                    String str = DateUtils.fillZero(i);
-//                    if (firstIndex == 0) {
-//                        str += "￥";
-//                    } else {
-//                        str += "$";
-//                    }
-
-                    secondList.add(str);
-                }
-                return secondList;
-            }
-
-            @Override
-            public List<String> provideThirdData(int firstIndex, int secondIndex) {
-                return null;
-            }
-
-        };
-        LinkagePicker picker = new LinkagePicker(LoginActivity.this, provider);
-        picker.setTitleText("签到时长设置");
-        picker.setCanLoop(false);
-        picker.setGravity(Gravity.BOTTOM);
-        picker.setLabel("<-时 分->", "");
-        picker.setLineVisible(true);
-        picker.setHeight(700);
-        picker.setSelectedIndex(0, 8);
-        // picker.setAnimationStyle(R.style.Animation_CustomPopup);
-        //picker.setSelectedItem("12", "9");
-        picker.setOnMoreItemPickListener(new OnMoreItemPickListener<String>() {
-
-            @Override
-            public void onItemPicked(String first, String second, String third) {
-                AlertDialogUtil.showConfirmClickAlertDialog(first + "-" + second + "-" + third, LoginActivity.this);
-            }
-        });
-        picker.show();
-    }
-
 
     private void initView() {
         vp = findViewById(R.id.vp_login);

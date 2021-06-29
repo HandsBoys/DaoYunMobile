@@ -147,10 +147,10 @@ public class HpMainFragment extends Fragment {
                     .hide(myJoinFragment)
                     .commit();
             if (classIcon.equals("")) {
-                myCreateFragment.courseList.add(new Course(R.drawable.course_img_1, className, MainActivity.name, gradeClass, classId));
+                myCreateFragment.courseList.add(new Course(R.drawable.course_img_1, className, GlobalConfig.getNickName(), gradeClass, classId));
 //                myCreateFragment.adapter.notifyDataSetChanged();
             } else {
-                myCreateFragment.courseList.add(new Course(classIcon, className, MainActivity.name, gradeClass, classId));
+                myCreateFragment.courseList.add(new Course(classIcon, className,GlobalConfig.getNickName(), gradeClass, classId));
 //                myCreateFragment.adapter.notifyDataSetChanged();
             }
             myCreateFragment.adapter.notifyDataSetChanged();

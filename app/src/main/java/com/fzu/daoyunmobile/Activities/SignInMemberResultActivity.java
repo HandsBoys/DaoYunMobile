@@ -2,7 +2,6 @@ package com.fzu.daoyunmobile.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.ListView;
@@ -12,7 +11,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.fzu.daoyunmobile.Adapter.SignIngMemberAdapter;
 import com.fzu.daoyunmobile.Configs.UrlConfig;
 import com.fzu.daoyunmobile.Entity.Member;
-import com.fzu.daoyunmobile.Entity.SignInHistory;
 import com.fzu.daoyunmobile.R;
 import com.fzu.daoyunmobile.Utils.AlertDialogUtil;
 import com.fzu.daoyunmobile.Utils.HttpUtils.OkHttpUtil;
@@ -28,7 +26,7 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
-public class SignMemberSetActivity extends AppCompatActivity {
+public class SignInMemberResultActivity extends AppCompatActivity {
     private Button backBtn;
     //未签到列表
     private ListView usListView;
@@ -44,7 +42,7 @@ public class SignMemberSetActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sign_member_set);
+        setContentView(R.layout.activity_sign_in_member_result);
         backBtn = findViewById(R.id.toolbar_left_btn);
         //返回
         backBtn.setOnClickListener(v -> {
@@ -61,7 +59,7 @@ public class SignMemberSetActivity extends AppCompatActivity {
         OkHttpUtil.getInstance().GetWithToken(UrlConfig.getUrl(UrlConfig.UrlType.GET_SIGNIN_ALL_STUDENT_INFO) + signID, new Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                AlertDialogUtil.showToastText(e.getMessage(), SignMemberSetActivity.this);
+                AlertDialogUtil.showToastText(e.getMessage(), SignInMemberResultActivity.this);
             }
 
 
@@ -75,7 +73,7 @@ public class SignMemberSetActivity extends AppCompatActivity {
 
 
                 } catch (Exception e) {
-                    AlertDialogUtil.showToastText(e.getMessage(), SignMemberSetActivity.this);
+                    AlertDialogUtil.showToastText(e.getMessage(), SignInMemberResultActivity.this);
                 }
             }
         });
@@ -115,22 +113,22 @@ public class SignMemberSetActivity extends AppCompatActivity {
     private void afterAction() {
         runOnUiThread(
                 () -> {
-                    signIngMemberAdapter = new SignIngMemberAdapter(SignMemberSetActivity.this, R.layout.item_member, sMemberList);
+                    signIngMemberAdapter = new SignIngMemberAdapter(SignInMemberResultActivity.this, R.layout.item_member, sMemberList);
                     sListView.setAdapter(signIngMemberAdapter);
                     signIngMemberAdapter.notifyDataSetChanged();
                     sListView.setOnItemClickListener((parent, view, position, id) -> {
                         //TODO 设置
                         Member m = sMemberList.get(position);
-                        AlertDialogUtil.showToastText(m.getMemberName(), SignMemberSetActivity.this);
+                        AlertDialogUtil.showToastText(m.getMemberName(), SignInMemberResultActivity.this);
                     });
 
-                    usSignIngMemberAdapter = new SignIngMemberAdapter(SignMemberSetActivity.this, R.layout.item_member, usMemberList);
+                    usSignIngMemberAdapter = new SignIngMemberAdapter(SignInMemberResultActivity.this, R.layout.item_member, usMemberList);
                     usListView.setAdapter(usSignIngMemberAdapter);
                     usSignIngMemberAdapter.notifyDataSetChanged();
                     usListView.setOnItemClickListener((parent, view, position, id) -> {
                         //TODO 设置
                         Member m = usMemberList.get(position);
-                        AlertDialogUtil.showToastText(m.getMemberName(), SignMemberSetActivity.this);
+                        AlertDialogUtil.showToastText(m.getMemberName(), SignInMemberResultActivity.this);
 
                     });
                 }

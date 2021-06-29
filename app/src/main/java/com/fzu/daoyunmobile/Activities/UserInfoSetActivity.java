@@ -21,7 +21,6 @@ public class UserInfoSetActivity extends AppCompatActivity {
     protected Button backButton;
     protected Button saveBtn;
     protected EditText nameET;
-    protected EditText idET;
     protected EditText userNameET;
     protected EditText emailET;
     protected EditText telET;

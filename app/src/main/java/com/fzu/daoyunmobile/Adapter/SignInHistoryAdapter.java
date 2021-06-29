@@ -18,8 +18,10 @@ import com.fzu.daoyunmobile.R;
 
 import java.util.List;
 
+/**
+ * 签到历史记录页面
+ */
 public class SignInHistoryAdapter extends ArrayAdapter<SignInHistory> {
-    //课程ID
     private int resourceId;
 
     public SignInHistoryAdapter(@NonNull Context context, int textViewResourceId, @NonNull List<SignInHistory> objects) {

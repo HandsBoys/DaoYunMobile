@@ -48,11 +48,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".Activities.UserInfoSetActivity"></activity>
-        <activity android:name=".Activities.SignMemberSetActivity" />
-        <activity android:name=".Activities.StartSignInActivity" />
-        <activity android:name=".Activities.FinishLimitSignInActivity" />
+        <activity android:name=".Activities.SignInMemberResultActivity" />
+        <activity android:name=".Activities.SignInResultActivity" />
+        <activity android:name=".Activities.SignInFinishLimitActivity" />
         <activity android:name=".Activities.SelectFacultyActivity" />
-        <activity android:name=".Activities.FinishOneBtnSignInActivity" />
+        <activity android:name=".Activities.SignInFinishOneBtnActivity" />
 
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"

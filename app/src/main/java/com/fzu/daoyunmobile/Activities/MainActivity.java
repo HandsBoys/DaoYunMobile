@@ -38,18 +38,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected TextView myInfoTV;
     protected HpMainFragment mMainFragment = new HpMainFragment();//首页
     protected MyInfoFragment mInfoFragment = new MyInfoFragment();//我的
-    public static String userName;
-    public static String icon = "";
-
-    public static String loginType;
-    public static String name = null;
-    public static String phoneNumber = "106666655";
-    public int BUFFER_SIZE = 8192;
 
     //添加权限
     String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.READ_EXTERNAL_STORAGE};
     List<String> permissionsList = new ArrayList<>();
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +49,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         ActivityUtil.finishAll();
         ActivityUtil.addActivity(this);
-
         initView();
         //将状态栏设置透明
         StatusBarUtil.transparencyBar(MainActivity.this);
@@ -104,7 +95,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
         switch (requestCode) {
             case 10004:
                 break;

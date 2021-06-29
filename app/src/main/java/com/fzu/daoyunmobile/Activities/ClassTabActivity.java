@@ -6,7 +6,6 @@ import androidx.core.content.ContextCompat;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -18,12 +17,11 @@ import com.fzu.daoyunmobile.R;
 public class ClassTabActivity extends AppCompatActivity implements View.OnClickListener {
 
     protected LinearLayout mMenuMember;
-    protected LinearLayout mMenuMore;
+    protected LinearLayout mMenuDetail;
     protected ImageView memberImageView;
-    protected ImageView activityImageView;
-    protected ImageView moreImageView;
+    protected ImageView mDetailImageView;
     protected MemberFragment mMemberFragment = new MemberFragment();
-    protected DetailFragment mMoreFragment = new DetailFragment();
+    protected DetailFragment mDetailFragment = new DetailFragment();
 
     public static String courseName = "";
     public static String classId = "";
@@ -50,9 +48,9 @@ public class ClassTabActivity extends AppCompatActivity implements View.OnClickL
         this.getSupportFragmentManager()
                 .beginTransaction()
                 .add(R.id.container_class_fragment, mMemberFragment)
-                .add(R.id.container_class_fragment, mMoreFragment)
+                .add(R.id.container_class_fragment, mDetailFragment)
                 //.hide(mMemberFragment)
-                .hide(mMoreFragment)
+                .hide(mDetailFragment)
                 //事物添加  默认：显示首页  其他页面：隐藏
                 //提交
                 .commit();
@@ -60,13 +58,13 @@ public class ClassTabActivity extends AppCompatActivity implements View.OnClickL
 
     public void initView() {
         mMenuMember = findViewById(R.id.menu_member);
-        mMenuMore = findViewById(R.id.menu_more);
+        mMenuDetail = findViewById(R.id.menu_more);
 
         memberImageView = findViewById(R.id.Iv_member);
-        moreImageView = findViewById(R.id.Iv_more);
+        mDetailImageView = findViewById(R.id.Iv_more);
 
         mMenuMember.setOnClickListener(this);
-        mMenuMore.setOnClickListener(this);
+        mMenuDetail.setOnClickListener(this);
         memberImageView.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.nav_member_pressed));
     }
 
@@ -77,20 +75,20 @@ public class ClassTabActivity extends AppCompatActivity implements View.OnClickL
                 this.getSupportFragmentManager()
                         .beginTransaction()
                         .show(mMemberFragment)
-                        .hide(mMoreFragment)
+                        .hide(mDetailFragment)
                         .commit();
                 memberImageView.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.nav_member_pressed));
-                moreImageView.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.nav_more_normal));
+                mDetailImageView.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.nav_more_normal));
                 break;
 
             case R.id.menu_more:
                 this.getSupportFragmentManager()
                         .beginTransaction()
-                        .show(mMoreFragment)
+                        .show(mDetailFragment)
                         .hide(mMemberFragment)
                         .commit();
                 memberImageView.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.nav_member_normal));
-                moreImageView.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.nav_more_pressed));
+                mDetailImageView.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.nav_more_pressed));
                 break;
         }
     }

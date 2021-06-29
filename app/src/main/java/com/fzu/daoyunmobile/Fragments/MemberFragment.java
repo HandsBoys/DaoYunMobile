@@ -1,6 +1,5 @@
 package com.fzu.daoyunmobile.Fragments;
 
-import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -20,7 +19,7 @@ import android.widget.Toast;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.fzu.daoyunmobile.Activities.ClassTabActivity;
-import com.fzu.daoyunmobile.Activities.StartSignInActivity;
+import com.fzu.daoyunmobile.Activities.SignInResultActivity;
 import com.fzu.daoyunmobile.Adapter.ClassMemberAdapter;
 import com.fzu.daoyunmobile.Configs.GlobalConfig;
 import com.fzu.daoyunmobile.Configs.UrlConfig;
@@ -29,10 +28,8 @@ import com.fzu.daoyunmobile.R;
 import com.fzu.daoyunmobile.Utils.AlertDialogUtil;
 import com.fzu.daoyunmobile.Utils.GPSUtil;
 import com.fzu.daoyunmobile.Utils.HttpUtils.OkHttpUtil;
-import com.fzu.daoyunmobile.Utils.SignInUtil;
 
 import org.jetbrains.annotations.NotNull;
-import org.json.JSONException;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -103,10 +100,10 @@ public class MemberFragment extends Fragment {
                 GPSUtil.getTitude(getActivity());
                 if (modeCheck()) {
                     //SignInUtil.checkTeaSignIn(getActivity(), ClassTabActivity.classId);
-                    getActivity().startActivity(new Intent(getActivity(), StartSignInActivity.class));
+                    getActivity().startActivity(new Intent(getActivity(), SignInResultActivity.class));
                 } else {
                     //SignInUtil.checkStuSignIn(getActivity(), ClassTabActivity.classId);
-                    getActivity().startActivity(new Intent(getActivity(), StartSignInActivity.class));
+                    getActivity().startActivity(new Intent(getActivity(), SignInResultActivity.class));
                 }
             } else {
                 GPSUtil.openGPSSettings(getActivity());

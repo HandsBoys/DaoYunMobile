@@ -8,7 +8,7 @@
     app:left_btn_visible="true"
     app:title_text="签到设置"
     app:title_visible="true"
-    tools:context=".Activities.StartSignInActivity">
+    tools:context=".Activities.SignInResultActivity">
 
     <LinearLayout
         android:id="@+id/swipe_refresh_layout"

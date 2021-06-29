@@ -131,7 +131,6 @@ public class CreateClassActivity extends AppCompatActivity {
                 OkHttpUtil.getInstance().PutWithJsonToken(UrlConfig.getUrl(UrlConfig.UrlType.CREATE_COURSE), json, new Callback() {
                     @Override
                     public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                        System.out.println("FUCK CreateCourse" + e.getMessage());
                         AlertDialogUtil.showToastText(e.getMessage(), CreateClassActivity.this);
                     }
 
@@ -222,7 +221,6 @@ public class CreateClassActivity extends AppCompatActivity {
                             (position, text) -> {
                                 termTV.setText(text);
                             }).show();
-
         });
     }
 
