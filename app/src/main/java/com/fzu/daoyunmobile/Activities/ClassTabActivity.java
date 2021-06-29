@@ -29,6 +29,7 @@ public class ClassTabActivity extends AppCompatActivity implements View.OnClickL
     public static String className = "";
     public static String term = "";
     public static String enterType = "Create";//Join
+    public static String enableJoin = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,32 +38,27 @@ public class ClassTabActivity extends AppCompatActivity implements View.OnClickL
         Intent intent = getIntent();
         courseName = intent.getStringExtra("courseName");
         classId = intent.getStringExtra("classId");
-        //输出班课ID
-        Log.i("classTabID", classId);
-        // enterType = intent.getStringExtra("enterType");
         teacherPhone = intent.getStringExtra("teacherPhone");
         className = intent.getStringExtra("className");
         term = intent.getStringExtra("term");
         enterType = intent.getStringExtra("enterType");
+        if (enterType.equals("Create")) {
+            enableJoin = intent.getStringExtra("enableJoin");
+        }
         initView();
         this.getSupportFragmentManager()
                 .beginTransaction()
                 .add(R.id.container_class_fragment, mMemberFragment)
                 .add(R.id.container_class_fragment, mDetailFragment)
-                //.hide(mMemberFragment)
                 .hide(mDetailFragment)
-                //事物添加  默认：显示首页  其他页面：隐藏
-                //提交
                 .commit();
     }
 
     public void initView() {
         mMenuMember = findViewById(R.id.menu_member);
         mMenuDetail = findViewById(R.id.menu_more);
-
         memberImageView = findViewById(R.id.Iv_member);
         mDetailImageView = findViewById(R.id.Iv_more);
-
         mMenuMember.setOnClickListener(this);
         mMenuDetail.setOnClickListener(this);
         memberImageView.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.nav_member_pressed));
@@ -80,7 +76,6 @@ public class ClassTabActivity extends AppCompatActivity implements View.OnClickL
                 memberImageView.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.nav_member_pressed));
                 mDetailImageView.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.nav_more_normal));
                 break;
-
             case R.id.menu_more:
                 this.getSupportFragmentManager()
                         .beginTransaction()

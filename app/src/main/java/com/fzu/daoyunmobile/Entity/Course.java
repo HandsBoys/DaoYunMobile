@@ -13,6 +13,7 @@ public class Course {
     private String courseDate = "";
     public String teacherPhone = "";
 
+    private String enableJoin="";
 
     public Course(String courseName, String teacherName, String className, String classId, String courseDate) {
         this.classId = classId;
@@ -51,5 +52,13 @@ public class Course {
 
     public String getClassName() {
         return className;
+    }
+
+    public String getEnableJoin() {
+        return enableJoin;
+    }
+
+    public void setEnableJoin(String enableJoin) {
+        this.enableJoin = enableJoin;
     }
 }

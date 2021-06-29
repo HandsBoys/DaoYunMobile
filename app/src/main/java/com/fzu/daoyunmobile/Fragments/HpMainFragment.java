@@ -52,8 +52,8 @@ public class HpMainFragment extends Fragment {
     protected TextView myJoinTV;
     protected View myCreateView;
     protected View myJoinView;
-    protected MyCreateCourseFragment myCreateFragment = new MyCreateCourseFragment();
-    protected MyJoinCourseFragment myJoinFragment = new MyJoinCourseFragment();
+    public MyCreateCourseFragment myCreateFragment = new MyCreateCourseFragment();
+    public MyJoinCourseFragment myJoinFragment = new MyJoinCourseFragment();
 
     public HpMainFragment() {        // Required empty public constructor
 
@@ -142,7 +142,7 @@ public class HpMainFragment extends Fragment {
                     .show(myCreateFragment)
                     .hide(myJoinFragment)
                     .commit();
-                myCreateFragment.courseList.add(new Course(className, GlobalConfig.getNickName(), gradeClass, classId));
+            myCreateFragment.courseList.add(new Course(className, GlobalConfig.getNickName(), gradeClass, classId));
 //                myCreateFrment.adapter.notifyDataSetChanged();
 
             myCreateFragment.adapter.notifyDataSetChanged();

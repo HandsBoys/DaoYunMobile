@@ -76,7 +76,6 @@ public class MyCreateCourseFragment extends Fragment {
 
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) {
-
                 try {
                     String responseBodyStr = response.body().string();
                     if (GlobalConfig.getIsTeacher()) {
@@ -87,7 +86,6 @@ public class MyCreateCourseFragment extends Fragment {
                     afterAction();
                 } catch (Exception e) {
                     //获取不到用户信息则取消登陆 需要重新登陆
-                    AlertDialogUtil.showToastText(e.getMessage(), getActivity());
                     AlertDialogUtil.showConfirmClickAlertDialog(e.getMessage(), getActivity());
                 }
             }
@@ -109,6 +107,7 @@ public class MyCreateCourseFragment extends Fragment {
                 intent.putExtra("teacherPhone", course.teacherPhone);
                 intent.putExtra("term", course.getCourseDate());
                 intent.putExtra("className", course.getClassName());
+                intent.putExtra("enableJoin", course.getEnableJoin());
                 startActivity(intent);
             });
             progressDialog.dismiss();
@@ -131,9 +130,11 @@ public class MyCreateCourseFragment extends Fragment {
             //TODO 也是需要的 班级信息
             final String className = jsonObject.getJSONObject("classDto").getString("className");
             final String term = jsonObject.getString("term");
+            final String enableJoin = jsonObject.getString("enableJoin");
             courseList.add(courseName);
             Course course = new Course(courseName, teacherName, className, classId, term);
             course.teacherPhone = "1066666655";
+            course.setEnableJoin(enableJoin);
             cList.add(course);
         }
         //List 去重

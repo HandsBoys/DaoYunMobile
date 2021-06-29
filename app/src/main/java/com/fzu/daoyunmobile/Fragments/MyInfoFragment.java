@@ -92,6 +92,7 @@ public class MyInfoFragment extends Fragment {
         logoutBtn.setOnClickListener(v -> {
             Intent intent = new Intent(getActivity(), LoginActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+            MainActivity.isFirst = true;
             startActivity(intent);
         });
 

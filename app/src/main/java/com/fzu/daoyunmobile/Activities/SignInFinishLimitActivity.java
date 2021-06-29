@@ -127,7 +127,7 @@ public class SignInFinishLimitActivity extends AppCompatActivity {
                 public void onResponse(@NotNull Call call, @NotNull Response response) {
                     try {
                         String responseBodyStr = response.body().string();
-                        AlertDialogUtil.showConfirmClickAlertDialogWithLister("一限时签到结束成功", SignInFinishLimitActivity.this, (dialog, i) -> {
+                        AlertDialogUtil.showConfirmClickAlertDialogWithLister("限时签到结束成功", SignInFinishLimitActivity.this, (dialog, i) -> {
                             finish();
                         });
                     } catch (Exception e) {

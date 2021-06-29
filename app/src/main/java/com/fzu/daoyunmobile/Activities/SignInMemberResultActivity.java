@@ -70,7 +70,7 @@ public class SignInMemberResultActivity extends AppCompatActivity {
                     praseJsonToList(responseBodyStr);
                     afterAction();
                 } catch (Exception e) {
-                    AlertDialogUtil.showToastText(e.getMessage(), SignInMemberResultActivity.this);
+                   // AlertDialogUtil.showToastText(e.getMessage(), SignInMemberResultActivity.this);
                 }
             }
         });
@@ -79,6 +79,8 @@ public class SignInMemberResultActivity extends AppCompatActivity {
 
     private void praseJsonToList(String jsonData) {
         JSONArray jsonArray = JSONObject.parseObject(jsonData).getJSONArray("data");
+        if(jsonArray==null)
+            return;
         int usNum = 1, sNum = 1;
         for (int i = 0; i < jsonArray.size(); i++) {
             //TODO 发起签到之前先检查下是否签到

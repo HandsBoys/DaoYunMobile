@@ -4,7 +4,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 public class MyJoinCourseViewHolder {
-    public ImageView courseImage;
     public TextView courseName;
     public TextView teacherName;
     public TextView className;

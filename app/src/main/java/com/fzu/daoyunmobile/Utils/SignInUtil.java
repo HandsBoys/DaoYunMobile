@@ -6,6 +6,7 @@ import android.view.Gravity;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.fzu.daoyunmobile.Activities.ClassTabActivity;
 import com.fzu.daoyunmobile.Activities.SignInFinishLimitActivity;
 import com.fzu.daoyunmobile.Activities.SignInFinishOneBtnActivity;
 import com.fzu.daoyunmobile.Configs.GlobalConfig;
@@ -29,6 +30,8 @@ import okhttp3.Callback;
 import okhttp3.Response;
 
 public class SignInUtil {
+
+    public static String courseId = "";
 
     /**
      * 发起签到
@@ -121,7 +124,7 @@ public class SignInUtil {
                         return;
                     }
                     JSONArray jsonArray = JSONObject.parseObject(responseBodyStr).getJSONArray("data");
-                    if (jsonArray.size() == 0) {
+                    if (jsonArray == null || jsonArray.size() == 0) {
                         showSignInPopupMenu(act, courseID);
                         return;
                     }
@@ -208,6 +211,8 @@ public class SignInUtil {
      * @param courseID
      */
     public static void checkStuSignIn(Activity act, String courseID) {
+
+        SignInUtil.courseId = courseID;
         //获取用户信息
         OkHttpUtil.getInstance().GetWithToken(UrlConfig.getUrl(UrlConfig.UrlType.GET_DO_SIGN_IN) + courseID, new Callback() {
             @Override
@@ -224,13 +229,11 @@ public class SignInUtil {
                         return;
                     }
                     JSONArray jsonArray = JSONObject.parseObject(responseBodyStr).getJSONArray("data");
-                    if (jsonArray.size() == 0) {
+                    if (jsonArray == null || jsonArray.size() == 0) {
                         AlertDialogUtil.showConfirmClickAlertDialog("暂时没有发起的签到", act);
                         return;
                     }
-                    //TODO 暂时认为只有限时签到会有未结束 一键签到会留着
                     for (int i = 0; i < jsonArray.size(); i++) {
-                        //TODO 发起签到之前先检查下是否签到
                         JSONObject jsonObject = jsonArray.getJSONObject(i);
                         final String signID = jsonObject.getString("id");
                         String type = jsonObject.getString("type");
@@ -240,7 +243,6 @@ public class SignInUtil {
                             public void onFailure(@NotNull Call call, @NotNull IOException e) {
                                 AlertDialogUtil.showToastText(e.getMessage(), act);
                             }
-
 
                             @Override
                             public void onResponse(@NotNull Call call, @NotNull Response response) {
@@ -298,7 +300,7 @@ public class SignInUtil {
                         });
                     }
                 } catch (Exception e) {
-                    AlertDialogUtil.showToastText(e.getMessage(), act);
+                    // AlertDialogUtil.showToastText(e.getMessage(), act);
                 }
             }
         });
@@ -359,9 +361,28 @@ public class SignInUtil {
                 try {
                     String responseBodyStr = response.body().string();
                     AlertDialogUtil.showConfirmClickAlertDialog("签到成功", act);
+                    studentAddScore("2", act);
                 } catch (Exception e) {
                     //获取不到用户信息则取消登陆 需要重新登陆
                     AlertDialogUtil.showConfirmClickAlertDialog("签到失败请重试" + e.getMessage(), act);
+                }
+            }
+        });
+    }
+
+    public static void studentAddScore(String score, Activity act) {
+        OkHttpUtil.getInstance().PostWithJsonToken(UrlConfig.getUrl(UrlConfig.UrlType.STUDENT_ADD_SCORE) + ClassTabActivity.classId + "&studentId=" + GlobalConfig.getUserID() + "&score=" + score, new JSONObject(), new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+            }
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) {
+                try {
+                    String responseBodyStr = response.body().string();
+                } catch (Exception e) {
+                    //获取不到用户信息则取消登陆 需要重新登陆
+                    AlertDialogUtil.showConfirmClickAlertDialog("结束签到错误" + e.getMessage(), act);
                 }
             }
         });
@@ -426,10 +447,10 @@ public class SignInUtil {
     }
 
     public static Boolean checkIsSignIn(String jsonData, Activity act) {
-
         JSONArray jsonArray = JSONObject.parseObject(jsonData).getJSONArray("data");
-        if (jsonArray.size() == 0) {
+        if (jsonArray == null || jsonArray.size() == 0) {
             AlertDialogUtil.showConfirmClickAlertDialog("暂时没有发起的签到", act);
+            return false;
         }
         for (int i = 0; i < jsonArray.size(); i++) {
             //TODO 发起签到之前先检查下是否签到

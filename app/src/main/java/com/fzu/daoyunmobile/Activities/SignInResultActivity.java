@@ -120,6 +120,8 @@ public class SignInResultActivity extends AppCompatActivity {
     public void parseStuHisList(String JsonArrayData) {
         hisList = new ArrayList<>();
         JSONArray jsonArray = com.alibaba.fastjson.JSONObject.parseObject(JsonArrayData).getJSONArray("data");
+        if (jsonArray == null)
+            return;
         try {
             sN = 0;
             tN = jsonArray.size();
@@ -190,6 +192,8 @@ public class SignInResultActivity extends AppCompatActivity {
     public void parseTeaHisList(String JsonArrayData) {
         hisList = new ArrayList<>();
         JSONArray jsonArray = com.alibaba.fastjson.JSONObject.parseObject(JsonArrayData).getJSONArray("data");
+        if (jsonArray == null)
+            return;
         try {
             for (int i = 0; i < jsonArray.size(); i++) {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);

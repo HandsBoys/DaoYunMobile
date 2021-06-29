@@ -22,6 +22,7 @@ import com.fzu.daoyunmobile.Fragments.HpMainFragment;
 import com.fzu.daoyunmobile.Fragments.MyInfoFragment;
 import com.fzu.daoyunmobile.R;
 import com.fzu.daoyunmobile.Utils.ActivityUtil;
+import com.fzu.daoyunmobile.Utils.AlertDialogUtil;
 import com.fzu.daoyunmobile.Utils.StatusBarUtil;
 import com.google.zxing.activity.CaptureActivity;
 
@@ -38,6 +39,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected TextView myInfoTV;
     protected HpMainFragment mMainFragment = new HpMainFragment();//首页
     protected MyInfoFragment mInfoFragment = new MyInfoFragment();//我的
+    public static boolean isFirst = true;
 
     //添加权限
     String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.READ_EXTERNAL_STORAGE};
@@ -173,4 +175,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onDestroy();
         ActivityUtil.removeActivity(this);
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (!isFirst) {
+            mMainFragment.myCreateFragment.initCourses();
+            mMainFragment.myJoinFragment.initCourses();
+        }
+        isFirst = false;
+    }
+
 }

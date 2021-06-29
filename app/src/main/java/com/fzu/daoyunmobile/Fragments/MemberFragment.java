@@ -200,7 +200,6 @@ public class MemberFragment extends Fragment {
             listView.setAdapter(memberAdapter);
             listView.setOnItemClickListener((parent, view, position, id) -> {
                 Member member = memberList.get(position);
-                Toast.makeText(getContext(), member.getMemberName(), Toast.LENGTH_SHORT).show();
             });
             //设置人数
             memberSumTV.setText(memberList.size() + "人");

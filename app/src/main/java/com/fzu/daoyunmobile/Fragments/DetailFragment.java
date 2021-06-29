@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
 import com.fzu.daoyunmobile.Activities.ClassTabActivity;
+import com.fzu.daoyunmobile.Configs.GlobalConfig;
 import com.fzu.daoyunmobile.Configs.UrlConfig;
 import com.fzu.daoyunmobile.R;
 import com.fzu.daoyunmobile.Utils.AlertDialogUtil;
@@ -45,6 +46,8 @@ public class DetailFragment extends Fragment implements CompoundButton.OnChecked
     private TextView termTV;
     private TextView schoolDepartmentTV;
     protected CheckBox permitaddClassCB;
+    private boolean isStudent = false;
+
 
     @Nullable
     @Override
@@ -54,15 +57,11 @@ public class DetailFragment extends Fragment implements CompoundButton.OnChecked
         //返回键设置
         backBtn = view.findViewById(R.id.toolbar_left_btn);
         backBtn.setOnClickListener(v -> getActivity().finish());
-
         classNameTV = view.findViewById(R.id.class_classname_Tv);
         courseNameTV = view.findViewById(R.id.class_coursename_Tv);
-        //teacherNameTv = view.findViewById(R.id.more_teacher_Tv);
         termTV = view.findViewById(R.id.class_coursedate_Tv);
         schoolDepartmentTV = view.findViewById(R.id.cloud_school_Tv);
-
         permitaddClassCB = view.findViewById(R.id.cb_permit_addclass);
-
         courseNameTV.setText(ClassTabActivity.courseName);
         termTV.setText(ClassTabActivity.term);
         classNameTV.setText(ClassTabActivity.className);
@@ -72,9 +71,17 @@ public class DetailFragment extends Fragment implements CompoundButton.OnChecked
         if (!ClassTabActivity.enterType.equals("Create")) {
             exitDismissBtn.setText("退出班课");
             view.findViewById(R.id.all_join_lineout).setVisibility(View.GONE);
+            isStudent = true;
+        } else {
+            if (!ClassTabActivity.enableJoin.equals("true"))
+                permitaddClassCB.setChecked(false);
         }
-        exitDismissBtn.setOnClickListener(v -> finishClass(true));
-
+        exitDismissBtn.setOnClickListener(v -> {
+            if (isStudent)
+                quitClass();
+            else
+                finishClass(true);
+        });
         permitaddClassCB.setOnCheckedChangeListener(this);
 
         return view;
@@ -86,10 +93,8 @@ public class DetailFragment extends Fragment implements CompoundButton.OnChecked
             case R.id.cb_permit_addclass:
                 if (checked) {// 选中吃
                     setJoin(true);
-
                 } else {
                     setJoin(false);
-                    //like.remove("eat");
                 }
                 break;
             default:
@@ -110,7 +115,7 @@ public class DetailFragment extends Fragment implements CompoundButton.OnChecked
             public void onResponse(@NotNull Call call, @NotNull Response response) {
                 try {
                     String responseBodyStr = response.body().string();
-                    AlertDialogUtil.showToastText(responseBodyStr, getActivity());
+                    AlertDialogUtil.showToastText("修改成功", getActivity());
                 } catch (Exception e) {
                     //获取不到用户信息则取消登陆 需要重新登陆
                     System.out.println(e.getMessage());
@@ -126,7 +131,6 @@ public class DetailFragment extends Fragment implements CompoundButton.OnChecked
         OkHttpUtil.getInstance().PostWithJsonToken(UrlConfig.getUrl(UrlConfig.UrlType.SET_FINISH_COURSE) + "id=" + ClassTabActivity.classId + "&finish=" + ej, new JSONObject(), new Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                System.out.println("FUCK CreateCourse" + e.getMessage());
             }
 
             @Override
@@ -142,4 +146,28 @@ public class DetailFragment extends Fragment implements CompoundButton.OnChecked
             }
         });
     }
+
+    private void quitClass() {
+        String ej = "true";
+        //获取用户信息
+        OkHttpUtil.getInstance().DeleteWithJsonToken(UrlConfig.getUrl(UrlConfig.UrlType.STUDENT_QUIT_CLASS) + ClassTabActivity.classId + "&studentId=" + GlobalConfig.getUserID(), new JSONObject(), new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+            }
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) {
+                try {
+                    String responseBodyStr = response.body().string();
+                    AlertDialogUtil.showToastText("退出修改成功", getActivity());
+                    getActivity().finish();
+
+                } catch (Exception e) {
+                    //获取不到用户信息则取消登陆 需要重新登陆
+                    System.out.println(e.getMessage());
+                }
+            }
+        });
+    }
+
 }

@@ -32,6 +32,8 @@ public class UrlConfig {
         STUDENT_FINISH_SIGN_IN,//学生完成签到
         GET_SIGNIN_ALL_STUDENT_INFO,//获取某个签到中的所有学生信息
         GET_STUDENT_ALL_SIGN,//获取学生的所有签到信息
+        STUDENT_ADD_SCORE,//给学生加分
+        STUDENT_QUIT_CLASS,//http://1.15.31.156:8081/system/course/student/57/91
     }
 
     public static String getUrl(UrlType urlType) {
@@ -80,7 +82,11 @@ public class UrlConfig {
                 return ORIGION_URL + "client/checkin/info?checkinId=";
             case GET_STUDENT_ALL_SIGN:
                 return ORIGION_URL + "client/checkin/student-records?courseId=";
+            case STUDENT_ADD_SCORE:
+                return ORIGION_URL + "client/management/addscore?courseId=";
             case MESSAGE:
+            case STUDENT_QUIT_CLASS:
+                return ORIGION_URL + "client/course/quit-course?courseId=";
             default:
                 return ORIGION_URL + "message?phone=";
         }
