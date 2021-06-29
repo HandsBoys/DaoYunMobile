@@ -251,7 +251,6 @@ public class SignInUtil {
                             public void onResponse(@NotNull Call call, @NotNull Response response) {
                                 try {
                                     String responseBodyStr = response.body().string();
-                                    AlertDialogUtil.showToastText(responseBodyStr, act);
                                     if (!checkIsSignIn(responseBodyStr, act)) {
                                         if (type.equals("1")) {
                                             studentSignIn(signID, act);

@@ -91,6 +91,9 @@ public class SignMemberSetActivity extends AppCompatActivity {
             final String studentID = jsonObject.getString("studentId");
             final String name = jsonObject.getString("nickName");
             final String experienceScore = "2";
+//            String lat=jsonObject.getString("");
+//            String lnt=jsonObject.getString("");
+
             boolean isFinish = Boolean.valueOf(jsonObject.getString("isFinish"));
             String checkTime = String.valueOf(jsonObject.getString("checkinTime"));
 

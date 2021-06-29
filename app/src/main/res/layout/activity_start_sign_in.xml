@@ -68,13 +68,6 @@
 
                     </LinearLayout>
 
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginLeft="20dp"
-                        android:layout_marginRight="20dp"
-                        android:background="#D8DDE1" />
-
                 </LinearLayout>
 
                 <LinearLayout
@@ -90,15 +83,17 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1.0"
                         android:text="历史签到记录" />
+
                     <TextView
                         android:id="@+id/start_sign_rate_Tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginRight="15dp"
                         android:layout_weight="1.0"
                         android:gravity="right"
-                        android:layout_marginRight="15dp"
 
-                        android:text="10%" />
+                        android:text="10%"
+                        android:textColor="#15E31D" />
 
                 </LinearLayout>
 

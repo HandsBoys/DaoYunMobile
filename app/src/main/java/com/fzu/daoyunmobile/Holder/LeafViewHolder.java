@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.fzu.daoyunmobile.Activities.RegisterActivity;
+import com.fzu.daoyunmobile.Activities.SelectFacultyActivity;
 import com.fzu.daoyunmobile.Bean.TreeBean;
 import com.fzu.daoyunmobile.R;
 import com.fzu.daoyunmobile.Utils.AlertDialogUtil;
@@ -38,6 +39,9 @@ public class LeafViewHolder extends BaseTelecomHolder {
                 intent.putExtra("school", rdb.getTrunk1());
                 //设置院系
                 intent.putExtra("academy", rdb.getLeaf1());
+
+                intent.putExtra("schoolID", SelectFacultyActivity.idDict.get(rdb.getTrunk1()));
+                intent.putExtra("academyID", SelectFacultyActivity.idDict.get(rdb.getLeaf1()));
                 // 设置返回码和返回携带的数据
                 selectAct.setResult(Activity.RESULT_OK, intent);
                 selectAct.finish();

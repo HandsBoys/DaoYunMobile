@@ -4,21 +4,9 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.Activity;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
-import android.telephony.gsm.GsmCellLocation;
 import android.text.format.Time;
-import android.util.Log;
-import android.view.MotionEvent;
-import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
@@ -30,6 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.fzu.daoyunmobile.Configs.GlobalConfig;
 import com.fzu.daoyunmobile.Configs.RequestCodeConfig;
@@ -37,24 +26,12 @@ import com.fzu.daoyunmobile.Configs.UrlConfig;
 import com.fzu.daoyunmobile.R;
 import com.fzu.daoyunmobile.Utils.AlertDialogUtil;
 import com.fzu.daoyunmobile.Utils.HttpUtils.OkHttpUtil;
-import com.google.zxing.activity.CaptureActivity;
 import com.lxj.xpopup.XPopup;
-import com.lxj.xpopup.interfaces.OnSelectListener;
 
 import org.jetbrains.annotations.NotNull;
-import org.json.JSONArray;
-import org.json.JSONException;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -65,20 +42,16 @@ public class CreateClassActivity extends AppCompatActivity {
     private ImageView classIconIV;
     private LinearLayout termLayout;
     private TextView termTV;
-    //  private EditText classNameET;
     private AutoCompleteTextView classNameET;
     private EditText schoolET;
     private EditText gradeClassET;
-    private EditText classIntroductionET;
     private Button createClassBtn;
     private Button backBtn;
-    private final int IMAGE_SELECT = 1;
-    private final int IMAGE_CUT = 2;
-    private File cropFile = null;
-    private String selectedTerm;
     private String school;
     private String academy;
     private final int CREATE_COURSE_OK = 123456;
+    private String schoolID;
+    private String academyID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,9 +92,7 @@ public class CreateClassActivity extends AppCompatActivity {
 
         classIconIV = findViewById(R.id.class_icon_Iv);
         classIconIV.setOnClickListener(v -> {
-            Intent intent = new Intent(Intent.ACTION_PICK, null);
-            intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
-            startActivityForResult(intent, IMAGE_SELECT);
+
         });
 
 
@@ -143,12 +114,20 @@ public class CreateClassActivity extends AppCompatActivity {
                 json.put("term", termTV.getText().toString());
                 json.put("teacherId", "0");
                 json.put("enableJoin", "true");
+                json.put("finish", "false");
+
                 JSONObject classDto = new JSONObject();
                 classDto.put("id", "0");
                 classDto.put("className", gradeClassET.getText().toString());
-                json.put("classDto", classDto);
 
-                //获取用户信息
+                json.put("classDto", classDto);
+                json.put("dept", schoolET.getText().toString());
+                JSONArray jsonArray = new JSONArray(); //保存数组数据的JSONArray对象
+                jsonArray.add(Integer.valueOf(schoolID));
+                jsonArray.add(Integer.valueOf(academyID));
+                json.put("deptIds", jsonArray);
+                AlertDialogUtil.showConfirmClickAlertDialog(json.toString(), CreateClassActivity.this);
+                //创建班课
                 OkHttpUtil.getInstance().PutWithJsonToken(UrlConfig.getUrl(UrlConfig.UrlType.CREATE_COURSE), json, new Callback() {
                     @Override
                     public void onFailure(@NotNull Call call, @NotNull IOException e) {
@@ -160,14 +139,14 @@ public class CreateClassActivity extends AppCompatActivity {
                     public void onResponse(@NotNull Call call, @NotNull Response response) {
                         try {
                             String responseBodyStr = response.body().string();
-                            AlertDialogUtil.showToastText(responseBodyStr, CreateClassActivity.this);
                             if (responseBodyStr.contains("操作成功")) {
                                 // myJoinFragment.initCourses();
-                                AlertDialogUtil.showToastText("创建班课成功!", CreateClassActivity.this);
-                                Intent intent = new Intent();
-                                // 设置返回码和返回携带的数据
-                                setResult(CREATE_COURSE_OK, intent);
-                                finish();
+                                AlertDialogUtil.showConfirmClickAlertDialogWithLister("创建班课成功!", CreateClassActivity.this, (dialog, i) -> {
+                                    Intent intent = new Intent();
+                                    // 设置返回码和返回携带的数据
+                                    setResult(CREATE_COURSE_OK, intent);
+                                    finish();
+                                });
                             } else {
                                 AlertDialogUtil.showConfirmClickAlertDialog("创建班课失败请重试！" + responseBodyStr, CreateClassActivity.this);
                             }
@@ -175,7 +154,6 @@ public class CreateClassActivity extends AppCompatActivity {
                             //获取不到用户信息则取消登陆 需要重新登陆
                             AlertDialogUtil.showToastText(e.getMessage(), CreateClassActivity.this);
                             AlertDialogUtil.showConfirmClickAlertDialog("创建班课失败请重试", CreateClassActivity.this);
-                            System.out.println(e.getMessage());
                         }
                     }
                 });
@@ -188,18 +166,11 @@ public class CreateClassActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         switch (resultCode) {
             case RESULT_OK:
-                if (requestCode == IMAGE_CUT) {
-                    Log.i("UserInfoInfo", Environment.getExternalStorageDirectory().toString());
-//                    userIconIV.setImageURI(cropImageUri);
-                    Bitmap bitmap = BitmapFactory.decodeFile(cropFile.getAbsolutePath());
-                    classIconIV.setImageBitmap(bitmap);
-                    Log.i("UserInfoInfo", "cropFile.toString()");
-                } else if (requestCode == IMAGE_SELECT) {
-                    Uri iconUri = data.getData();
-                    startCropImage(iconUri);
-                } else if (requestCode == RequestCodeConfig.getSelectFaculty()) {//院系选择
+                if (requestCode == RequestCodeConfig.getSelectFaculty()) {//院系选择
                     school = data.getStringExtra("school");
                     academy = data.getStringExtra("academy");
+                    schoolID = data.getStringExtra("schoolID");
+                    academyID = data.getStringExtra("academyID");
                     schoolET.setText(school + academy);
                 }
                 break;
@@ -208,44 +179,6 @@ public class CreateClassActivity extends AppCompatActivity {
         }
     }
 
-    private void startCropImage(Uri uri) {
-        try {
-            Intent intent = new Intent("com.android.camera.action.CROP");
-            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-            intent.setDataAndType(uri, "image/*");
-            // 使图片处于可裁剪状态
-            intent.putExtra("crop", "true");
-            // 裁剪框的比例（根据需要显示的图片比例进行设置）
-            intent.putExtra("aspectX", 1);
-            intent.putExtra("aspectY", 1);
-            // 让裁剪框支持缩放
-            intent.putExtra("scale", true);
-            // 裁剪后图片的大小（注意和上面的裁剪比例保持一致）
-            intent.putExtra("outputX", 1000);
-            intent.putExtra("outputY", 1000);
-            // 传递原图路径
-            cropFile = new File(Environment.getExternalStorageDirectory() + "/daoyun/" + timeStamp + ".jpg");
-//            cropFile = new File(path + File.separator + MainActivity.userName + ".jpg");
-            if (cropFile.exists()) {
-                cropFile.delete();
-            }
-            Uri cropImageUri = Uri.fromFile(cropFile);
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, cropImageUri);
-            // 设置裁剪区域的形状，默认为矩形，也可设置为原形
-            //intent.putExtra("circleCrop", true);
-            // 设置图片的输出格式
-            intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
-            // return-data=true传递的为缩略图，小米手机默认传递大图，所以会导致onActivityResult调用失败
-            intent.putExtra("return-data", false);
-            // 是否需要人脸识别
-            intent.putExtra("noFaceDetection", true);
-            intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION
-                    | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-            startActivityForResult(intent, IMAGE_CUT);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
     private void initTermSelect() {
 
@@ -253,17 +186,8 @@ public class CreateClassActivity extends AppCompatActivity {
         t.setToNow(); // 取得系统时间。
         int year = t.year;
         int month = t.month + 1;
-//        int day = t.monthDay;
-//        int hour = t.hour; // 0-23
-//        int minute = t.minute;
-//        int second = t.second;
-//        System.out.println("Calendar获取当前日期" + year + "年" + month + "月" + day + "日" + hour + ":" + minute + ":" + second);
-//
-//        final String[] term = new String[]{"2020-2021-1", "2020-2021-2",
-//                "2021-2022-1", "2021-2022-2", "2022-2023-1", "2022-2023-2", "2023-2024-1", "2023-2024-2",
-//                "2024-2025-1", "2024-2025-2", "2025-2026-1", "2025-2026-2", "2026-2027-1", "2026-2027-2",};
+
         int preYear, termID;
-        //        if (month < 8 && month > 2) {
         if (month <= 6) {
             preYear = year - 1;
             termID = 2;
@@ -296,8 +220,6 @@ public class CreateClassActivity extends AppCompatActivity {
 //                            .isDestroyOnDismiss(true) //对于只使用一次的弹窗，推荐设置这个
                     .asBottomList("班课学期选择", terms,
                             (position, text) -> {
-                                //TODO 这里接入转换接口
-                                Toast.makeText(CreateClassActivity.this, text, Toast.LENGTH_SHORT).show();
                                 termTV.setText(text);
                             }).show();
 

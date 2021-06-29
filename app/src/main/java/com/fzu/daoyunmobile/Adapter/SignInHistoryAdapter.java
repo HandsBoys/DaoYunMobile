@@ -50,6 +50,7 @@ public class SignInHistoryAdapter extends ArrayAdapter<SignInHistory> {
         if (ClassTabActivity.enterType.equals("Create")) {
             viewHolder.isFinishTv.setVisibility(View.GONE);
         } else {
+            viewHolder.consistTv.setVisibility(View.GONE);
             String f = his.getIsFinish() ? "已签到" : "缺勤";
             viewHolder.isFinishTv.setText(f);
         }

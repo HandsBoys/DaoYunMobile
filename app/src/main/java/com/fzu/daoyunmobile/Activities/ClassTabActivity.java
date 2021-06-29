@@ -30,7 +30,6 @@ public class ClassTabActivity extends AppCompatActivity implements View.OnClickL
     public static String teacherPhone = "";
     public static String className = "";
     public static String term = "";
-    public static String studentID = "";
     public static String enterType = "Create";//Join
 
     @Override
@@ -74,7 +73,6 @@ public class ClassTabActivity extends AppCompatActivity implements View.OnClickL
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-
             case R.id.menu_member:
                 this.getSupportFragmentManager()
                         .beginTransaction()

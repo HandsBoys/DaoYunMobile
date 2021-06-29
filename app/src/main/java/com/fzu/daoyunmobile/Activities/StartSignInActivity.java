@@ -46,6 +46,7 @@ public class StartSignInActivity extends AppCompatActivity {
     public TextView signRateTv;
 
     private boolean isCreate = true;
+    private int sN = 0, tN = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +73,12 @@ public class StartSignInActivity extends AppCompatActivity {
             if (GPSUtil.checkGPSIsOpen(StartSignInActivity.this)) {
                 //获取经纬度
                 GPSUtil.getTitude(StartSignInActivity.this);
-                SignInUtil.checkTeaSignIn(StartSignInActivity.this, ClassTabActivity.classId);
+                if (isCreate)
+                    SignInUtil.checkTeaSignIn(StartSignInActivity.this, ClassTabActivity.classId);
+                else {
+                    SignInUtil.checkStuSignIn(StartSignInActivity.this, ClassTabActivity.classId);
+                    iniHis();
+                }
             } else {
                 GPSUtil.openGPSSettings(StartSignInActivity.this);
             }
@@ -88,7 +94,76 @@ public class StartSignInActivity extends AppCompatActivity {
     }
 
     private void iniStuHis() {
+        OkHttpUtil.getInstance().GetWithToken(UrlConfig.getUrl(UrlConfig.UrlType.GET_STUDENT_ALL_SIGN) + ClassTabActivity.classId, new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                AlertDialogUtil.showToastText(e.getMessage(), StartSignInActivity.this);
+            }
 
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) {
+
+                try {
+                    String responseBodyStr = response.body().string();
+                    parseStuHisList(responseBodyStr);
+                    afterStuAction();
+
+                } catch (Exception e) {
+                    //获取不到用户信息则取消登陆 需要重新登陆
+                    AlertDialogUtil.showToastText(e.getMessage(), StartSignInActivity.this);
+                }
+            }
+        });
+    }
+
+
+    public void parseStuHisList(String JsonArrayData) {
+        hisList = new ArrayList<>();
+        JSONArray jsonArray = com.alibaba.fastjson.JSONObject.parseObject(JsonArrayData).getJSONArray("data");
+        try {
+            sN = 0;
+            tN = jsonArray.size();
+            for (int i = 0; i < jsonArray.size(); i++) {
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                String signId = jsonObject.getString("id");
+                String type = jsonObject.getString("type");
+                String startTime = TimeUtil.covertJsonFormatTime(jsonObject.getString("startTime"));
+                boolean isFinish = Boolean.valueOf(jsonObject.getString("isFinish"));
+                if (isFinish)
+                    sN++;
+                SignInHistory signInHistory = new SignInHistory(signId, startTime, "", "", "", isFinish);
+                String d = startTime.substring(0, startTime.length() - 9);
+
+                if (type.equals("1")) {
+                    signInHistory.setDateType(d + "\t一键签到");
+                } else {
+                    signInHistory.setDateType(d + "\t限时签到");
+                }
+                signInHistory.setConDate("");
+                hisList.add(signInHistory);
+            }
+        } catch (Exception e) {
+            AlertDialogUtil.showToastText(e.getMessage(), StartSignInActivity.this);
+        }
+        Collections.reverse(hisList);
+    }
+
+    public void afterStuAction() {
+        runOnUiThread(() -> {
+            signAdapter = new SignInHistoryAdapter(StartSignInActivity.this, R.layout.item_signinhistory, hisList);
+            ListView listView = findViewById(R.id.his_list_view);
+            listView.setAdapter(signAdapter);
+
+            signRateTv.setText(100 * sN / tN + " %");
+
+            listView.setOnItemClickListener((parent, view, position, id) -> {
+                //TODO 设置
+                SignInHistory s = hisList.get(position);
+                AlertDialogUtil.showToastText(s.getSignID(), StartSignInActivity.this);
+
+            });
+
+        });
     }
 
     //初始化成员

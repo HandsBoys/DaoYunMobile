@@ -105,7 +105,8 @@ public class MemberFragment extends Fragment {
                     //SignInUtil.checkTeaSignIn(getActivity(), ClassTabActivity.classId);
                     getActivity().startActivity(new Intent(getActivity(), StartSignInActivity.class));
                 } else {
-                    SignInUtil.checkStuSignIn(getActivity(), ClassTabActivity.classId);
+                    //SignInUtil.checkStuSignIn(getActivity(), ClassTabActivity.classId);
+                    getActivity().startActivity(new Intent(getActivity(), StartSignInActivity.class));
                 }
             } else {
                 GPSUtil.openGPSSettings(getActivity());

@@ -73,7 +73,6 @@ public class FinishOneBtnSignInActivity extends AppCompatActivity {
         refreshTV.setOnClickListener(v -> {
             memberList.clear();
             //设置刷新作用
-            AlertDialogUtil.showConfirmClickAlertDialog("刷新FUCK", FinishOneBtnSignInActivity.this);
             initMember(true);
             seconds = oriSeconds;//复位
 
@@ -228,6 +227,9 @@ public class FinishOneBtnSignInActivity extends AppCompatActivity {
                 //TODO自动刷新
                 seconds = oriSeconds;//复位
                 refreshTV.postDelayed(this, 1000);//递归执行
+                memberList.clear();
+                //设置刷新作用
+                initMember(true);
             }
         }
     };

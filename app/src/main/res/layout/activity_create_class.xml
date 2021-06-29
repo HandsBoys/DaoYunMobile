@@ -196,7 +196,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_margin="20dp"
-                android:background="#32A082"
+                android:background="@color/colorPrimary2"
                 android:text="创 建 班 课"
                 android:textColor="@android:color/white"
                 android:textSize="18dp" />

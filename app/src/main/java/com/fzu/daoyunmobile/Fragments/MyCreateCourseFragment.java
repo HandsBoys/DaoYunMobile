@@ -63,7 +63,6 @@ public class MyCreateCourseFragment extends Fragment {
         progressDialog.setMessage("加载中...");
         progressDialog.setCancelable(true);
         progressDialog.show();
-        AlertDialogUtil.showToastText("FUCK CREATE", getActivity());
         initCourses();
     }
 
@@ -72,7 +71,6 @@ public class MyCreateCourseFragment extends Fragment {
         OkHttpUtil.getInstance().GetWithToken(UrlConfig.getUrl(UrlConfig.UrlType.GET_CREATED_COURSES), new Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                System.out.println("GET CreateCourse" + e.getMessage());
                 AlertDialogUtil.showToastText(e.getMessage(), getActivity());
             }
 
@@ -83,8 +81,9 @@ public class MyCreateCourseFragment extends Fragment {
                     String responseBodyStr = response.body().string();
                     if (GlobalConfig.getIsTeacher()) {
                         courseList = parseJsonWithJsonObject(responseBodyStr);
+                    } else {
+                        courseList.clear();
                     }
-
                     afterAction();
                 } catch (Exception e) {
                     //获取不到用户信息则取消登陆 需要重新登陆

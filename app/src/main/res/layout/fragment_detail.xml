@@ -132,6 +132,7 @@
                 android:background="#D8DDE1" />
 
             <LinearLayout
+                android:id="@+id/all_join_lineout"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:layout_marginLeft="24dp"
@@ -169,7 +170,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_margin="20dp"
-                android:background="#32A082"
+                android:background="@color/colorPrimary2"
                 android:text="结束班课"
                 android:textColor="@android:color/white"
                 android:textSize="18dp" />

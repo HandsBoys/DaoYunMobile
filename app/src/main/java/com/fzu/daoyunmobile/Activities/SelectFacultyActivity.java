@@ -13,7 +13,6 @@ import com.fzu.daoyunmobile.Adapter.TreeAdapter;
 import com.fzu.daoyunmobile.Bean.TreeBean;
 import com.fzu.daoyunmobile.Configs.GlobalConfig;
 import com.fzu.daoyunmobile.Configs.UrlConfig;
-import com.fzu.daoyunmobile.Entity.Course;
 import com.fzu.daoyunmobile.R;
 import com.fzu.daoyunmobile.Utils.AlertDialogUtil;
 import com.fzu.daoyunmobile.Utils.HttpUtils.OkHttpUtil;
@@ -22,6 +21,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import okhttp3.Call;
@@ -33,6 +33,8 @@ public class SelectFacultyActivity extends AppCompatActivity {
     TreeAdapter treeAdapter;
     List<TreeBean> list;
     private Button backBtn;
+    public static HashMap<String, String> idDict = new HashMap<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +54,10 @@ public class SelectFacultyActivity extends AppCompatActivity {
 
     private void initData() {
 
+        //排序下成员
+//            if (!rankDict.containsKey(m.getExperience_score()))
+//                rankDict.put(m.getExperience_score(), String.valueOf(nowRank++));
+
         //获取用户信息
         OkHttpUtil.getInstance().GetWithToken(UrlConfig.getUrl(UrlConfig.UrlType.GET_DEPT), new Callback() {
             @Override
@@ -62,6 +68,7 @@ public class SelectFacultyActivity extends AppCompatActivity {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) {
                 try {
+                    idDict.clear();
                     String responseBodyStr = response.body().string();
                     if (responseBodyStr.contains("获取成功")) {
                         JSONArray jsonArray = JSONObject.parseObject(responseBodyStr).getJSONArray("data");
@@ -69,15 +76,18 @@ public class SelectFacultyActivity extends AppCompatActivity {
                         ArrayList<List<String>> facultList = new ArrayList<>();
                         for (int i = 0; i < jsonArray.size(); i++) {
                             JSONObject jsonObject = jsonArray.getJSONObject(i);
-                            final String shoolName = jsonObject.getString("deptName");
+                            final String schoolName = jsonObject.getString("deptName");
+                            idDict.put(schoolName, jsonObject.getString("id"));
                             //获取学校信息
-                            schoolList.add(shoolName);
+                            schoolList.add(schoolName);
                             //TODO 也是需要的 班级信息
                             JSONArray facults = jsonObject.getJSONArray("children");
                             List<String> fList = new ArrayList<String>();
                             for (int j = 0; j < facults.size(); j++) {
                                 JSONObject f = facults.getJSONObject(j);
                                 String fname = f.getString("deptName");
+                                idDict.put(fname, f.getString("id"));
+
                                 //获取学校信息
                                 fList.add(fname);
                             }

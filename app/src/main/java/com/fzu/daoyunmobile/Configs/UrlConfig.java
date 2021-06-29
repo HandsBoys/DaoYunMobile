@@ -31,6 +31,7 @@ public class UrlConfig {
         GET_COURSE_ALL_STUDENT,//获取课程信息中的所有学生
         STUDENT_FINISH_SIGN_IN,//学生完成签到
         GET_SIGNIN_ALL_STUDENT_INFO,//获取某个签到中的所有学生信息
+        GET_STUDENT_ALL_SIGN,//获取学生的所有签到信息
     }
 
     public static String getUrl(UrlType urlType) {
@@ -77,6 +78,8 @@ public class UrlConfig {
                 return ORIGION_URL + "client/checkin/finish-task";
             case GET_SIGNIN_ALL_STUDENT_INFO:
                 return ORIGION_URL + "client/checkin/info?checkinId=";
+            case GET_STUDENT_ALL_SIGN:
+                return ORIGION_URL + "client/checkin/student-records?courseId=";
             case MESSAGE:
             default:
                 return ORIGION_URL + "message?phone=";

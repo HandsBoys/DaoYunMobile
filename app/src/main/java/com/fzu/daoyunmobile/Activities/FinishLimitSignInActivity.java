@@ -227,8 +227,12 @@ public class FinishLimitSignInActivity extends AppCompatActivity {
                 refreshTV.postDelayed(this, 1000);//递归执行
             } else {
                 //TODO自动刷新
-                seconds = oriSeconds;//复位
                 refreshTV.postDelayed(this, 1000);//递归执行
+                memberList.clear();
+                //设置刷新作用
+                initMember(true);
+                seconds = oriSeconds;//复位
+
             }
         }
     };

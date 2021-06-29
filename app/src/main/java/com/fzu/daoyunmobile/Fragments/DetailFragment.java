@@ -1,6 +1,5 @@
 package com.fzu.daoyunmobile.Fragments;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -17,7 +16,6 @@ import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
 import com.fzu.daoyunmobile.Activities.ClassTabActivity;
-import com.fzu.daoyunmobile.Activities.CreateClassActivity;
 import com.fzu.daoyunmobile.Configs.UrlConfig;
 import com.fzu.daoyunmobile.R;
 import com.fzu.daoyunmobile.Utils.AlertDialogUtil;
@@ -71,6 +69,10 @@ public class DetailFragment extends Fragment implements CompoundButton.OnChecked
 
         //结束班课内容
         exitDismissBtn = view.findViewById(R.id.exit_dismiss_btn);
+        if (!ClassTabActivity.enterType.equals("Create")) {
+            exitDismissBtn.setText("退出班课");
+            view.findViewById(R.id.all_join_lineout).setVisibility(View.GONE);
+        }
         exitDismissBtn.setOnClickListener(v -> finishclass(true));
 
         permitaddClassCB.setOnCheckedChangeListener(this);
@@ -83,13 +85,11 @@ public class DetailFragment extends Fragment implements CompoundButton.OnChecked
         switch (checkBox.getId()) {
             case R.id.cb_permit_addclass:
                 if (checked) {// 选中吃
-                    AlertDialogUtil.showToastText("选中", getActivity());
                     setJoin(true);
 
                 } else {
                     setJoin(false);
                     //like.remove("eat");
-                    AlertDialogUtil.showToastText("未选中", getActivity());
                 }
                 break;
             default:

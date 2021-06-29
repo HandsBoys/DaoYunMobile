@@ -170,8 +170,6 @@ public class HpMainFragment extends Fragment {
 //                            .isDestroyOnDismiss(true) //对于只使用一次的弹窗，推荐设置这个
                 .asBottomList("", new String[]{"创建班课", "使用班课号加入班课", "使用二维码加入班课"},
                         (position, text) -> {
-                            //TODO 这里接入转换接口
-                            Toast.makeText(getContext(), text, Toast.LENGTH_SHORT).show();
                             switch (position) {
                                 case 0:
                                     if (GlobalConfig.getIsTeacher())
@@ -217,7 +215,7 @@ public class HpMainFragment extends Fragment {
             public void onResponse(@NotNull Call call, @NotNull Response response) {
                 try {
                     String responseBodyStr = response.body().string();
-                    if (responseBodyStr.contains("班课获取失败")) {
+                    if (responseBodyStr.length()<5||responseBodyStr.contains("班课获取失败")||responseBodyStr.contains("班课不存在")) {
                         AlertDialogUtil.showConfirmClickAlertDialog("班课不存在", getActivity());
                     } else {
                         JSONObject jsonObject = JSONObject.parseObject(responseBodyStr).getJSONObject("data");

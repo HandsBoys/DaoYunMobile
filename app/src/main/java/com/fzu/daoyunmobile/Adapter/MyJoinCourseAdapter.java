@@ -24,17 +24,10 @@ import java.util.List;
 
 public class MyJoinCourseAdapter extends ArrayAdapter<Course> {
     private int resourceId;
-    private int flag = 1;
 
     public MyJoinCourseAdapter(@NonNull Context context, int textViewResourceId, @NonNull List<Course> objects) {
         super(context, textViewResourceId, objects);
         resourceId = textViewResourceId;
-    }
-
-    public MyJoinCourseAdapter(@NonNull Context context, int textViewResourceId, @NonNull List<Course> objects, int flag) {
-        super(context, textViewResourceId, objects);
-        resourceId = textViewResourceId;
-        this.flag = flag;
     }
 
     @NonNull
